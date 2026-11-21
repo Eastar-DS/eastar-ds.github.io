@@ -258,7 +258,7 @@ export const blogDarkPlus = recolor(
 |---|---|---|
 | 글자 크기 | 15px, 휴대폰(767px 이하) 14px | `--font-size-code` |
 | 줄 간격 | 1.65 | `--line-height-code` |
-| 글꼴 | JetBrains Mono. 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 | `--font-mono: "JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace`. D2Coding(OFL)에서 글에 쓰인 한글만 남긴 부분 글꼴을 `src/shared/styles/fonts/`에 두고 `unicode-range`를 한글 범위로 제한합니다(`pnpm fonts:code`가 만듦). D2Coding의 OFL은 「D2Coding」을 예약 글꼴 이름(Reserved Font Name)으로 정해서, 수정본인 부분 글꼴은 그 이름을 쓸 수 없습니다. 그래서 이름을 「Blog Code Hangul」로 바꿨고, 저작권 표시와 OFL 전문(`fonts/D2Coding-OFL.txt`)을 함께 둡니다. 뒤의 `"D2Coding"`은 컴퓨터에 D2Coding을 깐 사람을 위한 것입니다. 둘 다 없으면 Pretendard가 대신합니다. Pencil 시안은 구글 글꼴 Nanum Gothic Coding(변수 `font-mono-hangul`)으로 대신 그렸습니다 |
+| 글꼴 | JetBrains Mono. 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 | `--font-mono: "JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace`. D2Coding(OFL)에서 글의 코드에 쓰인 한글만 남긴 부분 글꼴을 `src/shared/styles/fonts/`에 두고 `unicode-range`를 한글 범위로 제한합니다(`pnpm build`가 다시 만듦, 3.1). D2Coding의 OFL은 「D2Coding」을 예약 글꼴 이름(Reserved Font Name)으로 정해서, 수정본인 부분 글꼴은 그 이름을 쓸 수 없습니다. 그래서 이름을 「Blog Code Hangul」로 바꿨고, 저작권 표시와 OFL 전문(`fonts/D2Coding-OFL.txt`)을 함께 둡니다. 뒤의 `"D2Coding"`은 컴퓨터에 D2Coding을 깐 사람을 위한 것입니다. 둘 다 없으면 Pretendard가 대신합니다. Pencil 시안은 구글 글꼴 Nanum Gothic Coding(변수 `font-mono-hangul`)으로 대신 그렸습니다 |
 | 글자 이음 | 끔 (`=>`, `!==`가 이어 붙지 않음) | `font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0;`. Pencil 그림에서는 끌 수 없어 이어 보입니다 |
 | 탭 폭 | 2 | `tab-size: 2`. 글 속 코드의 들여쓰기도 스페이스 2칸 |
 | 강조 줄 | 짚어 줄 줄에만, 한 칸에 세 줄 이하 | 바탕 `--color-code-line-highlight` + 왼쪽 3px `--color-code-line-highlight-bar`. 코드 칸 메타에 줄 번호를 적는 방식(` ```ts {3,5-6} `)을 권합니다. 코드를 복사해도 표시가 섞이지 않습니다. `@shikijs/transformers`의 `transformerMetaHighlight`로 줄에 `highlighted` class를 붙입니다 |
@@ -281,12 +281,28 @@ export const blogDarkPlus = recolor(
 
 | CSS 변수 | 값 |
 |---|---|
-| `--font-sans` | `"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif` |
-| `--font-mono` | `"JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace` |
+| `--font-sans` | `"Blog Sans", "Blog Sans Fallback Mac", "Blog Sans Fallback Win", "Blog Sans Fallback", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif` |
+| `--font-mono` | `"JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Blog Sans", monospace` |
 
-- 제목과 본문은 Pretendard Variable 하나로 씁니다. 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 「Blog Code Hangul」이 그립니다(2.3 「코드」의 가독성 값, 이름을 바꾼 까닭도 거기에 있습니다). 불러오지 못하면 뒤쪽 Pretendard가 대신합니다.
+- 제목과 본문은 Pretendard Variable 하나로 씁니다. 실제로 받는 파일은 사이트에 쓰인 글자만 남긴 부분 글꼴 「Blog Sans」입니다(아래). 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 「Blog Code Hangul」이 그립니다(2.3 「코드」의 가독성 값).
 - Pencil 시안은 구글 글꼴만 쓸 수 있어서 Pretendard 자리에 Noto Sans KR을 넣었습니다. Pencil 변수 `font-sans`의 값이 `Noto Sans KR`인 까닭입니다. 실제 사이트는 Pretendard입니다.
-- Pretendard는 한글 일부씩 나눈 dynamic subset을 저장소에 두고(self-host) `font-display: swap`으로 씁니다. 가변 글꼴이라 조각 하나에 모든 굵기가 들어 있습니다. 미리 받는(preload) 조각은 `PretendardVariable.subset.91.woff2` 하나입니다(10장).
+- **글꼴 파일은 빌드할 때 사이트에 쓰인 글자만 담아 만듭니다**(2026-11-21, `scripts/buildFonts.ts`). 결과는 `src/shared/styles/fonts/`에 있고 개발 서버를 위해 커밋합니다.
+  - `pnpm build`가 「빌드 → 빌드 결과(HTML · RSS · CSS · JS)의 글자 모으기 → 글꼴 만들기 → 다시 빌드 → 빠진 글자 검사」를 돕니다. 빌드 결과에서 모으므로 코드 주석 속 한글은 빠지고, JavaScript가 나중에 그리는 글(데모의 「재생 중」 등)은 JS 번들에서 잡힙니다.
+  - Blog Sans: Pretendard Variable에서 사이트 글자와 ASCII만 남기고, 가변 굵기 축을 쓰는 범위(400–800)로 줄였습니다. 축을 줄이면 25% 작아집니다(91KB → 68KB). 페이지가 미리 받는 파일은 이것 하나입니다(10장).
+  - JetBrains Mono: 같은 글자 가운데 이 글꼴에 있는 것만(21KB → 16KB). Blog Code Hangul: `<pre>` · `<code>` 안의 한글만.
+  - OFL 3조: Pretendard는 「Pretendard」 · 「Source」, D2Coding은 「D2Coding」을 예약 글꼴 이름으로 정했습니다. 줄인 수정본은 그 이름을 쓸 수 없어 글꼴 안의 이름을 Blog Sans · Blog Code Hangul로 바꿨고, 저작권 표시는 남기고 라이선스 전문(`fonts/*-OFL.txt`)을 함께 둡니다. JetBrains Mono는 예약 이름이 없어 이름을 그대로 둡니다.
+  - 빠진 글자 검사는 빌드 결과에 나온 글자가 모두 글꼴의 글자 표(cmap)에 있는지 보고, 빠지면 빌드를 실패시킵니다. 원본 글꼴에 없는 글자(예: 한자, 그림 문자)를 쓰면 여기서 걸립니다.
+- `font-display: swap`입니다. 첫 방문(대개 검색에서 옴)에도 Pretendard로 읽히게 하려는 것입니다. `optional`은 느린 휴대폰의 첫 방문 내내 시스템 글꼴로 남습니다.
+- 글꼴이 바뀔 때 흔들리지 않게 대체 글꼴의 크기를 Blog Sans에 맞춥니다(`size-adjust` · `ascent-override` · `descent-override` · `line-gap-override`).
+  - 너비는 시험 글 본문 2,339자의 글자 너비 합을 Pretendard와 견줘 정했고, 세로 수치는 Pretendard(위 0.9521em · 아래 0.2412em · 줄 사이 0)를 `size-adjust`로 나눈 값입니다.
+
+| 대체 글꼴 이름 | 실제 글꼴 | `size-adjust` | 근거 |
+|---|---|---|---|
+| Blog Sans Fallback Mac | Apple SD Gothic Neo | 100.11% | 글꼴 파일로 잼 |
+| Blog Sans Fallback Win | 맑은 고딕 | 85.61% | 공개된 14px 너비 표로 추정. 윈도에서 확인이 필요합니다 |
+| Blog Sans Fallback | Noto Sans KR · Noto Sans CJK KR (안드로이드 · 리눅스) | 94.51% | 글꼴 파일로 잼 |
+
+  - 효과(시험 글 본문 높이, Blog Sans와의 차이): Noto Sans KR은 맞추기 전 넓은 화면 +92px · 휴대폰 +79px에서 맞춘 뒤 0px. Apple SD Gothic Neo는 원래 너비가 같아 넓은 화면 0px · 휴대폰 −22px(한 줄)로 맞추기 전후가 같습니다.
 - 굵기 토큰은 넷만 씁니다.
 
 | CSS 변수 | 값 | 쓰는 곳 |
@@ -658,11 +674,12 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 - 쓰는 법: 아티팩트를 다시 만든 데모만 넣습니다. 조작은 세 개 이하입니다. 화면에 들어올 때 불러옵니다(`client:visible`). 자세한 규칙은 content-guide의 「아티팩트를 데모로 다시 만드는 규칙」을 따릅니다.
 - 쓰지 않는 법: 데모 틀 밖에 따로 조작 장치 두기, 본문 폭보다 넓히기, 자동 재생.
 
-### 7.21 댓글 자리 (giscus)
+### 7.21 댓글 자리 (노션 DB 익명 댓글)
 
-- Pencil: 「댓글 자리」 `GbsK7`
-- 구성: 「댓글」 제목(h3 크기, `<h2>` 태그) + 점선 테두리 칸(안내 글 + 「GitHub Discussions에서 보기」 링크).
-- 쓰는 법: 글 맨 끝, 이전 · 다음 글 아래입니다. 화면에 가까워지면 giscus를 불러오고(`loading="lazy"`), 사이트 밝기가 바뀌면 giscus 테마도 `postMessage`로 바꿉니다. 불러오기 전과 JavaScript가 없을 때 이 칸이 보입니다. 이 칸의 높이를 최소 높이로 잡아 giscus가 들어와도 아래가 밀리지 않게 합니다.
+- Pencil: 「댓글 자리」 `GbsK7` (그림은 giscus 시절의 「GitHub Discussions에서 보기」 링크가 남아 있습니다. 2026-11-21 댓글이 노션 DB 익명 댓글로 바뀌어 코드에서는 링크를 뺐습니다)
+- 구성: 「댓글」 제목(h3 크기, `<h2>` 태그) + 점선 테두리 칸(안내 글: 로그인 없이 닉네임만 적고 남김, 닉네임과 댓글은 노션 표에 저장, IP는 저장하지 않음, JavaScript가 필요함).
+- 쓰는 법: 글 맨 끝, 이전 · 다음 글 아래입니다. Cloudflare Worker를 거쳐 댓글 목록과 입력 칸을 이 칸 안에 불러옵니다(docs/plan.md 「댓글」). 불러오기 전과 JavaScript가 없을 때 이 칸의 안내가 보입니다. 이 칸의 높이를 최소 높이로 잡아 댓글이 들어와도 아래가 밀리지 않게 합니다.
+- 1차 배포(Worker 전)에는 `src/shared/constants/features`의 `IS_COMMENTS_ENABLED`가 꺼져 있어 이 칸을 그리지 않습니다.
 
 ### 7.22 404 본문
 
@@ -698,7 +715,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 - 그림:
   - 투명 바탕 도식은 두 벌(`picture` + `prefers-color-scheme`, 그리고 `data-theme`에 맞춘 class)로 두거나, `--color-surface` 바탕 칸에 넣습니다.
   - 스크린샷은 한 벌만 두되 1px 선으로 테두리를 줍니다.
-- 코드 칸은 Shiki 두 테마가 같이 바뀝니다. giscus도 사이트 밝기를 따릅니다.
+- 코드 칸은 Shiki 두 테마가 같이 바뀝니다. 댓글 칸도 사이트 밝기를 따릅니다(같은 토큰을 씀).
 - `<meta name="theme-color">`는 두 값(`#FFFFFF`, `#0F1115`)을 `media`로 나눠 둡니다.
 
 ## 10. 속도 예산
@@ -708,19 +725,20 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 | 데모 없는 페이지(목록, 소개, 데모 없는 글)의 JS | 프레임워크 JS 0KB. 작은 스크립트(밝기, 목차 위치, 복사, 메뉴) 합계 5KB 이하(gzip) |
 | 데모 있는 글의 JS | 페이지 합계 100KB 이하(gzip, React 런타임 포함). 데모 하나의 자체 코드는 30KB 이하 |
 | CSS | 페이지 합계 30KB 이하(gzip) |
-| 글꼴 | 첫 화면에 쓰는 Pretendard 조각만, 합계 150KB 이하. preload는 `PretendardVariable.subset.91.woff2` 하나(38KB) |
+| 글꼴 | 글 한 편을 캐시 없이 처음 열 때 받는 글꼴 파일 합계(전송 크기) 150KB 이하. preload는 Blog Sans 하나. 2026-11-21 시험 글: 90KB(Blog Sans 69 · JetBrains Mono 16 · Blog Code Hangul 5) |
 | LCP | 2.5초 이하 (휴대폰, 느린 4G 기준). 보통 글 제목이 LCP라서 1.5초 안쪽을 노립니다 |
 | CLS | 0.1 이하, 목표 0. 그림 · 댓글 자리는 높이를 미리 잡고, 데모 화면은 고정 높이나 서버에서 그린 첫 화면으로 높이가 변하지 않게 합니다 |
 | INP | 200ms 이하 |
 | Lighthouse (휴대폰) | 성능 95 이상, 접근성 100, 권장사항 100, SEO 100 |
 
-- 미리 받는 글꼴 조각은 `pretendard/dist/web/variable/woff2-dynamic-subset/PretendardVariable.subset.91.woff2` 하나입니다.
-  - 가변 글꼴이라 이 파일 하나에 굵기 45~920이 모두 들어 있습니다. 그래서 「본문 굵기 한 가지」를 따로 고를 필요가 없습니다.
-  - 이 조각은 영문 · 숫자 · 기본 기호와 가장 자주 쓰는 한글 음절을 담고 있어 첫 화면 글자의 대부분을 그립니다. 다음으로 자주 쓰는 한글은 `subset.90`(21KB)인데, 미리 받지 않고 브라우저가 필요할 때 받게 둡니다.
+- 글꼴 예산은 Lighthouse(휴대폰)의 네트워크 기록에서 `Font` 종류 요청의 전송 크기를 더해 잽니다. 「첫 화면만」으로 재지 않는 까닭: 브라우저는 화면 밖 글자에도 글꼴을 받아서, 첫 화면 기준은 실제 받는 양을 말해 주지 못합니다.
+- 미리 받는 파일은 Blog Sans 하나입니다(`Document`가 `?url`로 불러 빌드 주소를 그대로 씀).
+  - 가변 글꼴이라 이 파일 하나에 쓰는 굵기(400–800)가 모두 들어 있습니다.
   - `<link rel="preload" as="font" type="font/woff2" crossorigin>`에는 빌드된 파일 주소(해시가 붙은 주소)를 넣어야 합니다. CSS가 부르는 주소와 다르면 두 번 받습니다.
-  - JetBrains Mono는 미리 받지 않습니다. 코드 칸은 대개 첫 화면 밑에 있습니다.
+  - JetBrains Mono와 Blog Code Hangul은 미리 받지 않습니다. 코드 칸은 대개 첫 화면 밑에 있습니다.
+- 글이 늘 때 Blog Sans가 커지는 어림: 새 한글 한 자에 약 0.1KB입니다. 지금 글자(한글 310자, 68KB)에 자주 쓰는 한글(KS X 1001 2,350자)을 앞에서부터 500자 더하면 120KB, 1,000자 더하면 162KB, 2,350자를 모두 담으면 304KB로 쟀습니다(2026-11-21). 글 한 편이 새 한글을 50~150자 더한다고 보면 처음 몇 편은 편마다 5~15KB씩 커지고, 쓰는 글자가 겹칠수록 덜 커집니다. 글꼴 합계가 150KB를 넘기 시작하면(Blog Sans 약 130KB, 지금보다 새 한글 약 600자 더) 글꼴을 다시 나눌지(자주 쓰는 글자 묶음 + 나머지) 정합니다.
 - 데모는 `client:visible`로 화면에 들어올 때 불러옵니다. 첫 화면 안에 데모가 있으면 `client:idle`로 바꿉니다.
-- 바깥 스크립트는 PostHog(중계 주소)와 giscus(화면 가까이 왔을 때)뿐입니다.
+- 바깥 스크립트는 PostHog와 노션 댓글뿐이고, 둘 다 우리 Cloudflare Worker 주소를 거칩니다.
 - 예산을 넘는 글은 올리기 전에 데모를 가볍게 하거나 정지 그림으로 바꿉니다.
 
 ## 11. Pencil과 코드 잇기
@@ -745,13 +763,12 @@ Knot에서는 컴포넌트마다 Figma 프레임 링크(`@see`)를 스토리에 
   4. `design/exports-system/`의 PNG를 다시 내보냅니다.
 - Pencil 변수 이름은 CSS 변수에서 `--`만 뺀 것입니다(`color-bg` = `--color-bg`). 다만 Pencil은 너비 · 높이에 변수를 받지 않아서, `--content-width`, `--toc-width`, `--header-height`, `--icon-button-size` 같은 크기 토큰은 Pencil에 숫자로 들어가 있습니다. 이 값들은 이 문서가 정본입니다.
 
-## 12. 부록: 지금 코드와 다른 점 (2026-11-21 3단계 기준)
+## 12. 부록: 지금 코드와 다른 점 (2026-11-21 4단계 기준)
 
-1단계 코드와 이 문서의 차이는 2단계(토큰 · 부품 · 상태)와 3단계(코드 칸, 페이지 제목 `title` 단계, 글 페이지 grid와 `--toc-sticky-top`, Pretendard 미리 받기)에서 모두 코드에 반영했습니다. 아래는 남은 차이와, 문서와 다르게 둔 까닭입니다.
+1단계 코드와 이 문서의 차이는 2단계(토큰 · 부품 · 상태), 3단계(코드 칸, 페이지 제목 `title` 단계, 글 페이지 grid와 `--toc-sticky-top`), 4단계(사이트 글자 글꼴과 대체 글꼴 크기 맞춤)에서 모두 코드에 반영했습니다. 아래는 남은 차이와, 문서와 다르게 둔 까닭입니다.
 
 | 항목 | 이 문서 | 지금 코드 | 까닭 |
 |---|---|---|---|
 | 데모 화면 높이 | 200px로 미리 정함 (7.20) | 넓은 칸에서 최소 200px. 렌더링 단계 데모는 고르기 · 미리보기 · 단계가 있어 그보다 높음 | 서버에서 그린 첫 화면이 그대로 있어 JavaScript가 늦게 와도 높이가 변하지 않습니다(10장의 CLS 줄과 같음) |
 | 표 설명 | `<caption>` (7.18) | `<Figure caption="표 1. …" captionSide="top">`의 `<figcaption>` | 마크다운(GFM) 표에는 `<caption>`을 넣을 수 없습니다 |
 | 글 제목 줄바꿈 | 손으로 줄바꿈을 넣지 않음 (3.3) | 제목의 첫 `: ` 앞뒤를 두 덩어리로 그려, 줄을 바꿔야 할 때 콜론 뒤에서 먼저 바꿈 (`widgets/post/PostHeader/utils/splitTitle`) | 손 줄바꿈이 아니라 「무엇: 어떻게」 꼴의 제목을 읽기 좋게 나누는 규칙입니다. 좁은 칸에서는 덩어리 안에서 다시 줄을 바꿉니다 |
-| Pretendard 글꼴 무게 | 첫 화면 조각만 합계 150KB (10장) | 미리 받기는 `subset.91` 하나(37KB). 다만 브라우저는 화면 밖 글자에도 해당 조각을 받아, 시험 글 한 편에서 조각 20여 개(약 550KB)를 받습니다 | dynamic subset의 동작입니다. 「첫 화면」 기준을 어떻게 잴지(첫 화면 안 조각만 셀지, 페이지 전체를 셀지) 정해야 합니다 |

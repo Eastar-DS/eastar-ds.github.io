@@ -37,7 +37,9 @@ user-invocable: true
 
 ```plaintext
 astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마와 transformer
-scripts/buildCodeFont.ts             # 코드용 한글 부분 글꼴 만들기 (pnpm fonts:code)
+scripts/buildFonts.ts                # 사이트 글자만 담은 글꼴 만들기 · 빠진 글자 검사 (pnpm build가 돌림)
+scripts/fonts/                       # 글자 모으기 · 글꼴 이름 바꾸기 (단위 테스트 포함)
+.github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · GitHub Pages 배포
 src/
 ├── content.config.ts                # 글 모음 스키마 (Astro가 요구하는 위치)
 ├── content/
@@ -108,10 +110,10 @@ src/
 │   │   └── formatDate/
 │   │       ├── index.ts
 │   │       └── test.ts
-│   ├── constants/                   # site, theme
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기)
 │   ├── types/                       # post.ts, seo.ts, theme.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
-│       └── fonts/                   # 코드용 한글 부분 글꼴과 OFL 전문
+│       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문
 │
 └── __test__/                        # E2E 테스트 (필요할 때)
 ```

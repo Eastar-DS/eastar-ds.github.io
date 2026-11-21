@@ -66,3 +66,15 @@
 | `.claude/rules/design-system.md` | 코드 칸 규칙(테마 · 가독성 값 · 대비 테스트 · D2Coding 부분 글꼴), 페이지 제목 `title` 단계를 더함 | 코드 칸이 확정됨 |
 | `.claude/rules/content-guide.md` | 강조 줄 메타 `{3,5-6}`, 줄 번호 자동, `pnpm fonts:code`, 새 함수(`codeThemes` 등)를 더함 | 글을 쓸 때 알아야 할 코드 쪽 규칙 |
 | `CLAUDE.md`, 스킬 | `pnpm fonts:code`와 `pnpm check`의 글꼴 검사, 폴더 나무의 `scripts/` · `styles/fonts/`를 더함 | 새 도구 |
+
+## 4단계에서 더 바꾼 것 (2026-11-21, 글꼴 최적화와 1차 배포 준비)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `scripts/buildFonts.ts`, `scripts/fonts/` | 새로 씀. `pnpm build`가 빌드 → 빌드 결과의 글자로 글꼴 세 개(Blog Sans · JetBrains Mono · Blog Code Hangul) 만들기 → 다시 빌드 → 빠진 글자 검사 순서로 돔. 글자 모으기와 이름 바꾸기는 순수 함수로 떼어 테스트함. 3단계의 `scripts/buildCodeFont.ts`와 `shared/content/collectCodeHangul`은 여기로 합침 | 글이 늘 때마다 글꼴을 손으로 다시 만들지 않게 하고, 빠진 글자가 있으면 배포 전에 빌드가 멈추게 함. 빌드 도구라 `src/`의 레이어 밖(`scripts/`)에 둠 |
+| `vitest.config.ts` | `scripts/**/*.test.ts`를 테스트 대상에 더함 | 위 순수 함수의 단위 테스트 |
+| `.claude/rules/design-system.md`, `content-guide.md` | 글꼴 파일을 손으로 고치지 않음, 굵기 400–800, 대체 글꼴 순서를 바꾸지 않음, 글을 쓴 뒤 바뀐 글꼴 파일을 함께 커밋함을 적음. `pnpm fonts:code`와 `collectCodeHangul` 줄을 뺌 | 글꼴 만드는 방식이 바뀜 |
+| `.claude/rules/component-abstract-pattern.md` | `Document`가 상수를 직접 읽는 예외에 `SITE.verification`(검색 등록 확인 메타)을 더함 | 문서 머리의 메타는 페이지가 넘길 값이 아님 |
+| `shared/constants/features` | 새로 둠. `IS_COMMENTS_ENABLED` | 1차 배포에서 댓글 자리를 설정 하나로 끄고 켬 |
+| `.github/workflows/deploy.yml` | 새로 씀. main에 올라오면 타입 검사 · 단위 테스트 · 빌드(빠진 글자 검사 포함) 뒤 GitHub Pages 공식 액션으로 배포 | 1차 배포 준비 |
+| `CLAUDE.md`, 스킬 | 명령 표(`pnpm build` · `pnpm fonts` · `pnpm fonts:check`), 배포 줄, 폴더 나무의 `scripts/fonts/` · `.github/` · `constants/features`를 고침 | 새 도구 |

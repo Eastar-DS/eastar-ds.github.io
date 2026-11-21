@@ -15,10 +15,10 @@
 | 명령 | 하는 일 |
 | --- | --- |
 | `pnpm dev` | 개발 서버 (`http://localhost:4321`). 에이전트는 `pnpm astro dev --background`로 띄우고 `pnpm astro dev stop`으로 끕니다 |
-| `pnpm build` | 정적 빌드 (`dist/`) |
-| `pnpm check` | 타입 검사(`astro check`, TypeScript strict)와 코드용 한글 글꼴이 글과 맞는지 검사 |
+| `pnpm build` | 정적 빌드(`dist/`). 빌드 → 사이트 글자로 글꼴 만들기(`scripts/buildFonts.ts`) → 다시 빌드 → 빠진 글자 검사. 글꼴이 바뀌면 `src/shared/styles/fonts/`를 함께 커밋 |
+| `pnpm check` | 타입 검사 (`astro check`, TypeScript strict) |
 | `pnpm test` | 단위 테스트 (vitest) |
-| `pnpm fonts:code` | 글의 코드에 쓰인 한글로 D2Coding 부분 글꼴(Blog Code Hangul)을 다시 만듦. 코드에 새 한글을 쓰면 돌림 |
+| `pnpm fonts` · `pnpm fonts:check` | `dist`로 글꼴만 다시 만들기 · 빠진 글자만 검사 (보통은 `pnpm build`가 함께 함) |
 
 ---
 
@@ -60,3 +60,4 @@
 - 글에는 공개되면 곤란한 내용을 넣지 않는다. 저장소는 공개 저장소다.
 - `.references/`(다른 사이트 화면)와 `design/*.pen`(Pencil 원본)은 저장소에 넣지 않는다. 시안은 `design/exports-system/`의 PNG를 보고, `.pen` 파일은 파일 도구로 열거나 고치지 않는다(다룰 때는 Pencil 도구로만, 이스타가 시킬 때만).
 - 커밋 메시지는 `feat: ...함`처럼 한국어로 쓰고, 공동작업자 줄을 넣지 않는다.
+- 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.

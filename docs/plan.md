@@ -30,6 +30,17 @@
   - 제목 앵커, 페이지마다 h1 하나
   - 답을 먼저 쓰는 문단
   - 네이버 서치어드바이저와 Google Search Console 등록
+    - 둘 다 HTML 메타 태그로 소유를 확인합니다. 값은 이스타가 등록할 때 받아 `src/shared/constants/site`의 `verification.google` · `verification.naver`에 넣습니다. 비어 있으면 메타 태그를 그리지 않습니다.
+  - **robots.txt는 모든 로봇을 허용합니다**(2026-11-21). `/robots.txt`는 `src/shared/seo/createRobotsTxt`가 만들고 사이트맵 주소(`/sitemap-index.xml`)를 적습니다.
+    - 이유: 이 블로그의 목표가 검색(SEO)과 AI 답변에 인용되기(AEO)라서, 글을 읽어 가는 로봇을 막을 까닭이 없습니다. 공개 글만 있고, 초안은 저장소에 넣지 않습니다.
+    - `User-agent: *`로 모두 허용하고, AI 로봇은 막지 않는다는 뜻을 분명히 하려고 이름을 따로 적어 허용합니다.
+      - 검색: Googlebot, Bingbot, Yeti(네이버), Daumoa(다음), Applebot, DuckDuckBot
+      - AI 검색 · 답변(질문에 답할 때 글을 읽고 출처로 걸어 줌): OAI-SearchBot, ChatGPT-User, PerplexityBot, Perplexity-User, Claude-SearchBot, Claude-User
+      - AI 학습 · 수집: GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot
+    - 학습용 수집까지 허용하는 까닭: 학습 데이터에 들어간 글이 AI 답변의 배경 지식이 되고, 막아도 이미 공개된 글은 다른 경로로 수집되기 때문입니다. 마음이 바뀌면 학습용 로봇만 `Disallow`로 바꿉니다.
+- **배포:** 두 번에 나눕니다(2026-11-21).
+  - 1차: 글과 화면만. `.github/workflows/deploy.yml`이 main에 올라올 때 타입 검사 · 단위 테스트 · 빌드(사이트 글자로 글꼴 만들기와 빠진 글자 검사 포함)를 거쳐 GitHub Pages에 배포합니다. 댓글 자리는 `src/shared/constants/features`의 `IS_COMMENTS_ENABLED`로 꺼 둡니다.
+  - 2차: Cloudflare Worker(노션 댓글, PostHog 중계)를 붙이고 댓글을 켭니다.
 - **세컨드 브레인 연결:**
   - 먼저 게시한 글을 세컨드 브레인 기록으로 넣습니다.
   - 글감 제안은 글을 몇 편 쓴 뒤에 합니다.

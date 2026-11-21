@@ -32,7 +32,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 
 - 마크다운을 JSX 부품 안에 넣을 때는 앞뒤에 빈 줄을 둡니다.
 - 데모는 `src/modules/features/demo/{데모 이름}/index.tsx`로 만들고, 글에서 import해 `client:visible`로 씁니다.
-- **코드 칸 · 본문 속 코드에 새 한글을 쓰면 `pnpm fonts:code`를 돌립니다.** 코드 속 한글은 글에 쓰인 글자만 남긴 D2Coding 부분 글꼴(`src/shared/styles/fonts/blog-code-hangul.woff2`)이 그립니다. `pnpm check`가 빠진 글자를 찾아 알려 줍니다.
+- **글꼴은 사이트에 쓰인 글자만 담습니다.** 글을 쓰고 `pnpm build`를 돌리면 새 글자로 글꼴을 다시 만들고 빠진 글자를 검사합니다. 바뀐 `src/shared/styles/fonts/` 파일은 글과 함께 커밋합니다.
 
 ## shared/content 함수
 
@@ -46,7 +46,6 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `calculateReadingMinutes` · `groupPostsByYear` · `toSeriesList` · `findAdjacentPosts` | 위 함수들이 쓰는 순수 계산. 단위 테스트함 |
 | `codeTitleTransformer` · `codeLineNumbersTransformer` | 코드 칸 메타의 `title`을 `<pre data-title>`로 옮기고, 20줄 넘는 코드에 `data-line-numbers`를 붙이는 Shiki transformer. `astro.config.ts`에서 씀 |
 | `codeThemes` | VS Code Light+ / Dark+에서 대비가 모자란 색만 고친 Shiki 테마 두 벌(`blog-light-plus` · `blog-dark-plus`). 테스트가 모든 글자색의 대비를 확인함 |
-| `collectCodeHangul` | 글의 코드에 쓰인 한글을 모음. `scripts/buildCodeFont.ts`가 부분 글꼴을 만들 때 씀 |
 
 - 컴포넌트는 `astro:content`를 직접 import하지 않고 이 함수들을 부릅니다.
 - 날짜는 `Date`로 넘기고, 문자열로 바꾸는 일은 `shared/utils/formatDate`(한국 시간 고정)가 합니다.

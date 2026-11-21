@@ -46,7 +46,9 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 - 코드 칸
   - 낱말 색은 VS Code Light+ / Dark+를 대비 보정한 `blog-light-plus` · `blog-dark-plus`입니다. 테마를 바꾸거나 Shiki를 올리면 `codeThemes/test.ts`가 모든 글자색의 대비(바탕 · 강조 줄 위 4.5:1)를 확인합니다.
   - 15px(휴대폰 14px) · 줄 간격 1.65 · 글자 이음 끔 · 탭 2 · 가로 스크롤. 강조 줄은 메타 `{3,5-6}`, 줄 번호는 20줄 넘을 때만.
-  - 코드 속 한글은 D2Coding 부분 글꼴을 씁니다. OFL의 예약 글꼴 이름 때문에 부분 글꼴의 이름은 「Blog Code Hangul」입니다. 글의 코드에 새 한글을 쓰면 `pnpm fonts:code`를 돌립니다.
+  - 코드 속 한글은 D2Coding 부분 글꼴(이름은 OFL 예약 이름 때문에 「Blog Code Hangul」)을 씁니다.
+- 글꼴 파일은 `scripts/buildFonts.ts`가 빌드 결과의 글자만 담아 만듭니다(Blog Sans = Pretendard 부분 글꼴, JetBrains Mono, Blog Code Hangul). `pnpm build`가 다시 만들고 빠진 글자를 검사하므로 손으로 고치지 않습니다. 새 글꼴 · 굵기를 쓰려면 이 스크립트와 `fonts.css`를 함께 고치고, 굵기는 400–800 밖으로 쓰지 않습니다(가변 축을 이 범위로 줄였음).
+- `font-sans`의 대체 글꼴(Blog Sans Fallback Mac · Win · 기본)은 Blog Sans에 크기를 맞춘 것이라 순서를 바꾸지 않습니다.
 - 아이콘은 Lucide 하나만, 선 굵기 2, `currentColor`. 크기는 `size="sm|md|lg|xl"`(14 · 16 · 18 · 20px)입니다. 아이콘만 있는 단추에는 `aria-label`을 꼭 붙입니다.
 - 포커스는 `base.css`의 `:focus-visible`(2px `--color-focus`, 간격 2px)을 씁니다. `outline: none`으로 지우거나 `box-shadow`로 대신하지 않습니다. 모서리만 부품 모서리를 따르게 고칩니다.
 - 움직임은 `--duration-*`과 `--ease-standard`를 씁니다. 움직임 줄이기 설정이면 `base.css`가 시간을 0으로 줄입니다. 데모는 자동 재생하지 않습니다.
