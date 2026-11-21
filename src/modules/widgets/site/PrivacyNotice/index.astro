@@ -156,8 +156,13 @@ const posthogPrivacyUrl = "https://posthog.com/privacy";
 
     <h2>문의</h2>
     <p>
-      궁금한 점은 <a href={SITE.author.githubUrl}>이스타의 GitHub</a>로 알려
-      주세요.
+      궁금한 점은
+      {SITE.author.email && (
+        <>
+          <a href={`mailto:${SITE.author.email}`}>{SITE.author.email}</a>이나{" "}
+        </>
+      )}
+      <a href={SITE.author.githubUrl}>이스타의 GitHub</a>로 알려 주세요.
     </p>
   </div>
 </article>

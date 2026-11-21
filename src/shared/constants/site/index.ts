@@ -8,7 +8,7 @@ const AUTHOR_REAL_NAME = "김동성";
 export const SITE = {
   title: "이스타의 개발 노트",
   description:
-    "도메인에 진심으로 달려드는 프론트엔드 엔지니어 이스타가 공부하며 배운 것과 만든 것을 적습니다.",
+    `도메인에 진심으로 달려드는 프론트엔드 엔지니어 ${AUTHOR_NAME}(${AUTHOR_REAL_NAME})가 공부하며 배운 것과 만든 것을 적습니다.`,
   url: "https://eastar-ds.github.io",
   locale: "ko_KR",
   language: "ko",
