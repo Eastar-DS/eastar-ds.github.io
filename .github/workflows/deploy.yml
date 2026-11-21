@@ -1,6 +1,7 @@
 # main에 올라오면 검사하고 빌드해서 GitHub Pages(https://eastar-ds.github.io)에 배포합니다.
 # 사용자 사이트(<계정>.github.io)라 astro.config.ts에 base가 없습니다.
 # 저장소 설정 > Pages > Source를 「GitHub Actions」로 두어야 합니다.
+# 배포가 끝나면 글이 바뀐 페이지 주소를 IndexNow로 검색 엔진에 알립니다(scripts/indexNow.ts). 알리기가 실패해도 배포는 성공으로 둡니다.
 name: 배포
 
 on:
@@ -22,6 +23,8 @@ jobs:
   build:
     name: 검사와 빌드
     runs-on: ubuntu-latest
+    outputs:
+      indexnow-urls: ${{ steps.indexnow-plan.outputs.urls }}
     steps:
       - uses: actions/checkout@v7
 
@@ -52,6 +55,13 @@ jobs:
             echo "::warning::글꼴이 빌드에서 다시 만들어졌습니다. 배포에는 새 글꼴이 들어가지만, 로컬에서 pnpm build 후 src/shared/styles/fonts를 커밋해 두세요."
           fi
 
+      # 지금 배포된 indexnow-pages.json(페이지마다 글의 해시)과 새 빌드를 견줘, 새로 생기거나 글이 바뀌거나 없어진 페이지를 고릅니다.
+      # 새 목록은 dist에 넣어 함께 배포합니다. 고르기가 실패해도 배포는 이어 갑니다
+      - name: IndexNow로 알릴 주소 고르기
+        id: indexnow-plan
+        continue-on-error: true
+        run: node scripts/indexNow.ts plan
+
       - uses: actions/configure-pages@v6
 
       - uses: actions/upload-pages-artifact@v5
@@ -68,3 +78,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  indexnow:
+    name: 바뀐 주소를 검색 엔진에 알리기 (IndexNow)
+    needs: [build, deploy]
+    if: needs.build.outputs.indexnow-urls != '' && needs.build.outputs.indexnow-urls != '[]'
+    runs-on: ubuntu-latest
+    # 검색 엔진이 받지 못해도 배포 결과는 성공으로 둡니다. 응답 코드는 이 작업의 로그에 남습니다
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      # 스크립트가 바깥 패키지를 쓰지 않아 의존성 설치 없이 Node 24로 바로 돌립니다
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: IndexNow로 보내기
+        run: node scripts/indexNow.ts submit
+        env:
+          INDEXNOW_URLS: ${{ needs.build.outputs.indexnow-urls }}
