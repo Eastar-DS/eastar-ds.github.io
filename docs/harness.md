@@ -120,3 +120,17 @@
 | `scripts/indexNow.ts`, `scripts/indexNow/`, `public/{키}.txt`, `.github/workflows/deploy.yml` | 배포 뒤 글이 바뀐 페이지를 IndexNow로 알림 | 새 글을 검색 엔진이 사이트맵을 다시 읽기 전에 알 수 있게 합니다. 워크플로는 로컬에서 돌릴 수 없어서 고르는 부분을 순수 함수로 떼어 시험합니다 |
 | `vitest.config.ts` | `css.include`에 `tokens.css` | vitest는 CSS를 빈 글로 불러와서, 공유 그림이 `?raw`로 읽는 색 토큰을 시험에서도 읽게 했습니다 |
 | `.claude/rules/seo-guide.md`, `shared-layer.md`, `content-guide.md`, 스킬 | 공유 그림, llms.txt, IndexNow 절과 새 함수, 폴더 나무를 더함 | 코드가 바뀐 만큼 맞춤 |
+
+## 8단계에서 더 바꾼 것 (2026-11-21, 이름 표기, 포트폴리오 공개, 관련 글)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `shared/constants/features`의 `IS_PORTFOLIO_SHOWN` | `true`로 바꾸고, 포트폴리오 페이지, 머리말 메뉴, 소개 링크, 이력서 연락처의 포트폴리오 링크, 글 끝의 「이 글과 이어진 프로젝트」, 사이트맵, 공유 그림, llms.txt가 모두 이 값 하나를 보게 함 | 이스타가 포트폴리오를 이력서와 따로 바로 공개하기로 정함. 공개 판단을 한곳에 둠 |
+| `.claude/rules/seo-guide.md` | 이력서 h1을 「이스타(김동성)」으로, 글쓴이 Person을 name 「김동성」과 alternateName 「이스타」로 적고, 이메일과 전화번호는 넣지 않는다고 적음. 사이트맵 줄의 포트폴리오를 `IS_PORTFOLIO_SHOWN`으로 고침 | 이스타가 본명을 함께 쓰기로 정함 |
+| `.claude/rules/component-abstract-pattern.md` | 스위치로 켜고 끄는 고정 주소 페이지가 이력서(`IS_RESUME_SHOWN`)와 포트폴리오(`IS_PORTFOLIO_SHOWN`)라고 적음. features 예에 `post/RelatedPostLinks`, `post/PostProjectLinks`를 더함 | 스위치가 둘로 나뉨, 새 features |
+| `.claude/rules/shared-layer.md` | `routes`에 `getPortfolioProjectPath`, `content`에 `getPostsBySlugs`, `constants/career`에 프로젝트 id 목록을 적음 | 새 shared 코드 |
+| `.claude/rules/content-guide.md` | 글 앞머리 `projects` 칸, 이력서와 포트폴리오의 `relatedPostSlugs`, `getPostsBySlugs`와 `findPostsBySlugs`를 적음 | 글과 이력서, 포트폴리오를 서로 잇는 구조. 정본 `docs/content-guide.md` 1장 표에는 `projects`가 아직 없어 보고함 |
+| `.claude/rules/design-system.md` | 「관련 글」 링크와 「이 글과 이어진 프로젝트」가 정본 7.25, 7.26에 있다는 줄을 더함 | 새 화면 요소 |
+| `.claude/skills/project-structure/SKILL.md` | 폴더 나무의 포트폴리오 페이지 설명, `getPortfolioProjectPath`, `constants/career`의 id 목록을 고침 | 코드가 바뀐 만큼 맞춤 |
+| `src/content.config.ts` | `projects` 칸이 `shared/constants/career`의 id만 받음(`@/` 별칭으로 불러옴) | 없는 프로젝트를 적으면 빌드가 멈춰서 깨진 링크가 배포되지 않게 함 |
+| `shared/seo/getPageOgCards`, `shared/seo/createLlmsTxt` | 이력서와 포트폴리오 그림의 이름 줄과 설명을 `SITE.author.displayName`(「이스타(김동성)」)으로, llms.txt 「글쓴이」 절의 소개 설명에 같은 이름을 넣음. 그림의 사이트 이름 줄은 그대로 둠 | 이력서 머리와 같은 이름 표기 |

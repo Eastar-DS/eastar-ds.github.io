@@ -56,7 +56,7 @@ src/
 │   ├── index.astro                  # 글 목록 (/)
 │   ├── about/index.astro            # 소개 (/about/)
 │   ├── resume/[...path]/index.astro # 이력서 (/resume/). 공개 스위치가 꺼지면 배포 빌드에 없음
-│   ├── portfolio/[...path]/index.astro # 포트폴리오 (/portfolio/). 이력서와 같은 스위치
+│   ├── portfolio/[...path]/index.astro # 포트폴리오 (/portfolio/). 포트폴리오 스위치(IS_PORTFOLIO_SHOWN, 지금은 켜 둠)를 따름
 │   ├── privacy/index.astro          # 개인정보 처리 안내 (/privacy/)
 │   ├── posts/[slug]/index.astro     # 글 화면 (/posts/{slug}/)
 │   ├── posts/[slug]/og.png.ts       # 글의 공유 미리보기 그림 (/posts/{slug}/og.png)
@@ -119,14 +119,14 @@ src/
 │   │   ├── domain/
 │   │   └── common/
 │   ├── routes/
-│   │   ├── paths/index.ts           # PATHS, getPostPath, getOgImagePath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
+│   │   ├── paths/index.ts           # PATHS, getPostPath, getOgImagePath, getPortfolioProjectPath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
 │   │   └── getSwitchPagePaths/      # 스위치로 켜고 끄는 고정 주소 페이지의 getStaticPaths 값
 │   ├── utils/
 │   │   ├── formatDate/
 │   │   │   ├── index.ts
 │   │   │   └── test.ts
 │   │   └── isCommentsReady/         # astro.config.ts도 부르므로 import 없는 순수 함수 (shouldLoadAnalytics도 같음)
-│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기, 포트폴리오 공개 판단), career(이력서 · 포트폴리오의 프로젝트 정보), services(Worker · Turnstile · PostHog 설정), ogImage(공유 그림 크기)
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기, 포트폴리오 공개 판단), career(이력서 · 포트폴리오의 프로젝트 정보, 글 앞머리 projects가 받는 id 목록), services(Worker · Turnstile · PostHog 설정), ogImage(공유 그림 크기)
 │   ├── types/                       # post.ts, seo.ts, theme.ts, career.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
 │       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문

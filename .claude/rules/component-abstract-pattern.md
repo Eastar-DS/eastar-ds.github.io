@@ -63,7 +63,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 ### 주의사항
 
 - 라우트에 대응하는 화면 단위는 `src/pages`에 두며, widgets를 import해 **배치하는 레이아웃 역할만** 담당. 페이지가 하는 일은 아래까지임.
-  - `getStaticPaths`로 만들 주소 정하기 (Astro 규약이라 페이지에만 둘 수 있음). 기능 스위치로 켜고 끄는 고정 주소 페이지(이력서, 포트폴리오)는 `pages/{주소}/[...path]/index.astro`에 두고 `getSwitchPagePaths(스위치)`로 path가 빈 주소 하나만 만듦
+  - `getStaticPaths`로 만들 주소 정하기 (Astro 규약이라 페이지에만 둘 수 있음). 기능 스위치로 켜고 끄는 고정 주소 페이지(이력서는 `IS_RESUME_SHOWN`, 포트폴리오는 `IS_PORTFOLIO_SHOWN`)는 `pages/{주소}/[...path]/index.astro`에 두고 `getSwitchPagePaths(스위치)`로 path가 빈 주소 하나만 만듦
   - `shared/seo` 함수로 문서 메타와 구조화 데이터를 만들어 `Document`에 넘기기
   - `primitives/layout`으로 widgets 배치하기, 페이지 위아래 여백 정하기
 - 페이지에서 콘텐츠를 가공하거나 화면 요소를 직접 그리지 않음.
@@ -83,7 +83,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - 도메인 로직을 다루는 작은 컴포넌트. 대부분 움직이는 칸임
 - 섹션이 되지 못하는 작은 단위로, 여러 widgets·pages에서 재사용 가능한 단위로 작성
 - 하위에 도메인별 디렉토리로 작성
-  - e.g. `site/ThemeToggle`, `post/CopyCodeButton`, `demo/VirtualListDemo`
+  - e.g. `site/ThemeToggle`, `post/CopyCodeButton`, `post/RelatedPostLinks`(이력서 · 포트폴리오 widgets가 쓰는 「관련 글」 링크), `post/PostProjectLinks`(글 페이지가 바로 놓는 「이 글과 이어진 프로젝트」), `demo/VirtualListDemo`
 - 글 속 데모는 `demo/{데모 이름}`으로 둠. 데모는 글 본문(MDX)이 직접 import하므로 widgets를 거치지 않음
 
 #### shared/components/composites
