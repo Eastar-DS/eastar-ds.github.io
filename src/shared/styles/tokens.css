@@ -64,15 +64,16 @@
   --color-data-4: light-dark(#be185d, #f472b6);
 
   /* 글꼴 */
+  /* 본문: Blog Sans(Pretendard 부분 글꼴) → 오기 전엔 크기를 맞춘 대체 글꼴(맥 · 윈도 · 그 밖) → 깔린 Pretendard → 시스템 글꼴 */
   --font-sans:
-    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
-    sans-serif;
-  /* 코드 속 한글은 D2Coding 부분 글꼴(Blog Code Hangul, codeFont.css)이 그립니다.
-     로컬에 D2Coding이 깔린 사람은 그다음 D2Coding, 둘 다 없으면 Pretendard가 대신합니다 */
+    "Blog Sans", "Blog Sans Fallback Mac", "Blog Sans Fallback Win",
+    "Blog Sans Fallback", "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR",
+    "Malgun Gothic", sans-serif;
+  /* 코드: 영문은 JetBrains Mono, 한글은 D2Coding 부분 글꼴(Blog Code Hangul). 깔린 D2Coding, 없으면 Blog Sans가 대신합니다 */
   --font-mono:
     "JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace,
-    SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace;
+    SFMono-Regular, Menlo, Consolas, "Blog Sans", monospace;
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;

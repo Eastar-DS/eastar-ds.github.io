@@ -1,0 +1,104 @@
+/*
+ * 글꼴 (scripts/buildFonts.ts가 사이트에 쓰인 글자만 담아 만든 파일들. pnpm build가 매번 다시 만들고 빠진 글자를 검사합니다)
+ *
+ * - Blog Sans: Pretendard Variable에서 사이트 글자만 남기고 굵기 축을 400–800으로 줄인 글꼴. 페이지가 미리 받는 파일은 이것 하나입니다
+ * - JetBrains Mono: 코드의 영문 · 숫자 · 기호
+ * - Blog Code Hangul: 코드 속 한글(주석 · 문자열). D2Coding에서 코드에 쓰인 한글만 남김
+ *
+ * OFL 3조: Pretendard(예약 이름 Pretendard · Source)와 D2Coding(예약 이름 D2Coding)은 줄인 수정본에 원래 이름을 쓸 수 없어
+ * Blog Sans · Blog Code Hangul로 바꿨습니다. 라이선스 전문은 fonts/*-OFL.txt
+ *
+ * font-display: swap — 첫 방문(대개 검색에서 옴)에도 Pretendard로 읽히게 합니다. optional은 느린 휴대폰에서 첫 방문 내내 시스템 글꼴로 남습니다.
+ * 바뀔 때 흔들리지 않게 아래 대체 글꼴의 너비 · 세로 수치를 Blog Sans에 맞췄습니다.
+ */
+@font-face {
+  font-family: "Blog Sans";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("./fonts/blog-sans.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/jetbrains-mono.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Blog Code Hangul";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/blog-code-hangul.woff2") format("woff2");
+  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
+}
+
+/*
+ * Blog Sans가 오기 전 잠깐 쓰는 대체 글꼴. 너비(size-adjust)는 시험 글 본문 2,339자의 글자 너비 합을 Pretendard와 견줘 정했고,
+ * 세로 수치는 Pretendard(위 0.9521em · 아래 0.2412em · 줄 사이 0)를 size-adjust로 나눈 값입니다.
+ * - 맥: Apple SD Gothic Neo (글꼴 파일로 잼, 너비 100.11%)
+ * - 윈도: 맑은 고딕 (공개된 14px 너비 표로 추정, 85.61%. 윈도에서 확인이 필요합니다)
+ * - 그 밖(안드로이드 · 리눅스): Noto Sans KR · Noto Sans CJK KR (글꼴 파일로 잼, 94.51%)
+ */
+@font-face {
+  font-family: "Blog Sans Fallback Mac";
+  font-weight: 400;
+  src: local("Apple SD Gothic Neo Regular"), local("AppleSDGothicNeo-Regular");
+  size-adjust: 100.11%;
+  ascent-override: 95.11%;
+  descent-override: 24.09%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Blog Sans Fallback Mac";
+  font-weight: 600 800;
+  src: local("Apple SD Gothic Neo Bold"), local("AppleSDGothicNeo-Bold");
+  size-adjust: 100.11%;
+  ascent-override: 95.11%;
+  descent-override: 24.09%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Blog Sans Fallback Win";
+  font-weight: 400;
+  src: local("Malgun Gothic"), local("MalgunGothic"), local("맑은 고딕");
+  size-adjust: 85.61%;
+  ascent-override: 111.21%;
+  descent-override: 28.17%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Blog Sans Fallback Win";
+  font-weight: 600 800;
+  src: local("Malgun Gothic Bold"), local("MalgunGothicBold"), local("맑은 고딕 Bold");
+  size-adjust: 85.61%;
+  ascent-override: 111.21%;
+  descent-override: 28.17%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Blog Sans Fallback";
+  font-weight: 400;
+  src: local("Noto Sans KR"), local("NotoSansKR-Regular"), local("Noto Sans CJK KR"), local("NotoSansCJKkr-Regular");
+  size-adjust: 94.51%;
+  ascent-override: 100.74%;
+  descent-override: 25.52%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Blog Sans Fallback";
+  font-weight: 600 800;
+  src: local("Noto Sans KR Bold"), local("NotoSansKR-Bold"), local("Noto Sans CJK KR Bold"), local("NotoSansCJKkr-Bold");
+  size-adjust: 94.51%;
+  ascent-override: 100.74%;
+  descent-override: 25.52%;
+  line-gap-override: 0%;
+}
