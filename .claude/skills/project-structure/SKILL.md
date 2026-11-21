@@ -50,6 +50,8 @@ src/
 ├── pages/                           # 라우트. widgets를 배치·조립만 함
 │   ├── index.astro                  # 글 목록 (/)
 │   ├── about/index.astro            # 소개 (/about/)
+│   ├── resume/[...path]/index.astro # 이력서 (/resume/). 공개 스위치가 꺼지면 배포 빌드에 없음
+│   ├── portfolio/[...path]/index.astro # 포트폴리오 (/portfolio/). 이력서와 같은 스위치
 │   ├── privacy/index.astro          # 개인정보 처리 안내 (/privacy/)
 │   ├── posts/[slug]/index.astro     # 글 화면 (/posts/{slug}/)
 │   ├── 404.astro
@@ -105,13 +107,14 @@ src/
 │   │   ├── domain/
 │   │   └── common/
 │   ├── routes/
-│   │   └── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS, MAIN_CONTENT_ID
+│   │   ├── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
+│   │   └── getSwitchPagePaths/      # 스위치로 켜고 끄는 고정 주소 페이지의 getStaticPaths 값
 │   ├── utils/
 │   │   └── formatDate/
 │   │       ├── index.ts
 │   │       └── test.ts
-│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기)
-│   ├── types/                       # post.ts, seo.ts, theme.ts
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기), career(이력서 · 포트폴리오의 프로젝트 정보)
+│   ├── types/                       # post.ts, seo.ts, theme.ts, career.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
 │       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문
 │

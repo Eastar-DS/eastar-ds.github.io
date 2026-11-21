@@ -78,3 +78,14 @@
 | `shared/constants/features` | 새로 둠. `IS_COMMENTS_ENABLED` | 1차 배포에서 댓글 자리를 설정 하나로 끄고 켬 |
 | `.github/workflows/deploy.yml` | 새로 씀. main에 올라오면 타입 검사 · 단위 테스트 · 빌드(빠진 글자 검사 포함) 뒤 GitHub Pages 공식 액션으로 배포 | 1차 배포 준비 |
 | `CLAUDE.md`, 스킬 | 명령 표(`pnpm build` · `pnpm fonts` · `pnpm fonts:check`), 배포 줄, 폴더 나무의 `scripts/fonts/` · `.github/` · `constants/features`를 고침 | 새 도구 |
+
+## 5단계에서 더 바꾼 것 (2026-11-21, 소개 문구와 이력서, 포트폴리오)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `.claude/rules/component-abstract-pattern.md` | 도메인에 `career`(이력서와 포트폴리오)를 더하고, 스위치로 켜고 끄는 고정 주소 페이지를 `pages/{주소}/[...path]/index.astro` + `getSwitchPagePaths`로 만든다는 줄을 더함 | 고정 주소 페이지는 `getStaticPaths`를 쓸 수 없어서, 공개 전 페이지를 배포 빌드에서 빼려면 나머지 매개변수 폴더가 필요함 |
+| `.claude/rules/seo-guide.md` | h1 목록에 `Resume`과 `Portfolio`, 구조화 데이터 표에 소개의 ProfilePage, 글쓴이 Person을 한 함수로 만든다는 줄, 스위치가 꺼진 페이지는 사이트맵에 없다는 줄을 더함 | 소개 페이지를 BlogPosting의 author가 가리키므로 같은 Person으로 묶음 |
+| `.claude/rules/shared-layer.md` | `routes`에 `getNavItems`와 `getSwitchPagePaths`, `constants`에 `features`와 `career`, `seo`에 ProfilePage와 Person을 적음 | 새 shared 코드 |
+| `.claude/rules/design-system.md` | 인쇄 규칙(밝은 값 고정, 머리말과 꼬리말 숨김, `Container` 여백 풀기, 이력서 인쇄는 정본 7.23)을 더함 | 이력서를 종이로 뽑을 일이 생김 |
+| `.claude/skills/project-structure/SKILL.md` | 폴더 나무에 이력서와 포트폴리오 페이지, `routes/getSwitchPagePaths`, `constants/career`, `types/career.ts`를 더함 | 새 파일 |
+

@@ -21,7 +21,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 모든 컴포넌트는 아래의 추상화 레벨을 지켜야 함.
 핵심적으로 모든 컴포넌트는 도메인 로직을 다루는지에 따라 `modules/...` 또는 `shared/components/...`에 들어감.
 
-이 블로그의 도메인은 `site`(사이트 공통), `post`(글), `series`(시리즈), `demo`(글 속 데모)임.
+이 블로그의 도메인은 `site`(사이트 공통), `post`(글), `series`(시리즈), `demo`(글 속 데모), `career`(이력서와 포트폴리오)임.
 
 `shared/components/` 내에서도 내부 로직·ui를 다루는 컴포넌트인지에 따라 `shared/components/composites/...`와 `shared/components/primitives/...`로 나뉨.
 
@@ -63,7 +63,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 ### 주의사항
 
 - 라우트에 대응하는 화면 단위는 `src/pages`에 두며, widgets를 import해 **배치하는 레이아웃 역할만** 담당. 페이지가 하는 일은 아래까지임.
-  - `getStaticPaths`로 만들 주소 정하기 (Astro 규약이라 페이지에만 둘 수 있음)
+  - `getStaticPaths`로 만들 주소 정하기 (Astro 규약이라 페이지에만 둘 수 있음). 기능 스위치로 켜고 끄는 고정 주소 페이지(이력서, 포트폴리오)는 `pages/{주소}/[...path]/index.astro`에 두고 `getSwitchPagePaths(스위치)`로 path가 빈 주소 하나만 만듦
   - `shared/seo` 함수로 문서 메타와 구조화 데이터를 만들어 `Document`에 넘기기
   - `primitives/layout`으로 widgets 배치하기, 페이지 위아래 여백 정하기
 - 페이지에서 콘텐츠를 가공하거나 화면 요소를 직접 그리지 않음.
@@ -76,7 +76,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - 콘텐츠를 가져와 하위 요소에 책임을 할당하는 지휘자 역할. 빌드할 때 `shared/content` 함수를 직접 부름 (같은 글을 여러 widgets가 불러도 Astro가 콘텐츠를 한 번만 읽음)
 - **자기가 어떤 틀 안에 놓일지 가정하지 않음.** 바깥 여백·폭·고정 위치는 페이지와 layout primitives가 정함. 안쪽 반응형은 container query로 함
 - 하위에 도메인별 디렉토리로 작성
-  - e.g. `site/SiteHeader`, `post/PostHeader`, `post/PostBody`, `post/TableOfContents`, `series/SeriesChips`
+  - e.g. `site/SiteHeader`, `post/PostHeader`, `post/PostBody`, `post/TableOfContents`, `series/SeriesChips`, `career/Resume`, `career/Portfolio`
 
 #### modules/features
 
