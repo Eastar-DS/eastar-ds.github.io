@@ -1,0 +1,134 @@
+---
+import type { PortfolioProject } from "@/modules/widgets/career/Portfolio/types/portfolio";
+import toDisplayUrl from "@/shared/utils/toDisplayUrl";
+
+import PortfolioCase from "./PortfolioCase.astro";
+
+interface Props {
+  portfolioProject: PortfolioProject;
+}
+
+/**
+ * 포트폴리오의 프로젝트 하나입니다. 머리 줄(이름 h2, 한 줄 소개, 기간 같은 정보와 서비스 주소, 맡은 일) 아래에 사례를 쌓습니다.
+ * 구획 id는 프로젝트 id라서, 페이지 머리의 프로젝트 링크가 이 자리로 갑니다.
+ */
+const { portfolioProject } = Astro.props;
+const { project, cases } = portfolioProject;
+const titleId = `${project.id}-title`;
+---
+
+<section class="container" id={project.id} aria-labelledby={titleId}>
+  <header class="header">
+    <h2 class="name" id={titleId}>{project.name}</h2>
+    <p class="summary">{project.summary}</p>
+    <ul class="facts">
+      {project.facts.map((fact) => <li>{fact}</li>)}
+      {
+        project.url && (
+          <li>
+            <a class="link" href={project.url}>
+              {toDisplayUrl(project.url)}
+            </a>
+          </li>
+        )
+      }
+    </ul>
+    {
+      project.role && (
+        <dl class="role">
+          <dt class="roleLabel">맡은 일</dt>
+          <dd class="roleText">{project.role}</dd>
+        </dl>
+      )
+    }
+  </header>
+  <div class="cases">
+    {cases.map((portfolioCase) => <PortfolioCase portfolioCase={portfolioCase} />)}
+  </div>
+</section>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .name {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h2);
+    letter-spacing: var(--letter-spacing-h2);
+  }
+
+  .summary {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    list-style: none;
+  }
+
+  /* 항목 사이의 가운뎃점은 꾸밈이라 CSS로 그립니다. 줄이 바뀌어도 새 줄이 점으로 시작하지 않게 앞 항목 뒤에 붙입니다 */
+  .facts > li:not(:last-child)::after {
+    content: "·";
+    margin-inline: var(--space-2);
+  }
+
+  .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  .role {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .roleLabel {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .roleText {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .cases {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  @media print {
+    .header {
+      break-after: avoid;
+    }
+  }
+</style>

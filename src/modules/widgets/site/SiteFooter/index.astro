@@ -5,7 +5,7 @@ import { PATHS } from "@/shared/routes/paths";
 import formatDate from "@/shared/utils/formatDate";
 
 /**
- * 사이트 꼬리말입니다. 저작권 줄과 RSS · GitHub · 개인정보 처리 안내 링크를 둡니다. 좁은 칸에서는 두 줄로 쌓습니다.
+ * 사이트 꼬리말입니다. 저작권 줄과 RSS · GitHub · 개인정보 처리 안내 링크를 둡니다. 좁은 칸에서는 두 줄로 쌓고, 인쇄할 때는 그리지 않습니다.
  * @design design/blog.pen 「꼬리말」 m9iWo (넓은 화면 qgxES · 휴대폰 oHQDs)
  */
 const year = formatDate({ date: new Date(), format: "year" });
@@ -64,6 +64,12 @@ const links = [
 
   .link:hover {
     color: var(--color-text);
+  }
+
+  @media print {
+    .root {
+      display: none;
+    }
   }
 
   @container (min-width: 768px) {

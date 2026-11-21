@@ -1,0 +1,180 @@
+---
+import type { PortfolioCase } from "@/modules/widgets/career/Portfolio/types/portfolio";
+import toCaseSteps from "@/modules/widgets/career/Portfolio/utils/toCaseSteps";
+
+interface Props {
+  portfolioCase: PortfolioCase;
+}
+
+/**
+ * 포트폴리오의 사례 하나입니다. 제목(h3) 아래에 문제 → 가설 → 한 일 → 결과 → 배운 것(있을 때만) 칸을 둡니다.
+ * 칸 글이 문자열이면 문단, 배열이면 목록으로 그립니다. 칸이 넓으면 이름표와 글을 두 열로, 좁으면 위아래로 놓습니다.
+ * 이름표와 글을 한 줄(`.step`)로 묶어 줄마다 위쪽 선을 하나만 그리고, 두 열은 subgrid로 모든 줄의 이름표 폭을 맞춥니다.
+ */
+const { portfolioCase } = Astro.props;
+const steps = toCaseSteps(portfolioCase);
+---
+
+<article class="container">
+  <h3 class="title">{portfolioCase.title}</h3>
+  <dl class="steps">
+    {
+      steps.map((step) => (
+        <div class="step">
+          <dt class="stepLabel">{step.label}</dt>
+          <dd class="stepBody">
+            {typeof step.content === "string" ? (
+              <p class="text">{step.content}</p>
+            ) : (
+              <ul class="list">
+                {step.content.map((item) => (
+                  <li class="item">
+                    {item.title && <p class="itemTitle">{item.title}</p>}
+                    <p class="text">{item.text}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+  {
+    portfolioCase.links && (
+      <ul class="links">
+        {portfolioCase.links.map((link) => (
+          <li>
+            <a class="link" href={link.href}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    container-type: inline-size;
+  }
+
+  .title {
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-lead);
+    text-wrap: balance;
+  }
+
+  .steps {
+    display: grid;
+    margin: 0;
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-4);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .step:last-child {
+    padding-bottom: 0;
+  }
+
+  .stepLabel {
+    color: var(--color-accent);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .stepBody {
+    margin: 0;
+  }
+
+  .text {
+    text-wrap: pretty;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .item::marker {
+    color: var(--color-text-muted);
+  }
+
+  .itemTitle {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    padding-top: var(--space-4);
+    border-top: var(--border-width) solid var(--color-border);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    list-style: none;
+  }
+
+  .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  /* 넓은 칸에서는 이름표를 왼쪽 열에, 글을 오른쪽 열에 두고 첫 줄 높이를 맞춥니다 */
+  @container (min-width: 560px) {
+    .container {
+      padding: var(--space-6);
+    }
+
+    /* 이름표 열은 가장 긴 「배운 것」이 들어가는 폭(48px)으로 맞춰, 배운 것이 없는 사례와 열 폭이 같게 합니다 */
+    .steps {
+      grid-template-columns: minmax(var(--space-12), max-content) 1fr;
+      column-gap: var(--space-6);
+    }
+
+    .step {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: baseline;
+    }
+  }
+
+  @media print {
+    .title {
+      break-after: avoid;
+    }
+
+    .list > .item {
+      break-inside: avoid;
+    }
+  }
+</style>

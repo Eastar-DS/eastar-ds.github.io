@@ -11,6 +11,7 @@ interface Props {
 
 /**
  * 내용을 가운데에 두고 최대 폭과 좌우 여백(휴대폰 20px, 768px부터 40px)을 정합니다.
+ * 인쇄할 때는 종이 여백을 인쇄 설정이 정하므로 좌우 여백과 최대 폭을 풉니다.
  * @design design/blog.pen 기초 보드 「04 화면 폭과 배치」 e2gfM
  */
 const { size = "page", as: Tag = "div" } = Astro.props;
@@ -40,5 +41,12 @@ const { size = "page", as: Tag = "div" } = Astro.props;
       var(--content-width) + var(--layout-gap) + var(--toc-width) +
         var(--page-padding-inline) * 2
     );
+  }
+
+  @media print {
+    .root {
+      max-width: none;
+      padding-inline: 0;
+    }
   }
 </style>

@@ -1,0 +1,89 @@
+---
+import { PATHS } from "@/shared/routes/paths";
+
+import { PORTFOLIO_INTRO, PORTFOLIO_PROJECTS } from "./constants/portfolio";
+import PortfolioProject from "./ui/PortfolioProject.astro";
+
+/**
+ * 포트폴리오 페이지의 본문입니다. 머리(h1, 소개 문단, 프로젝트 바로 가기) 아래에 프로젝트를 Knot → 셀러홈 → 비드 순서로 쌓고, 이 페이지의 h1을 가집니다.
+ * 프로젝트마다 사례를 문제 → 가설 → 한 일 → 결과 순서로 보여 줍니다.
+ */
+---
+
+<article class="container">
+  <header class="header">
+    <h1 class="title">포트폴리오</h1>
+    <p class="intro">
+      {PORTFOLIO_INTRO} 줄여 정리한 경력은 <a class="link" href={PATHS.resume}
+        >이력서</a
+      >에 있습니다.
+    </p>
+    <nav aria-label="프로젝트 바로 가기">
+      <ul class="projectLinks">
+        {
+          PORTFOLIO_PROJECTS.map(({ project }) => (
+            <li>
+              <a class="link" href={`#${project.id}`}>
+                {project.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </header>
+  {
+    PORTFOLIO_PROJECTS.map((portfolioProject) => (
+      <PortfolioProject portfolioProject={portfolioProject} />
+    ))
+  }
+</article>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-14);
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .title {
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-title);
+    letter-spacing: var(--letter-spacing-title);
+  }
+
+  .intro {
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .projectLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    list-style: none;
+  }
+
+  .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+</style>

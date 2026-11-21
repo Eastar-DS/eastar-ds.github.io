@@ -1,0 +1,260 @@
+---
+import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
+import toDisplayUrl from "@/shared/utils/toDisplayUrl";
+
+import {
+  RESUME_EDUCATIONS,
+  RESUME_EXPERIENCES,
+  RESUME_INTRO,
+  RESUME_ROLE,
+  RESUME_SKILLS,
+} from "./constants/resume";
+import ResumeExperience from "./ui/ResumeExperience.astro";
+import ResumeItemList from "./ui/ResumeItemList.astro";
+
+/**
+ * 이력서 페이지의 본문입니다. 머리(이름 h1, 직함, 연락처) → 소개 → 경험 → 기술 → 교육 순서이고, 이 페이지의 h1을 가집니다.
+ * 연락처는 종이로 뽑아도 읽을 수 있게 주소 글자를 그대로 링크로 씁니다. 이메일은 `SITE.author.email`이 비어 있으면 그리지 않습니다.
+ * 인쇄할 때는 글자 단계를 한 단계씩 줄이고, 제목 바로 뒤나 줄 가운데에서 쪽이 나뉘지 않게 합니다.
+ */
+const { email, githubUrl, name } = SITE.author;
+const contacts = [
+  ...(email
+    ? [{ label: "이메일", href: `mailto:${email}`, text: email }]
+    : []),
+  { label: "GitHub", href: githubUrl, text: toDisplayUrl(githubUrl) },
+  { label: "블로그", href: PATHS.home, text: toDisplayUrl(SITE.url) },
+  {
+    label: "포트폴리오",
+    href: PATHS.portfolio,
+    text: toDisplayUrl(new URL(PATHS.portfolio, SITE.url).href),
+  },
+];
+---
+
+<article class="container">
+  <header class="header">
+    <h1 class="name">{name}</h1>
+    <p class="role">{RESUME_ROLE}</p>
+    <ul class="contacts">
+      {
+        contacts.map((contact) => (
+          <li class="contact">
+            <span class="contactLabel">{contact.label}</span>
+            <a class="link" href={contact.href}>
+              {contact.text}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </header>
+
+  <section class="section">
+    <h2 class="sectionTitle">소개</h2>
+    <p class="summary">{RESUME_INTRO.summary}</p>
+    <ul class="highlights">
+      {RESUME_INTRO.highlights.map((highlight) => <li>{highlight}</li>)}
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="sectionTitle">경험</h2>
+    <div class="experiences">
+      {
+        RESUME_EXPERIENCES.map((experience) => (
+          <ResumeExperience experience={experience} />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sectionTitle">기술</h2>
+    <dl class="skills">
+      {
+        RESUME_SKILLS.map((skill) => (
+          <>
+            <dt class="skillLabel">{skill.label}</dt>
+            <dd class="skillValue">{skill.value}</dd>
+          </>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section">
+    <h2 class="sectionTitle">교육</h2>
+    <ResumeItemList items={RESUME_EDUCATIONS} />
+  </section>
+</article>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    container-type: inline-size;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .name {
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-title);
+    letter-spacing: var(--letter-spacing-title);
+  }
+
+  .role {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lead);
+    line-height: var(--line-height-lead);
+  }
+
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-5);
+    margin-top: var(--space-3);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    list-style: none;
+  }
+
+  .contactLabel {
+    margin-right: var(--space-2);
+    color: var(--color-text-muted);
+  }
+
+  .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .sectionTitle {
+    padding-bottom: var(--space-2);
+    border-bottom: var(--border-width) solid var(--color-border);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h3);
+    letter-spacing: var(--letter-spacing-h3);
+  }
+
+  .summary {
+    text-wrap: pretty;
+  }
+
+  .highlights {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .highlights > li {
+    text-wrap: pretty;
+  }
+
+  .highlights > li::marker {
+    color: var(--color-text-muted);
+  }
+
+  .experiences {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .skills {
+    display: grid;
+    gap: var(--space-1) var(--space-6);
+    margin: 0;
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .skillLabel {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .skillValue {
+    margin: 0 0 var(--space-3);
+  }
+
+  /* 넓은 칸에서는 기술 이름과 내용을 한 줄에 둡니다 */
+  @container (min-width: 560px) {
+    .skills {
+      grid-template-columns: max-content 1fr;
+      row-gap: var(--space-3);
+    }
+
+    .skillValue {
+      margin-bottom: 0;
+    }
+  }
+
+  /* 종이에서는 글자 단계를 한 단계씩 줄이고, 링크는 밑줄 없이 주소 글자만 둡니다 */
+  @media print {
+    .container {
+      gap: var(--space-8);
+    }
+
+    .header {
+      padding-bottom: var(--space-4);
+    }
+
+    .role {
+      font-size: var(--font-size-body);
+      line-height: var(--line-height-body);
+    }
+
+    .summary,
+    .highlights {
+      font-size: var(--font-size-body-sm);
+      line-height: var(--line-height-body-sm);
+    }
+
+    .sectionTitle {
+      font-size: var(--font-size-lead);
+      line-height: var(--line-height-lead);
+      break-after: avoid;
+    }
+
+    .experiences {
+      gap: var(--space-8);
+    }
+
+    .highlights > li,
+    .skillLabel,
+    .skillValue {
+      break-inside: avoid;
+    }
+
+    .link {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>

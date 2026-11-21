@@ -1,0 +1,65 @@
+---
+import type { ResumeItem } from "@/modules/widgets/career/Resume/types/resume";
+
+interface Props {
+  items: ResumeItem[];
+  /** 줄 아래에 한 단계 들여 쓰는 자세한 목록이면 참입니다 */
+  isNested?: boolean;
+}
+
+/**
+ * 이력서의 점 목록입니다. 줄에 제목이 있으면 제목을 한 줄 위에 두고 그 아래에 글을 둡니다.
+ * 자세한 줄(`details`)은 같은 컴포넌트로 한 단계 들여 그립니다.
+ * 인쇄할 때는 줄의 제목과 글이 쪽 사이에서 나뉘지 않게 하되, 자세한 줄까지 한 덩어리로 묶지는 않아 쪽 아래가 크게 비지 않게 합니다.
+ */
+const { items, isNested = false } = Astro.props;
+---
+
+<ul class:list={["root", { isNested }]}>
+  {
+    items.map((item) => (
+      <li class="item">
+        <div class="content">
+          {item.title && <p class="title">{item.title}</p>}
+          <p class="text">{item.text}</p>
+        </div>
+        {item.details && <Astro.self items={item.details} isNested />}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .isNested {
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    list-style-type: circle;
+  }
+
+  .item::marker {
+    color: var(--color-text-muted);
+  }
+
+  .title {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .text {
+    text-wrap: pretty;
+  }
+
+  @media print {
+    .content {
+      break-inside: avoid;
+    }
+  }
+</style>

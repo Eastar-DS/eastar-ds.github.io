@@ -170,6 +170,14 @@
   color-scheme: dark;
 }
 
+/* 종이에는 바탕색이 찍히지 않으므로, 어두운 화면에서 인쇄해도 밝은 화면 값(흰 바탕 위 짙은 글자)으로 찍습니다 */
+@media print {
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+  }
+}
+
 @media (min-width: 768px) {
   :root {
     --font-size-display: 48px;
