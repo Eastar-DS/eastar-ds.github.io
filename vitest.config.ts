@@ -5,5 +5,7 @@ import { getViteConfig } from "astro/config";
 export default getViteConfig({
   test: {
     include: ["src/**/test.ts", "src/**/*.test.ts", "scripts/**/*.test.ts"],
+    // vitest는 CSS를 빈 글로 바꿔 불러옵니다. 공유 미리보기 그림이 tokens.css의 색을 ?raw로 읽으므로 이 파일만 그대로 둡니다
+    css: { include: [/tokens\.css/] },
   },
 });

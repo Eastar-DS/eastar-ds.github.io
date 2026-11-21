@@ -15,11 +15,12 @@ const post: Post = {
 };
 
 describe("createBlogPostingJsonLd", () => {
-  it("작성자, 발행일, 수정일, 글 주소를 담는다", () => {
+  it("작성자, 발행일, 수정일, 글 주소, 공유 그림을 담는다", () => {
     expect(createBlogPostingJsonLd(post)).toMatchObject({
       "@type": "BlogPosting",
       headline: post.title,
       url: "https://eastar-ds.github.io/posts/virtualized-document-list/",
+      image: "https://eastar-ds.github.io/posts/virtualized-document-list/og.png",
       datePublished: "2026-11-18T00:00:00.000Z",
       dateModified: "2026-11-20T00:00:00.000Z",
       author: { "@type": "Person", name: "이스타" },

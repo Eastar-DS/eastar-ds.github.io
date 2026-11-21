@@ -1,4 +1,5 @@
 import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
 
 /**
  * 이름을 따로 적어 허용하는 로봇. `User-agent: *`도 모두 허용하지만, AEO(AI 답변에 인용되기)가 목표라
@@ -36,7 +37,7 @@ const createRobotsTxt = () =>
     ...ALLOWED_BOTS.map((bot) => `User-agent: ${bot}`),
     "Allow: /",
     "",
-    `Sitemap: ${new URL("/sitemap-index.xml", SITE.url).href}`,
+    `Sitemap: ${new URL(PATHS.sitemap, SITE.url).href}`,
     "",
   ].join("\n");
 

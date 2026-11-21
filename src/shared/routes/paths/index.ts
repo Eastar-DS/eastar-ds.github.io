@@ -8,6 +8,7 @@ export const PATHS = {
   portfolio: "/portfolio/",
   privacy: "/privacy/",
   rss: "/rss.xml",
+  sitemap: "/sitemap-index.xml",
 } as const;
 
 /** 페이지마다 하나인 `<main>`의 id. 건너뛰기 링크가 이 자리로 옮겨 줍니다 */
@@ -18,6 +19,12 @@ export const SERIES_SECTION_ID = "series";
 
 /** 글 주소를 만듭니다. 다른 저장소의 Pages 주소와 겹치지 않게 /posts/ 아래에 둡니다 */
 export const getPostPath = (slug: string) => `/posts/${slug}/`;
+
+/**
+ * 페이지의 공유 미리보기 그림 주소를 만듭니다. 그림은 페이지 주소 바로 아래 `og.png`에 둡니다.
+ * 예: `/posts/글-이름/` → `/posts/글-이름/og.png`, 첫 화면 `/` → `/og.png`(사이트 기본 그림)
+ */
+export const getOgImagePath = (pagePath: string) => `${pagePath}og.png`;
 
 /** 머리말의 주 메뉴 가운데 늘 보이는 것 */
 export const NAV_ITEMS = [

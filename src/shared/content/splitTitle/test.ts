@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import splitTitle from "./splitTitle";
+import splitTitle from ".";
 
 describe("splitTitle", () => {
   it("첫 콜론 뒤에서 나누고 콜론은 앞 덩어리에 남긴다", () => {

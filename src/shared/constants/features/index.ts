@@ -20,3 +20,11 @@ export const IS_RESUME_PUBLIC = false;
  * `import.meta.env.DEV`는 개발 서버에서만 참이고, `astro build`에서는 거짓입니다.
  */
 export const IS_RESUME_SHOWN = IS_RESUME_PUBLIC || import.meta.env.DEV;
+
+/**
+ * 포트폴리오 페이지가 있는지. 공유 미리보기 그림(`/portfolio/og.png`)과 llms.txt가 이 값 하나만 봅니다.
+ * 이스타가 포트폴리오는 이력서와 따로 바로 공개하기로 정했습니다(2026-11-21). 포트폴리오 페이지를 공개 스위치에서 떼는 작업과
+ * 합칠 때 이 줄만 `true`로 바꾸면, 그림과 llms.txt도 포트폴리오를 늘 공개된 페이지로 다룹니다.
+ * 그때까지는 포트폴리오 페이지가 이력서와 같은 스위치(`IS_RESUME_SHOWN`)로 만들어지므로 같은 값을 둡니다.
+ */
+export const IS_PORTFOLIO_SHOWN: boolean = IS_RESUME_SHOWN;
