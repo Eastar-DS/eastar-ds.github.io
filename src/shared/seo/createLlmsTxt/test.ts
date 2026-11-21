@@ -66,6 +66,13 @@ describe("createLlmsTxt", () => {
     expect(both).toContain("- [이력서](https://eastar-ds.github.io/resume/):");
   });
 
+  it("게시한 글이 없으면 「글」 절을 쓰지 않는다", () => {
+    const empty = createLlmsTxt({ posts: [], isResumeShown: false, isPortfolioShown: false });
+
+    expect(empty).not.toContain("## 글\n");
+    expect(empty).toContain("## 글쓴이");
+  });
+
   it("제목은 규격대로 H1 하나와 H2 절만 쓴다", () => {
     expect(llms.match(/^#{3,} /m)).toBeNull();
     expect(llms.match(/^# /gm)).toHaveLength(1);

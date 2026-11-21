@@ -35,6 +35,11 @@ const posts = defineCollection({
      * 적으면 글 끝에 포트폴리오의 그 프로젝트 구획으로 가는 링크가 붙고, 없는 id를 적으면 빌드가 멈춥니다.
      */
     projects: z.array(z.enum(CAREER_PROJECT_IDS)).optional(),
+    /**
+     * 초안이면 `true`. 배포 빌드에서는 글 목록, 글 페이지, RSS, 사이트맵, llms.txt, 공유 그림 어디에도 나오지 않고,
+     * 개발 서버에서만 보입니다. 이스타가 글을 확인한 뒤 지우거나 `false`로 바꿔 게시합니다.
+     */
+    draft: z.boolean().default(false),
   }),
 });
 

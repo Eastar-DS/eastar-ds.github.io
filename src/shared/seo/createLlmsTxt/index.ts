@@ -77,10 +77,15 @@ const createLlmsTxt = ({ posts, isResumeShown, isPortfolioShown }: CreateLlmsTxt
     "",
     "한국어로 쓰는 기술 블로그이며, 글 목록에는 글마다 요약과 분류, 쓴 날을 적었습니다. 글 페이지는 JavaScript 없이 읽히는 정적 HTML이라 주소를 그대로 받으면 본문 전체를 읽을 수 있습니다.",
     "",
-    "## 글",
-    "",
-    ...posts.map((post) => toListItem({ name: post.title, path: getPostPath(post.slug), note: toPostNote(post) })),
-    "",
+    // An empty heading tells readers nothing, so the section waits for the first published post.
+    ...(posts.length > 0
+      ? [
+          "## 글",
+          "",
+          ...posts.map((post) => toListItem({ name: post.title, path: getPostPath(post.slug), note: toPostNote(post) })),
+          "",
+        ]
+      : []),
     "## 글쓴이",
     "",
     ...authorLinks.map(toListItem),
