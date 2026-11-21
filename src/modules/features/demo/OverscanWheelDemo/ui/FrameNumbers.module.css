@@ -1,0 +1,50 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.name {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+/* 값의 길이는 슬라이더를 움직일 때 바뀝니다. 좁은 칸에서 두 줄로 넘어가도 데모 높이가 바뀌지 않게 두 줄 높이를 미리 잡습니다 */
+.value {
+  min-height: 2lh;
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+@container overscan-wheel (min-width: 520px) {
+  .value {
+    min-height: 0;
+    white-space: nowrap;
+  }
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+.isBad {
+  color: var(--color-bad);
+}
+
+.isGood {
+  color: var(--color-good);
+}

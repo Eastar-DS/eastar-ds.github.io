@@ -17,7 +17,7 @@ interface RowStatsProps {
 const formatCount = (count: number) => `${count.toLocaleString("ko-KR")}개`;
 
 /**
- * 데모 아래의 숫자 칸입니다. DOM에 있는 행, 보이는 행, 여유 행(가상화를 끄면 화면 밖에 그린 행), 그리지 않은 행을 셉니다.
+ * 데모 아래의 숫자 칸입니다. DOM에 있는 행, 보이는 행, 미리 그린 행(가상화를 끄면 화면 밖에 그린 행), 그리지 않은 행을 셉니다.
  * 이름 앞의 표시는 구조 보기의 막대 색과 같고, 모양(● ▲ ■ □)으로도 나눕니다.
  */
 export default function RowStats({
@@ -55,7 +55,7 @@ export default function RowStats({
           {isVirtualized ? (
             <>
               <span className={`${styles.marker} ${styles.overscan}`} />
-              여유 행
+              미리 그린 행
             </>
           ) : (
             <>

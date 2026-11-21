@@ -1,0 +1,133 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* 좁은 칸에서는 칸 이름이 두 줄로 넘어갈 수 있어서, 나란한 두 칸의 높이를 맞추려고 두 줄 높이를 잡습니다 */
+.title {
+  min-height: 2lh;
+  color: var(--color-text);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body-sm);
+}
+
+@container overscan-wheel (min-width: 520px) {
+  .title {
+    min-height: 0;
+  }
+}
+
+/* 숫자 글이 두 줄로 넘어가도 칸 높이가 바뀌지 않고, 나란한 두 칸의 그림이 같은 높이에서 시작하게 두 줄 높이를 미리 잡습니다 */
+.detail {
+  min-height: 2lh;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 높이 280px는 constants/overscanWheel.ts의 PANEL.heightPx와 같아야 합니다 */
+.chart {
+  position: relative;
+  height: 280px;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-label);
+}
+
+.tick {
+  position: absolute;
+  left: 0;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  transform: translateY(-50%);
+}
+
+.plot {
+  position: absolute;
+  inset: 0 0 0 var(--space-10);
+}
+
+/* 카드는 그림 폭의 왼쪽 58%에 두고, 오른쪽은 이름표 자리로 씁니다 */
+.card,
+.row,
+.blank {
+  position: absolute;
+  left: 0;
+  box-sizing: border-box;
+  width: 58%;
+}
+
+.card {
+  top: 0;
+  bottom: 0;
+  border-inline: var(--border-width) solid var(--color-border-strong);
+  background: var(--color-bg);
+}
+
+/* 행 사이는 바탕색 1px 틈으로 나눕니다 */
+.row {
+  border-bottom: var(--border-width) solid var(--color-bg);
+  border-left: var(--border-width-callout) solid var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.blank {
+  background: var(--color-bad);
+}
+
+/* 빈 칸 바로 위, 카드 오른쪽 빈자리에 이름표를 둡니다 */
+.blankTag {
+  position: absolute;
+  left: calc(58% + var(--space-1));
+  color: var(--color-bad);
+  font-weight: var(--font-weight-bold);
+  transform: translateY(-100%);
+}
+
+.widened,
+.view {
+  position: absolute;
+  right: 0;
+  left: 0;
+  box-sizing: border-box;
+}
+
+.widened {
+  border: var(--border-width-strong) dashed var(--color-data-1);
+}
+
+.widenedTag {
+  position: absolute;
+  right: var(--space-1);
+  bottom: 0;
+  color: var(--color-data-1);
+  font-weight: var(--font-weight-semibold);
+}
+
+.view {
+  border: var(--border-width-strong) solid var(--color-text);
+  border-radius: var(--radius-sm);
+}
+
+.viewTag {
+  position: absolute;
+  top: 0;
+  right: var(--space-1);
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+@media (forced-colors: active) {
+  .row {
+    border-left-color: CanvasText;
+    background: GrayText;
+  }
+
+  .blank {
+    background: CanvasText;
+  }
+}

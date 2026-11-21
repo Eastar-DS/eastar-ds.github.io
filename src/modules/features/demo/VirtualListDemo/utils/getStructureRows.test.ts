@@ -27,7 +27,7 @@ describe("getStructureRows", () => {
     expect(viewHeight).toBe(80);
   });
 
-  it("행마다 보이는 행, 여유 행, 그리지 않은 행을 알려 준다", () => {
+  it("행마다 보이는 행, 미리 그린 행, 그리지 않은 행을 알려 준다", () => {
     const { rows } = getStructureRows({
       ...base,
       scrollTop: 400,

@@ -13,7 +13,7 @@ export interface ListRanges {
 /**
  * 행 하나가 지금 어떤 상태인지
  * - `visible`: 스크롤 칸에 보이는 행
- * - `overscan`: 화면 밖이지만 여유 거리 안이라 미리 그린 행
+ * - `overscan`: 화면 밖이지만 미리 그릴 거리 안이라 미리 그린 행
  * - `offscreen`: 가상화를 껐을 때 화면 밖인데도 그린 행
  * - `notDrawn`: 그리지 않고 높이만 비워 둔 행
  */

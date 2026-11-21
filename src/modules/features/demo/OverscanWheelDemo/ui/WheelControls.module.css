@@ -1,0 +1,32 @@
+/* 슬라이더 둘을 한 줄에 하나씩 쌓습니다. 빈 칸 높이는 위의 숫자 칸이 보여 주므로 상태 글은 스크린 리더에만 읽힙니다 */
+.container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: var(--space-1) var(--space-4);
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* 이름 폭을 맞춰, 쌓인 두 슬라이더가 같은 곳에서 시작하게 합니다 */
+.label {
+  flex: none;
+  width: 6.5em;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.value {
+  flex: none;
+  width: 3.5em;
+  color: var(--color-text);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

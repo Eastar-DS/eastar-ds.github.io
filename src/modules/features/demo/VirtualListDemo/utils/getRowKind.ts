@@ -18,7 +18,7 @@ interface IsInRangeParams {
 const isInRange = ({ index, range }: IsInRangeParams) =>
   range.start <= index && index < range.end;
 
-/** 행 하나가 보이는 행인지, 미리 그린 여유 행인지, 화면 밖에 그린 행인지, 그리지 않은 행인지 고릅니다 */
+/** 행 하나가 보이는 행인지, 미리 그린 행인지, 화면 밖에 그린 행인지, 그리지 않은 행인지 고릅니다 */
 const getRowKind = ({ index, ranges, isVirtualized }: GetRowKindParams) => {
   let kind: RowKind = "notDrawn";
 

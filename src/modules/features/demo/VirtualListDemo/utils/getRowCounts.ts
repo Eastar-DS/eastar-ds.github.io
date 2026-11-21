@@ -10,7 +10,7 @@ interface GetRowCountsParams {
 
 /**
  * 데모 아래 숫자 칸에 보일 행 수를 셉니다.
- * 보이는 행 위아래에서 그린 행은 가상화를 켰으면 여유 행, 껐으면 화면 밖에 그린 행입니다.
+ * 보이는 행 위아래에서 그린 행은 가상화를 켰으면 미리 그린 행, 껐으면 화면 밖에 그린 행입니다.
  */
 const getRowCounts = ({ rowCount, ranges }: GetRowCountsParams) => {
   const { visible, drawn } = ranges;

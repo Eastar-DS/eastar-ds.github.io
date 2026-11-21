@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import getRowCounts from "./getRowCounts";
 
 describe("getRowCounts", () => {
-  it("그린 행, 보이는 행, 위아래 여유 행, 그리지 않은 행을 센다", () => {
+  it("그린 행, 보이는 행, 위아래 미리 그린 행, 그리지 않은 행을 센다", () => {
     expect(
       getRowCounts({
         rowCount: 2000,
@@ -15,7 +15,7 @@ describe("getRowCounts", () => {
     ).toEqual({ drawn: 10, visible: 6, above: 2, below: 2, notDrawn: 1990 });
   });
 
-  it("맨 위에서는 위쪽 여유 행이 없다", () => {
+  it("맨 위에서는 위쪽 미리 그린 행이 없다", () => {
     expect(
       getRowCounts({
         rowCount: 2000,

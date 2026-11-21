@@ -19,11 +19,11 @@ import styles from "./index.module.css";
 
 /**
  * 문서 2,000개 목록을 직접 스크롤하며 가상화를 켜고 끄는 데모입니다.
- * 가상화를 켜면 화면 위아래를 여유 거리만큼 넓힌 구간의 행만 DOM에 그리고, 끄면 2,000행을 모두 그립니다.
- * 오른쪽 구조 보기와 아래 숫자 칸이 DOM에 있는 행, 보이는 행, 여유 행, 그리지 않은 행을 보여 줍니다.
+ * 가상화를 켜면 화면 위아래를 미리 그릴 거리만큼 넓힌 구간의 행만 DOM에 그리고, 끄면 2,000행을 모두 그립니다.
+ * 오른쪽 구조 보기와 아래 숫자 칸이 DOM에 있는 행, 보이는 행, 미리 그린 행, 그리지 않은 행을 보여 줍니다.
  * 글에서는 `<VirtualListDemo client:visible />`로 씁니다.
  * 서버에서 그린 첫 화면(맨 위, 가상화 켬)이 JavaScript가 없을 때의 정지 화면 몫을 하고, 그때는 스크롤 칸을 움직이지 않습니다.
- * 「보이는 행」은 「고른 것」과 같은 강조색, 「여유 행」은 데이터 색 1(주황)이고, 모양과 이름으로도 나눕니다.
+ * 「보이는 행」은 「고른 것」과 같은 강조색, 「미리 그린 행」은 데이터 색 1(주황)이고, 모양과 이름으로도 나눕니다.
  * @design design/blog.pen 「데모 틀」 M3NVPX
  */
 export default function VirtualListDemo() {
@@ -55,7 +55,7 @@ export default function VirtualListDemo() {
   );
   const overscanRows = overscanPx / ROW_HEIGHT_PX;
   const status = isVirtualized
-    ? `가상화 켬 · 여유 거리 ${overscanPx}px`
+    ? `가상화 켬 · 미리 그릴 거리 ${overscanPx}px`
     : `가상화 끔 · ${ROW_COUNT.toLocaleString("ko-KR")}행을 모두 그림`;
 
   const handleScroll = (event: UIEvent<HTMLDivElement>) => {
@@ -64,7 +64,7 @@ export default function VirtualListDemo() {
 
   return (
     <DemoFrame
-      caption="가상화를 켜면 2,000행 가운데 화면과 위아래 여유 거리에 걸친 행만 DOM에 있고, 끄면 2,000행을 모두 그립니다. 여유 거리를 늘리면 미리 그리는 행이 위아래로 늘어납니다."
+      caption="가상화를 켜면 2,000행 가운데 화면과 위아래 미리 그릴 거리에 걸친 행만 DOM에 있고, 끄면 2,000행을 모두 그립니다. 미리 그릴 거리를 늘리면 미리 그리는 행이 위아래로 늘어납니다."
       controls={
         <ListControls
           isVirtualized={isVirtualized}

@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  container: overscan-wheel / inline-size;
+}
+
+/* 두 칸을 나란히 둡니다. 휴대폰처럼 좁은 칸에서도 두 그림을 견주어 보도록 쌓지 않습니다 */
+.panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@container overscan-wheel (min-width: 520px) {
+  .panels {
+    gap: var(--space-8);
+  }
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}

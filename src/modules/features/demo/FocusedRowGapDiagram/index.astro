@@ -1,0 +1,250 @@
+---
+/**
+ * 포커스가 있는 행을 범위 밖에서도 제자리에 그리고, 그 행과 범위 사이를 간격 `li` 하나로 채운 카드를 행을 모두 그린 카드와 견주는 그림입니다.
+ * 높이 100px인 행 10개 카드에서 범위가 6~8번 행이고 1번 행에 포커스가 있는 경우로, Knot `getDrawnRows`의 단위 테스트와 같은 예입니다.
+ * 세로 길이는 0.25배로 비율대로 줄였습니다. 범위의 행은 강조색 바탕(●), 포커스가 있는 행은 굵은 테두리와 「포커스」 이름표, 간격 `li`는 점선 칸으로 나눕니다.
+ * JavaScript 없이 서버에서 그립니다.
+ */
+interface Item {
+  kind: "padding" | "row" | "focused" | "range" | "gap" | "empty";
+  label: string;
+  top: number;
+  height: number;
+}
+
+const SCALE = 0.25;
+const CARD_HEIGHT = 1000;
+const TICKS = [0, 100, 200, 600, 900, 1000];
+
+const allRows: Item[] = Array.from({ length: 10 }, (_, index) => ({
+  kind: index === 1 ? "focused" : index >= 6 && index <= 8 ? "range" : "row",
+  label: `${index}번 행`,
+  top: index * 100,
+  height: 100,
+}));
+
+const drawnItems: Item[] = [
+  { kind: "padding", label: "위쪽 여백 100px", top: 0, height: 100 },
+  { kind: "focused", label: "1번 행", top: 100, height: 100 },
+  { kind: "gap", label: "간격 li 400px (aria-hidden)", top: 200, height: 400 },
+  ...[6, 7, 8].map((index) => ({
+    kind: "range" as const,
+    label: `${index}번 행`,
+    top: index * 100,
+    height: 100,
+  })),
+  { kind: "empty", label: "행 없는 높이", top: 900, height: 100 },
+];
+
+const columns = [
+  { title: "행을 모두 그린 카드", items: allRows },
+  { title: "범위와 포커스 행만 그린 카드", items: drawnItems },
+];
+
+const toPx = (value: number) => `${value * SCALE}px`;
+---
+
+<div class="container">
+  <div class="columns">
+    {
+      columns.map((column) => (
+        <div class="column">
+          <p class="title">{column.title}</p>
+          <div class="chart" style={`height: ${toPx(CARD_HEIGHT)}`}>
+            <div class="ticks" aria-hidden="true">
+              {TICKS.map((tick) => (
+                <span class="tick" style={`top: ${toPx(tick)}`}>
+                  {tick.toLocaleString("ko-KR")}
+                </span>
+              ))}
+            </div>
+            <div class="card">
+              {column.items.map((item) => (
+                <span class:list={["item", item.kind]} style={`top: ${toPx(item.top)}; height: ${toPx(item.height)}`}>
+                  {item.kind === "range" && (
+                    <span class="marker" aria-hidden="true">
+                      ●
+                    </span>
+                  )}
+                  {item.label}
+                  {item.kind === "focused" && <span class="badge">포커스</span>}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <ul class="legend">
+    <li class="legendItem"><span class="swatch range"></span>화면 근처 범위의 행</li>
+    <li class="legendItem"><span class="swatch focused"></span>포커스가 있는 행</li>
+    <li class="legendItem"><span class="swatch gap"></span>간격 li</li>
+  </ul>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    container: gap-diagram / inline-size;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  .title {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .chart {
+    display: grid;
+    grid-template-columns: 3.5em minmax(0, 1fr);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  .ticks {
+    position: relative;
+  }
+
+  .tick {
+    position: absolute;
+    right: var(--space-2);
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    transform: translateY(-50%);
+  }
+
+  .card {
+    position: relative;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .item {
+    position: absolute;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    overflow: hidden;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .row {
+    border-bottom: var(--border-width) solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .range {
+    border-bottom: var(--border-width) solid var(--color-bg);
+    background: var(--color-accent-soft);
+  }
+
+  .focused {
+    border: var(--border-width-strong) solid var(--color-text);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .padding,
+  .empty {
+    background: var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .gap {
+    border: var(--border-width-strong) dashed var(--color-border-strong);
+    color: var(--color-text-muted);
+  }
+
+  .marker {
+    color: var(--color-accent);
+  }
+
+  .badge {
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    list-style: none;
+  }
+
+  .legendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .swatch {
+    box-sizing: border-box;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: var(--radius-sm);
+  }
+
+  .swatch.range {
+    background: var(--color-accent-soft);
+    outline: var(--border-width) solid var(--color-accent);
+  }
+
+  .swatch.focused {
+    border: var(--border-width-strong) solid var(--color-text);
+  }
+
+  .swatch.gap {
+    border: var(--border-width-strong) dashed var(--color-border-strong);
+  }
+
+  @container gap-diagram (min-width: 560px) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .padding,
+    .empty {
+      background: GrayText;
+    }
+  }
+</style>

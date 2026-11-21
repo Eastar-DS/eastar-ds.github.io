@@ -17,7 +17,7 @@ describe("getRowKind", () => {
     );
   });
 
-  it("가상화를 켜면 보이는 구간 밖에서 그린 행은 여유 행이다", () => {
+  it("가상화를 켜면 보이는 구간 밖에서 그린 행은 미리 그린 행이다", () => {
     expect(getRowKind({ index: 8, ranges, isVirtualized: true })).toBe(
       "overscan",
     );

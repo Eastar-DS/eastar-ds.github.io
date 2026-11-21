@@ -15,9 +15,9 @@ interface ListControlsProps {
 }
 
 /**
- * 가상화 목록 데모의 조작 줄입니다. 가상화 켜고 끄기 단추와 여유 거리 슬라이더, 상태 글을 한 줄에 둡니다.
+ * 가상화 목록 데모의 조작 줄입니다. 가상화 켜고 끄기 단추와 미리 그릴 거리 슬라이더, 상태 글을 한 줄에 둡니다.
  * 켜고 끄기 단추는 「칩」의 고름 모양(체크 아이콘 · 강조색 바탕)으로 지금 상태를 알리고, `aria-pressed`로 스크린 리더에도 알립니다.
- * 가상화를 끄면 여유 거리가 뜻이 없어서 슬라이더를 끕니다.
+ * 가상화를 끄면 미리 그릴 거리가 뜻이 없어서 슬라이더를 끕니다.
  * @design design/blog.pen 「데모 틀」 M3NVPX 조작 줄, 「칩」 prFrh (고름 iJMPy), 「슬라이더」 taHDx
  */
 export default function ListControls({
@@ -54,7 +54,7 @@ export default function ListControls({
         가상화
       </button>
       <span className={styles.sliderLabel} aria-hidden="true">
-        여유 거리
+        미리 그릴 거리
       </span>
       <DemoSlider
         value={overscanPx}
@@ -62,7 +62,7 @@ export default function ListControls({
         max={OVERSCAN_PX.max}
         step={OVERSCAN_PX.step}
         onValueChange={onOverscanChange}
-        label="여유 거리"
+        label="미리 그릴 거리"
         valueText={overscanText}
         isDisabled={!isVirtualized}
       />

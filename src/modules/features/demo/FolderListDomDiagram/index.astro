@@ -1,0 +1,179 @@
+---
+/**
+ * Knot 문서 탭 「주제별」 목록의 DOM 구조를 바깥 칸이 안쪽 칸을 감싸는 모양으로 보여 주는 그림입니다.
+ * 스크롤은 창이 아니라 `main`이 맡고, 폴더 틀(`section`, 폴더 머리, 카드 `ul`)은 모두 그리며, 카드 안의 행(`li`)만 화면 근처의 것을 그린다는 점을 보입니다.
+ * JavaScript 없이 서버에서 그리고, 색은 토큰만 써서 어두운 화면에서도 그대로 보입니다. 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
+ * 늘 그리는 틀은 실선 테두리, 행은 강조색 바탕(●)으로 나누고, 이름표로도 알립니다.
+ */
+const rows = ["0번 행", "1번 행", "2번 행"];
+---
+
+<div class="container">
+  <div class="box">
+    <p class="name"><code>main</code> 스크롤 영역</p>
+    <div class="box isDashed">
+      <p class="name">문서 탭 머리 (제목과 탭)</p>
+    </div>
+    <div class="box">
+      <p class="name">폴더 목록 <span class="note">폴더 사이 28px</span></p>
+      <div class="box">
+        <p class="name"><code>section</code> 폴더 <span class="note">28개</span></p>
+        <div class="box isDashed">
+          <p class="name">폴더 머리 <span class="note">폴더 이름과 문서 수, 높이 24px</span></p>
+        </div>
+        <p class="gap">간격 12px</p>
+        <div class="box">
+          <p class="name"><code>ul</code> 카드</p>
+          <ul class="rows">
+            {
+              rows.map((row) => (
+                <li class="row">
+                  <span class="marker" aria-hidden="true">●</span> <code>li</code> {row}
+                </li>
+              ))
+            }
+            <li class="row isMore">폴더 28개를 합쳐 행 1,939개</li>
+          </ul>
+        </div>
+      </div>
+      <div class="box isDashed">
+        <p class="name">다음 <code>section</code> 27개</p>
+      </div>
+    </div>
+  </div>
+  <ul class="legend">
+    <li class="legendItem"><span class="swatch isFrame"></span>늘 그리는 틀</li>
+    <li class="legendItem"><span class="swatch isRow"></span>화면 근처의 것만 그리는 행</li>
+  </ul>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    container: dom-diagram / inline-size;
+  }
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  /* 점선 칸은 늘 그리지만 이 글에서 다루지 않는 부분입니다 */
+  .box.isDashed {
+    border-style: dashed;
+  }
+
+  .name {
+    color: var(--color-text);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-caption);
+  }
+
+  .name code,
+  .row code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-label);
+  }
+
+  .note,
+  .gap {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .gap {
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    border: var(--border-width) solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    list-style: none;
+  }
+
+  .row {
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  .row + .row {
+    border-top: var(--border-width) solid var(--color-bg);
+  }
+
+  .row.isMore {
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  .marker {
+    color: var(--color-accent);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    list-style: none;
+  }
+
+  .legendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .swatch {
+    box-sizing: border-box;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: var(--radius-sm);
+  }
+
+  .swatch.isFrame {
+    border: var(--border-width-strong) solid var(--color-border-strong);
+    background: var(--color-bg);
+  }
+
+  .swatch.isRow {
+    border: var(--border-width) solid var(--color-accent);
+    background: var(--color-accent-soft);
+  }
+
+  @container dom-diagram (min-width: 520px) {
+    .box {
+      padding: var(--space-3);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .rows,
+    .swatch.isRow {
+      border-color: CanvasText;
+    }
+  }
+</style>

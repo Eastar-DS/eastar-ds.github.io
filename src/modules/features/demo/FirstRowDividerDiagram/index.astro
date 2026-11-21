@@ -1,0 +1,215 @@
+---
+/**
+ * 카드 안 첫 `li`가 폴더의 첫 행이 아닐 때 구분선이 빠져 행이 1px씩 위에 놓이는 것을 보여 주는 그림입니다.
+ * 요약이 [있음, 없음, 있음, 없음, 없음]인 카드를 행을 모두 그린 경우와, 1번 행부터 그린 고치기 전 코드로 견줍니다.
+ * 숫자는 행의 위쪽 끝이 카드 맨 위에서 몇 px 아래에 있는지이고, 계산과 다른 값은 「나쁨」 색과 「계산」 값으로 함께 알립니다.
+ * 세로 길이는 0.6배로 줄여 그렸고, 1px 구분선은 2px로 굵게 그렸습니다. JavaScript 없이 서버에서 그립니다.
+ */
+interface Row {
+  label: string;
+  top: number;
+  height: number;
+  hasDivider: boolean;
+  isDividerMissing?: boolean;
+}
+
+interface Tick {
+  value: number;
+  /** 계산과 다르면 계산 값 */
+  expected?: number;
+}
+
+const SCALE = 0.6;
+const CARD_HEIGHT = 380;
+
+const columns: { title: string; paddingTop: number; rows: Row[]; ticks: Tick[] }[] = [
+  {
+    title: "행을 모두 그린 카드",
+    paddingTop: 0,
+    rows: [
+      { label: "0번 행 (요약 있음)", top: 0, height: 92, hasDivider: false },
+      { label: "1번 행", top: 92, height: 65, hasDivider: true },
+      { label: "2번 행 (요약 있음)", top: 157, height: 93, hasDivider: true },
+      { label: "3번 행", top: 250, height: 65, hasDivider: true },
+      { label: "4번 행", top: 315, height: 65, hasDivider: true },
+    ],
+    ticks: [{ value: 0 }, { value: 92 }, { value: 157 }, { value: 250 }, { value: 315 }, { value: 380 }],
+  },
+  {
+    title: "1번 행부터 그린 카드 (고치기 전)",
+    paddingTop: 92,
+    rows: [
+      { label: "1번 행, 64px", top: 92, height: 64, hasDivider: false, isDividerMissing: true },
+      { label: "2번 행 (요약 있음)", top: 156, height: 93, hasDivider: true },
+      { label: "3번 행", top: 249, height: 65, hasDivider: true },
+      { label: "4번 행", top: 314, height: 65, hasDivider: true },
+    ],
+    ticks: [
+      { value: 0 },
+      { value: 92 },
+      { value: 156, expected: 157 },
+      { value: 249, expected: 250 },
+      { value: 314, expected: 315 },
+      { value: 380 },
+    ],
+  },
+];
+
+const toPx = (value: number) => `${value * SCALE}px`;
+---
+
+<div class="container">
+  <div class="columns">
+    {
+      columns.map((column) => (
+        <div class="column">
+          <p class="title">{column.title}</p>
+          <div class="chart" style={`height: ${toPx(CARD_HEIGHT)}`}>
+            <div class="ticks" aria-hidden="true">
+              {column.ticks.map((tick) => (
+                <span class:list={["tick", { isWrong: tick.expected !== undefined }]} style={`top: ${toPx(tick.value)}`}>
+                  {tick.value}
+                  {tick.expected && <span class="expected">계산 {tick.expected}</span>}
+                </span>
+              ))}
+            </div>
+            <div class="card">
+              {column.paddingTop > 0 && (
+                <span class="padding" style={`top: 0; height: ${toPx(column.paddingTop)}`}>
+                  위쪽 여백 {column.paddingTop}px
+                </span>
+              )}
+              {column.rows.map((row) => (
+                <span
+                  class:list={["row", { hasDivider: row.hasDivider }]}
+                  style={`top: ${toPx(row.top)}; height: ${toPx(row.height)}`}
+                >
+                  {row.label}
+                  {row.isDividerMissing && <span class="missing">구분선 없음</span>}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    container: divider-diagram / inline-size;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  .title {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .chart {
+    display: grid;
+    grid-template-columns: 5.5em minmax(0, 1fr);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  .ticks {
+    position: relative;
+  }
+
+  .tick {
+    position: absolute;
+    right: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    transform: translateY(-50%);
+  }
+
+  .tick.isWrong {
+    color: var(--color-bad);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .expected {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .card {
+    position: relative;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .padding,
+  .row {
+    position: absolute;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+  }
+
+  .padding {
+    background: var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .row {
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+  }
+
+  /* 1px 구분선을 알아보게 2px로 굵게 그립니다 */
+  .row.hasDivider {
+    border-top: var(--border-width-strong) solid var(--color-text);
+  }
+
+  .missing {
+    color: var(--color-bad);
+    font-weight: var(--font-weight-bold);
+  }
+
+  @container divider-diagram (min-width: 560px) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .padding {
+      background: GrayText;
+    }
+  }
+</style>

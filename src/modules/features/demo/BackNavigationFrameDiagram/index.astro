@@ -1,0 +1,266 @@
+---
+/**
+ * 뒤로 가기로 스크롤 위치를 한 번에 되돌릴 때, 메인 스레드에서 작업과 화면 갱신이 일어나는 순서를 고치기 전과 고친 뒤로 견주는 그림입니다.
+ * 예시는 맨 위에서 15,000px 아래에 있는 요약 없는 행 100개짜리 카드이고, 뒤로 가기로 scrollTop이 0에서 15,795px가 됩니다.
+ * 화면 갱신마다 그 프레임에 칠해진 모습을 작은 화면으로 보이고, 행 없는 카드는 「나쁨」 색과 「행 없음」 글로 함께 알립니다.
+ * JavaScript 없이 서버에서 그립니다.
+ */
+interface Step {
+  kind: "task" | "frame";
+  name: string;
+  lines: string[];
+  /** 화면 갱신에서 칠해진 모습 */
+  paint?: "blank" | "rows";
+}
+
+const columns: { title: string; steps: Step[] }[] = [
+  {
+    title: "고치기 전",
+    steps: [
+      {
+        kind: "task",
+        name: "작업: 뒤로 가기 처리",
+        lines: [
+          "React가 목록을 커밋하고, 폴더 카드가 scrollTop 0에서 범위 { start: 0, end: 0 }을 구합니다.",
+          "스크롤 복원 훅이 scrollTop을 15,795px로 되돌립니다.",
+        ],
+      },
+      {
+        kind: "frame",
+        name: "화면 갱신 1",
+        lines: [
+          "scroll 이벤트에서 새 범위 { start: 7, end: 29 }를 구해 setRange를 부르지만, React는 렌더링을 다음 작업으로 미룹니다.",
+          "DOM에 행이 없는 채로 페인트합니다.",
+        ],
+        paint: "blank",
+      },
+      {
+        kind: "task",
+        name: "다음 작업",
+        lines: ["React가 { start: 7, end: 29 }로 렌더링하고 커밋합니다."],
+      },
+      { kind: "frame", name: "화면 갱신 2", lines: ["행이 있는 화면을 페인트합니다."], paint: "rows" },
+    ],
+  },
+  {
+    title: "고친 뒤",
+    steps: [
+      {
+        kind: "task",
+        name: "작업: 뒤로 가기 처리",
+        lines: ["고치기 전과 같이 범위 { start: 0, end: 0 }을 구한 뒤 scrollTop을 15,795px로 되돌립니다."],
+      },
+      {
+        kind: "frame",
+        name: "화면 갱신 1",
+        lines: [
+          "scroll 이벤트에서 isViewCovered가 그린 행이 화면을 덮지 못한다고 알립니다.",
+          "flushSync 안에서 { start: 7, end: 29 }로 렌더링하고 커밋한 뒤 페인트합니다.",
+        ],
+        paint: "rows",
+      },
+      { kind: "task", name: "다음 작업", lines: ["미뤄 둔 업데이트가 없어 React가 할 일이 없습니다."] },
+    ],
+  },
+];
+---
+
+<div class="container">
+  <div class="columns">
+    {
+      columns.map((column) => (
+        <div class="column">
+          <p class="title">{column.title}</p>
+          <ol class="steps">
+            {column.steps.map((step) => (
+              <li class:list={["step", step.kind]}>
+                <p class="name">{step.name}</p>
+                <ul class="lines">
+                  {step.lines.map((line) => (
+                    <li>{line}</li>
+                  ))}
+                </ul>
+                {step.paint === "blank" && (
+                  <div class="screen isBlank">
+                    <span class="screenText">행 없음</span>
+                  </div>
+                )}
+                {step.paint === "rows" && (
+                  <div class="screen isRows" aria-hidden="true">
+                    {Array.from({ length: 5 }, () => (
+                      <span class="screenRow" />
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+  <ul class="legend">
+    <li class="legendItem"><span class="swatch task"></span>작업(task)</li>
+    <li class="legendItem"><span class="swatch frame"></span>화면 갱신(스타일, 레이아웃, 페인트)</li>
+  </ul>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    container: back-diagram / inline-size;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  .title {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  /* 작업은 바탕만 칠하고, 화면 갱신은 테두리로 나눕니다 */
+  .step.task {
+    background: var(--color-surface-hover);
+  }
+
+  .step.frame {
+    border: var(--border-width) solid var(--color-border-strong);
+    background: var(--color-bg);
+  }
+
+  .name {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding-left: var(--space-4);
+    color: var(--color-text);
+    text-wrap: pretty;
+  }
+
+  .screen {
+    box-sizing: border-box;
+    height: var(--space-14);
+    border: var(--border-width-strong) solid var(--color-text);
+    border-radius: var(--radius-sm);
+  }
+
+  .screen.isBlank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bad-soft);
+  }
+
+  .screenText {
+    color: var(--color-bad);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .screen.isRows {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 0 var(--space-3);
+    background: var(--color-bg);
+  }
+
+  .screenRow {
+    display: block;
+    height: var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    list-style: none;
+  }
+
+  .legendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .swatch {
+    box-sizing: border-box;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: var(--radius-sm);
+  }
+
+  .swatch.task {
+    background: var(--color-surface-hover);
+    outline: var(--border-width) solid var(--color-border);
+  }
+
+  .swatch.frame {
+    border: var(--border-width) solid var(--color-border-strong);
+    background: var(--color-bg);
+  }
+
+  @container back-diagram (min-width: 560px) {
+    .columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .screenRow {
+      background: CanvasText;
+    }
+  }
+</style>

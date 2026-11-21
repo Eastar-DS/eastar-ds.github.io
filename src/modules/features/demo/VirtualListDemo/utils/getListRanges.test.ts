@@ -31,7 +31,7 @@ describe("getRowRange", () => {
 describe("getListRanges", () => {
   const base = { rowCount: 2000, rowHeight: 40, viewportHeight: 240 };
 
-  it("가상화를 켜면 화면 위아래로 여유 거리만큼 더 그린다", () => {
+  it("가상화를 켜면 화면 위아래로 미리 그릴 거리만큼 더 그린다", () => {
     expect(
       getListRanges({ ...base, scrollTop: 400, overscanPx: 80, isVirtualized: true }),
     ).toEqual({
@@ -40,7 +40,7 @@ describe("getListRanges", () => {
     });
   });
 
-  it("맨 위에서는 위쪽 여유 행 없이 아래쪽만 더 그린다", () => {
+  it("맨 위에서는 위쪽 미리 그린 행 없이 아래쪽만 더 그린다", () => {
     expect(
       getListRanges({ ...base, scrollTop: 0, overscanPx: 80, isVirtualized: true }),
     ).toEqual({
@@ -49,7 +49,7 @@ describe("getListRanges", () => {
     });
   });
 
-  it("여유 거리가 0이면 보이는 행만 그린다", () => {
+  it("미리 그릴 거리가 0이면 보이는 행만 그린다", () => {
     expect(
       getListRanges({ ...base, scrollTop: 420, overscanPx: 0, isVirtualized: true }),
     ).toEqual({
