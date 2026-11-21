@@ -1,23 +1,66 @@
 ---
+import { IS_RESUME_SHOWN } from "@/shared/constants/features";
 import { SITE } from "@/shared/constants/site";
 import { PATHS } from "@/shared/routes/paths";
 
-/** 소개 페이지의 본문입니다. 이 페이지의 h1을 가집니다 */
+/**
+ * 소개 페이지의 본문입니다. 이 페이지의 h1을 가집니다.
+ * 첫 문단에 어떤 사람인지 쓰고, 도메인에 직접 뛰어든 세 경험(비드, 셀러홈, Knot)을 목록으로 둡니다.
+ * 이력서 · 포트폴리오 링크는 두 페이지를 그릴 때(`IS_RESUME_SHOWN`)만, 이메일 링크는 `SITE.author.email`이 있을 때만 둡니다.
+ * 공개 전 숫자를 바로 내보내지 않도록, 기억에 의한 비드의 숫자(구독자 수 등)는 여기에 쓰지 않습니다.
+ */
+const { email, githubUrl } = SITE.author;
+const links = [
+  ...(IS_RESUME_SHOWN
+    ? [
+        { label: "이력서", href: PATHS.resume },
+        { label: "포트폴리오", href: PATHS.portfolio },
+      ]
+    : []),
+  { label: "GitHub", href: githubUrl },
+  ...(email ? [{ label: "이메일", href: `mailto:${email}` }] : []),
+  { label: "RSS 구독", href: PATHS.rss },
+];
 ---
 
 <section class="container">
   <h1 class="title">소개</h1>
   <div class="body">
     <p>
-      프론트엔드 개발자 이스타입니다. 브라우저, React, 접근성을 주로 다루고, 글마다
-      직접 움직여 볼 수 있는 예시를 넣습니다.
+      프론트엔드 엔지니어 이스타입니다. 맡은 서비스의 도메인에 진심으로 달려들어,
+      사용자가 하는 일을 직접 해 보며 찾은 문제를 풀고 결과를 숫자로 확인합니다.
     </p>
+    <ul class="experiences">
+      <li>
+        부동산 경매 정보 서비스 비드를 창업해 약 3년 동안 운영하면서, 서비스의 분석으로
+        경매 물건 10건 이상에 직접 투자했습니다. 법원에서 입찰자들을 인터뷰하고 경매
+        학원에 다니며 수강생들과 대화한 끝에, 실제로 투자하는 사람보다 학원 수강생이 훨씬
+        많다는 것을 알고 타깃을 학원 수강생으로 바꿨습니다.
+      </li>
+      <li>
+        셀러홈을 만들기 전에 아는 쇼핑몰 사장님의 일을 무급으로 도우며 발주 업무를 직접
+        처리해 봤습니다. 쇼핑몰마다 다른 엑셀 양식으로 반복하던 일을 버튼 한 번으로
+        묶었고, 무료 체험 없이 유료 구독 10곳을 모았습니다.
+      </li>
+      <li>
+        팀 프로젝트 Knot에서는 사용자 데이터 분석을 맡아, 퍼널에서 크게 빠지는 곳마다
+        가설을 세우고 세션 리플레이와 이벤트로 원인을 나눴습니다. 화면으로 고칠 수 있는
+        원인을 고쳐 첫 방문 녹음 시도를 47%에서 68%로 올렸습니다.
+      </li>
+    </ul>
     <p>
-      이 블로그는 공부하며 배운 것과 만든 것을 읽기 좋은 글로 남기는 곳입니다.
+      사용자를 만나 인터뷰할 때 가장 먼저 보여 주는 것이 화면이고, 사용자가 주는
+      피드백도 많은 부분이 화면과 관련 있어서 프론트엔드를 골랐습니다.
     </p>
+    <p>블로그에는 공부하며 배운 것과 만든 것을 읽기 좋은 글로 적습니다.</p>
     <ul class="links">
-      <li><a href={SITE.author.githubUrl}>GitHub</a></li>
-      <li><a href={PATHS.rss}>RSS 구독</a></li>
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>
@@ -37,13 +80,26 @@ import { PATHS } from "@/shared/routes/paths";
     margin-top: var(--space-6);
   }
 
-  .body p {
+  .body p,
+  .experiences > li {
     text-wrap: pretty;
+  }
+
+  .experiences {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .experiences > li::marker {
+    color: var(--color-text-muted);
   }
 
   .links {
     display: flex;
-    gap: var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
     list-style: none;
   }
 

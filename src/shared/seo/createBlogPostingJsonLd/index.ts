@@ -1,5 +1,6 @@
 import { SITE } from "@/shared/constants/site";
-import { getPostPath, PATHS } from "@/shared/routes/paths";
+import { getPostPath } from "@/shared/routes/paths";
+import createPersonJsonLd from "@/shared/seo/createPersonJsonLd";
 import type { Post } from "@/shared/types/post";
 import type { JsonLd } from "@/shared/types/seo";
 
@@ -17,12 +18,7 @@ const createBlogPostingJsonLd = (post: Post) => {
     dateModified: post.updatedAt.toISOString(),
     inLanguage: SITE.language,
     articleSection: post.category,
-    author: {
-      "@type": "Person",
-      name: SITE.author.name,
-      url: new URL(PATHS.about, SITE.url).href,
-      sameAs: [SITE.author.githubUrl],
-    },
+    author: createPersonJsonLd(),
   };
 
   return jsonLd;
