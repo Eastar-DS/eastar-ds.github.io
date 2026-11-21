@@ -294,7 +294,7 @@ export const blogDarkPlus = recolor(
   - 빠진 글자 검사는 빌드 결과에 나온 글자가 모두 글꼴의 글자 표(cmap)에 있는지 보고, 빠지면 빌드를 실패시킵니다. 원본 글꼴에 없는 글자(예: 한자, 그림 문자)를 쓰면 여기서 걸립니다.
 - `font-display: swap`입니다. 첫 방문(대개 검색에서 옴)에도 Pretendard로 읽히게 하려는 것입니다. `optional`은 느린 휴대폰의 첫 방문 내내 시스템 글꼴로 남습니다.
 - 글꼴이 바뀔 때 흔들리지 않게 대체 글꼴의 크기를 Blog Sans에 맞춥니다(`size-adjust` · `ascent-override` · `descent-override` · `line-gap-override`).
-  - 너비는 시험 글 본문 2,339자의 글자 너비 합을 Pretendard와 견줘 정했고, 세로 수치는 Pretendard(위 0.9521em · 아래 0.2412em · 줄 사이 0)를 `size-adjust`로 나눈 값입니다.
+  - 너비는 시험 글(지금은 지움) 본문 2,339자의 글자 너비 합을 Pretendard와 견줘 정했고, 세로 수치는 Pretendard(위 0.9521em · 아래 0.2412em · 줄 사이 0)를 `size-adjust`로 나눈 값입니다.
 
 | 대체 글꼴 이름 | 실제 글꼴 | `size-adjust` | 근거 |
 |---|---|---|---|
@@ -302,7 +302,7 @@ export const blogDarkPlus = recolor(
 | Blog Sans Fallback Win | 맑은 고딕 | 85.61% | 공개된 14px 너비 표로 추정. 윈도에서 확인이 필요합니다 |
 | Blog Sans Fallback | Noto Sans KR · Noto Sans CJK KR (안드로이드 · 리눅스) | 94.51% | 글꼴 파일로 잼 |
 
-  - 효과(시험 글 본문 높이, Blog Sans와의 차이): Noto Sans KR은 맞추기 전 넓은 화면 +92px · 휴대폰 +79px에서 맞춘 뒤 0px. Apple SD Gothic Neo는 원래 너비가 같아 넓은 화면 0px · 휴대폰 −22px(한 줄)로 맞추기 전후가 같습니다.
+  - 효과(시험 글 본문 높이, 지금은 지운 글 기준, Blog Sans와의 차이): Noto Sans KR은 맞추기 전 넓은 화면 +92px · 휴대폰 +79px에서 맞춘 뒤 0px. Apple SD Gothic Neo는 원래 너비가 같아 넓은 화면 0px · 휴대폰 −22px(한 줄)로 맞추기 전후가 같습니다.
 - 굵기 토큰은 넷만 씁니다.
 
 | CSS 변수 | 값 | 쓰는 곳 |
@@ -475,7 +475,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 | 링크 | 링크 | `fXlRl` | state: default · hover · focus · visited | 본문 `a` 스타일 (`widgets/post/PostBody`) |
 | 아이콘 단추 | 아이콘 단추 | `Bh8HQ` | state: default · hover · focus | `primitives/ui/IconButton` (React 데모 안은 `primitives/ui/DemoControls`가 같은 토큰으로 그림) |
 | 칩 | 칩 | `prFrh` | state: default · hover · selected · focus | `primitives/ui/Chip`, `widgets/series/SeriesChips` |
-| 슬라이더 | 슬라이더 | `taHDx` | state: default · focus | `primitives/ui/DemoControls` 안 `input[type=range]` |
+| 슬라이더 | 슬라이더 | `taHDx` | state: default · focus | `primitives/ui/DemoSlider` (`DemoControls`와 데모 조작 줄이 함께 씀) |
 | 건너뛰기 링크 | 건너뛰기 링크 | `Y9Engv` | 없음 | `primitives/ui/SkipLink` (`primitives/layout/Document`의 `<body>` 맨 앞) |
 | 머리말 | 머리말 | `mg60A` | device: desktop · mobile | `widgets/site/SiteHeader`, `features/site/ThemeToggle` |
 | 꼬리말 | 꼬리말 | `m9iWo` | device: desktop · mobile | `widgets/site/SiteFooter` |
@@ -551,6 +551,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 - 구성:
   - 넓은 화면: 높이 72px, 안쪽 폭 최대 1200px. 사이트 이름(lead 700) · 메뉴(글 · 시리즈 · 소개, body-sm) · RSS 단추 · 밝기 단추
   - 메뉴 끝의 이력서, 포트폴리오는 공개 스위치(`shared/constants/features`의 `IS_RESUME_PUBLIC`)가 켜졌거나 개발 서버일 때만 붙습니다(2026-11-21). 붙으면 메뉴는 다섯 개이고, 넓은 메뉴가 펼쳐지는 768px에서도 한 줄에 들어갑니다. Pencil 「머리말」 시안에는 아직 없습니다.
+  - 시리즈가 하나도 없으면 「시리즈」 메뉴가 갈 구획(`/#series`)이 없어서 메뉴에서 뺍니다(`SiteHeader/utils/filterNavItems`, 2026-11-21). 시리즈가 생기면 다시 보입니다.
   - 인쇄할 때는 머리말을 그리지 않습니다. 꼬리말도 같습니다.
   - 휴대폰: 높이 56px. 사이트 이름 · 밝기 단추 · 메뉴 단추. 메뉴는 `<details>`로 펼칩니다.
 - 상태: 지금 페이지의 메뉴는 `aria-current="page"`, 글자 `--color-text`와 600.
@@ -761,7 +762,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 | 데모 없는 페이지(목록, 소개, 데모 없는 글)의 JS | 프레임워크 JS 0KB. 작은 스크립트(밝기, 목차 위치, 복사, 메뉴) 합계 5KB 이하(gzip) |
 | 데모 있는 글의 JS | 페이지 합계 100KB 이하(gzip, React 런타임 포함). 데모 하나의 자체 코드는 30KB 이하 |
 | CSS | 페이지 합계 30KB 이하(gzip) |
-| 글꼴 | 글 한 편을 캐시 없이 처음 열 때 받는 글꼴 파일 합계(전송 크기) 150KB 이하. preload는 Blog Sans 하나. 2026-11-21 시험 글: 90KB(Blog Sans 69 · JetBrains Mono 16 · Blog Code Hangul 5) |
+| 글꼴 | 글 한 편을 캐시 없이 처음 열 때 받는 글꼴 파일 합계(전송 크기) 150KB 이하. preload는 Blog Sans 하나. 2026-11-21 시험 글: 90KB(Blog Sans 69 · JetBrains Mono 16 · Blog Code Hangul 5). 2026-11-21 첫 글(목록 가상화): 98KB(Blog Sans 80 · JetBrains Mono 16, 코드 칸에 한글이 없어 Blog Code Hangul은 받지 않음) |
 | LCP | 2.5초 이하 (휴대폰, 느린 4G 기준). 보통 글 제목이 LCP라서 1.5초 안쪽을 노립니다 |
 | CLS | 0.1 이하, 목표 0. 그림 · 댓글 자리는 높이를 미리 잡고, 데모 화면은 고정 높이나 서버에서 그린 첫 화면으로 높이가 변하지 않게 합니다 |
 | INP | 200ms 이하 |
@@ -805,6 +806,6 @@ Knot에서는 컴포넌트마다 Figma 프레임 링크(`@see`)를 스토리에 
 
 | 항목 | 이 문서 | 지금 코드 | 까닭 |
 |---|---|---|---|
-| 데모 화면 높이 | 200px로 미리 정함 (7.20) | 넓은 칸에서 최소 200px. 렌더링 단계 데모는 고르기 · 미리보기 · 단계가 있어 그보다 높음 | 서버에서 그린 첫 화면이 그대로 있어 JavaScript가 늦게 와도 높이가 변하지 않습니다(10장의 CLS 줄과 같음) |
+| 데모 화면 높이 | 200px로 미리 정함 (7.20) | 넓은 칸에서 최소 200px. 목록 가상화 데모는 목록 칸 · 구조 보기 · 숫자 칸이 있어 그보다 높음(약 595px, 하이드레이션 전후 같음) | 서버에서 그린 첫 화면이 그대로 있어 JavaScript가 늦게 와도 높이가 변하지 않습니다(10장의 CLS 줄과 같음) |
 | 표 설명 | `<caption>` (7.18) | `<Figure caption="표 1. …" captionSide="top">`의 `<figcaption>` | 마크다운(GFM) 표에는 `<caption>`을 넣을 수 없습니다 |
 | 글 제목 줄바꿈 | 손으로 줄바꿈을 넣지 않음 (3.3) | 제목의 첫 `: ` 앞뒤를 두 덩어리로 그려, 줄을 바꿔야 할 때 콜론 뒤에서 먼저 바꿈 (`widgets/post/PostHeader/utils/splitTitle`) | 손 줄바꿈이 아니라 「무엇: 어떻게」 꼴의 제목을 읽기 좋게 나누는 규칙입니다. 좁은 칸에서는 덩어리 안에서 다시 줄을 바꿉니다 |
