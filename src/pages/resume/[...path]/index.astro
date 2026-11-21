@@ -5,6 +5,7 @@ import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Document from "@/shared/components/primitives/layout/Document/index.astro";
 import { IS_RESUME_SHOWN } from "@/shared/constants/features";
+import { SITE } from "@/shared/constants/site";
 import getSwitchPagePaths from "@/shared/routes/getSwitchPagePaths";
 import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
@@ -17,8 +18,7 @@ export const getStaticPaths = () => getSwitchPagePaths(IS_RESUME_SHOWN);
 
 const meta = createPageMeta({
   title: "이력서",
-  description:
-    "프론트엔드 엔지니어 이스타의 이력서입니다. Knot, 셀러홈, 비드에서 한 일과 기술, 교육을 적었습니다.",
+  description: `프론트엔드 엔지니어 ${SITE.author.displayName}의 이력서입니다. Knot, 셀러홈, 비드에서 한 일과 기술, 교육을 적었습니다.`,
   path: PATHS.resume,
 });
 ---

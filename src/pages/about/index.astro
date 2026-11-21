@@ -4,6 +4,7 @@ import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
 import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import { SITE } from "@/shared/constants/site";
 import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
 import createProfilePageJsonLd from "@/shared/seo/createProfilePageJsonLd";
@@ -11,8 +12,7 @@ import createProfilePageJsonLd from "@/shared/seo/createProfilePageJsonLd";
 /** 소개 페이지. 글의 작성자(BlogPosting의 author)가 가리키는 곳이라 ProfilePage(Person) 구조화 데이터를 둡니다 */
 const meta = createPageMeta({
   title: "소개",
-  description:
-    "도메인에 진심으로 달려드는 프론트엔드 엔지니어 이스타를 소개합니다. 창업한 비드, 혼자 만든 셀러홈, 팀 프로젝트 Knot에서 한 일을 적었습니다.",
+  description: `도메인에 진심으로 달려드는 프론트엔드 엔지니어 ${SITE.author.displayName}를 소개합니다. 창업한 비드, 혼자 만든 셀러홈, 팀 프로젝트 Knot에서 한 일을 적었습니다.`,
   path: PATHS.about,
 });
 const jsonLds = [createProfilePageJsonLd()];

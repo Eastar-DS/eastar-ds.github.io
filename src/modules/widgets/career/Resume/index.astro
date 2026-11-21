@@ -15,10 +15,11 @@ import ResumeItemList from "./ui/ResumeItemList.astro";
 
 /**
  * 이력서 페이지의 본문입니다. 머리(이름 h1, 직함, 연락처) → 소개 → 경험 → 기술 → 교육 순서이고, 이 페이지의 h1을 가집니다.
+ * 이름은 닉네임과 본명을 함께 쓴 `SITE.author.displayName`(「이스타(김동성)」)이고, 전화번호는 넣지 않습니다.
  * 연락처는 종이로 뽑아도 읽을 수 있게 주소 글자를 그대로 링크로 씁니다. 이메일은 `SITE.author.email`이 비어 있으면 그리지 않습니다.
  * 인쇄할 때는 글자 단계를 한 단계씩 줄이고, 제목 바로 뒤나 줄 가운데에서 쪽이 나뉘지 않게 합니다.
  */
-const { email, githubUrl, name } = SITE.author;
+const { displayName, email, githubUrl } = SITE.author;
 const contacts = [
   ...(email
     ? [{ label: "이메일", href: `mailto:${email}`, text: email }]
@@ -35,7 +36,7 @@ const contacts = [
 
 <article class="container">
   <header class="header">
-    <h1 class="name">{name}</h1>
+    <h1 class="name">{displayName}</h1>
     <p class="role">{RESUME_ROLE}</p>
     <ul class="contacts">
       {

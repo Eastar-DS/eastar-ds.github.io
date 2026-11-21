@@ -10,7 +10,8 @@ describe("createProfilePageJsonLd", () => {
       url: "https://eastar-ds.github.io/about/",
       mainEntity: {
         "@type": "Person",
-        name: "이스타",
+        name: "김동성",
+        alternateName: "이스타",
         sameAs: ["https://github.com/eastar-DS"],
       },
     });
