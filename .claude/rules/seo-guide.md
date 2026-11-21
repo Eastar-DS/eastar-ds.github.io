@@ -58,13 +58,13 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 - 그림 주소는 페이지 주소 바로 아래 `og.png`(`getOgImagePath`). 글은 `/posts/{slug}/og.png`, 사이트 기본 그림은 `/og.png`
   - 글: `src/pages/posts/[slug]/og.png.ts`. 글 폴더에 직접 만든 `og.png`가 있으면 그것을 쓰고(`shared/content/readPostOgImage`, 크기가 다르면 빌드 실패), 없으면 분류와 제목으로 그림
   - 글이 아닌 페이지: `src/pages/[...page]/og.png.ts`. 어떤 페이지가 자기 그림을 갖는지는 `shared/seo/getPageOgCards` 한곳에서 정함. 지금은 첫 화면(사이트 기본 그림), 이력서(`IS_RESUME_SHOWN`), 포트폴리오(`IS_PORTFOLIO_SHOWN`). 목록에 없는 페이지(소개, 개인정보 처리 안내, 404)는 사이트 기본 그림
-- 그림은 satori로 배치하고 sharp로 PNG를 만듦. 색은 `tokens.css`의 밝은 값을 `?raw`로 읽고(그림에 색을 직접 쓰지 않음), 사람 이름은 `SITE`에서 읽음
+- 그림은 satori로 배치하고 sharp로 PNG를 만듦. 색은 `tokens.css`의 밝은 값을 `?raw`로 읽고(그림에 색을 직접 쓰지 않음), 사람 이름은 `SITE`에서 읽음. 이력서와 포트폴리오 그림의 이름 줄은 이력서 머리와 같은 `SITE.author.displayName`(「이스타(김동성)」)이고, 그림 아래 사이트 이름 줄(「이스타의 개발 노트」)은 그대로 둠
 - 글자는 사이트 글꼴(Blog Sans)이 아니라 Pretendard 원본 OTF 전체로 그림. 원본에도 없는 글자(한자, 그림 문자)가 있으면 빌드를 멈춤. 그림은 `scripts/buildFonts.ts`가 읽지 않아 사이트 글꼴 만들기와 엉키지 않음
 
 ## llms.txt
 
 - `src/pages/llms.txt.ts`(`/llms.txt`)가 `shared/seo/createLlmsTxt`로 만듦. 규격은 https://llmstxt.org v2: H1 사이트 이름 → 인용문 사이트 설명 → 읽는 법 문단 → H2 절마다 `- [이름](주소): 설명` 목록
-- 절: 「글」(최신순, 제목 · 주소 · 요약 · 분류 · 쓴 날), 「글쓴이」(소개, 페이지가 있을 때만 포트폴리오 · 이력서), 「Optional」(RSS, 사이트맵, 개인정보 처리 안내)
+- 절: 「글」(최신순, 제목 · 주소 · 요약 · 분류 · 쓴 날), 「글쓴이」(소개 설명에 「이스타(김동성)」 이름 표기, 페이지가 있을 때만 포트폴리오 · 이력서), 「Optional」(RSS, 사이트맵, 개인정보 처리 안내)
 - 모든 페이지 `<head>`에 `<link rel="describedby" href="/llms.txt">`를 둠(규격 v2의 찾게 하는 방법). robots.txt와 사이트맵에는 llms.txt를 알리는 표준 관례가 없어 적지 않음
 - llms-full.txt와 글별 `.md` 사본은 두지 않음. 글 페이지가 JavaScript 없는 정적 HTML이라 에이전트가 주소를 그대로 읽으면 됨
 - `scripts/buildFonts.ts`는 llms.txt의 글자를 사이트 글꼴에 넣지 않음(화면에 그리지 않는 글)

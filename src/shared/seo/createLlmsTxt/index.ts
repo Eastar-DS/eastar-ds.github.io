@@ -37,11 +37,16 @@ const toPostNote = (post: Post) => {
  * llms.txt(https://llmstxt.org 규격 v2)를 만듭니다. AI 에이전트가 이 사이트에서 읽을 곳을 찾을 때 봅니다.
  * - H1 사이트 이름 → 인용문 사이트 설명 → 읽는 법 문단 → H2마다 링크 목록(`- [이름](주소): 설명`) 순서입니다.
  * - 글은 최신순으로 제목, 주소, 요약, 분류, 쓴 날을 적습니다.
+ * - 「글쓴이」 절의 소개 설명에는 이력서 머리와 같은 이름 표기(`SITE.author.displayName`, 「이스타(김동성)」)를 씁니다.
  * - 이력서와 포트폴리오는 페이지가 있을 때만 넣고, RSS와 사이트맵 같은 보조 링크는 규격의 관례대로 「Optional」 절에 둡니다.
  */
 const createLlmsTxt = ({ posts, isResumeShown, isPortfolioShown }: CreateLlmsTxtParams) => {
   const authorLinks: LlmsLink[] = [
-    { name: "소개", path: PATHS.about, note: "글쓴이를 소개하고 지금까지 한 일을 적은 페이지입니다." },
+    {
+      name: "소개",
+      path: PATHS.about,
+      note: `글쓴이 ${SITE.author.displayName}를 소개하고 지금까지 한 일을 적은 페이지입니다.`,
+    },
     ...(isPortfolioShown
       ? [
           {

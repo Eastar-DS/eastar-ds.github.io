@@ -49,7 +49,9 @@ describe("createLlmsTxt", () => {
   });
 
   it("소개 페이지를 넣고, 페이지가 없는 이력서와 포트폴리오는 빼며, 보조 링크는 Optional 절에 둔다", () => {
-    expect(llms).toContain("## 글쓴이\n\n- [소개](https://eastar-ds.github.io/about/):");
+    expect(llms).toContain(
+      "## 글쓴이\n\n- [소개](https://eastar-ds.github.io/about/): 글쓴이 이스타(김동성)를 소개하고 지금까지 한 일을 적은 페이지입니다.",
+    );
     expect(llms).not.toContain("/resume/");
     expect(llms).not.toContain("/portfolio/");
     expect(llms).toContain("## Optional\n\n- [RSS](https://eastar-ds.github.io/rss.xml):");

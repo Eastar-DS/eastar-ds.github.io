@@ -28,15 +28,18 @@ describe("getPageOgCards", () => {
     ).toEqual(["/", "/resume/", "/portfolio/"]);
   });
 
-  it("이력서 그림에는 글쓴이 이름을 SITE 상수에서 읽어 넣는다", () => {
-    const resume = getPageOgCards({ isResumeShown: true, isPortfolioShown: false }).find(
-      (item) => item.path === "/resume/",
-    );
+  it("이력서와 포트폴리오 그림에는 닉네임과 본명을 함께 쓴 이름을 SITE 상수에서 읽어 넣는다", () => {
+    const cards = getPageOgCards({ isResumeShown: true, isPortfolioShown: true });
 
-    expect(resume).toEqual({
+    expect(cards.find((item) => item.path === "/resume/")).toEqual({
       path: "/resume/",
-      alt: "이스타의 이력서",
-      card: { label: "이스타", title: "이력서" },
+      alt: "이스타(김동성)의 이력서",
+      card: { label: "이스타(김동성)", title: "이력서" },
+    });
+    expect(cards.find((item) => item.path === "/portfolio/")).toEqual({
+      path: "/portfolio/",
+      alt: "이스타(김동성)의 포트폴리오",
+      card: { label: "이스타(김동성)", title: "포트폴리오" },
     });
   });
 });

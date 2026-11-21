@@ -27,7 +27,7 @@ describe("getOgImage", () => {
   it("자기 그림이 있는 페이지는 그 그림을 쓴다", () => {
     expect(getOgImage({ path: "/resume/", title: "이력서", ogType: "website", pageCards })).toMatchObject({
       url: "https://eastar-ds.github.io/resume/og.png",
-      alt: "이스타의 이력서",
+      alt: "이스타(김동성)의 이력서",
     });
   });
 
