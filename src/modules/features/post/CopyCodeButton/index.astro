@@ -2,10 +2,10 @@
 import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 
 /**
- * 코드 칸의 코드를 클립보드에 복사하는 버튼입니다.
- * 「복사됨」 상태의 색(--color-good)은 코드 칸 정본이 정해지면 맞춥니다.
+ * 코드 칸의 코드를 클립보드에 복사하는 단추입니다. 복사하면 2초 동안 체크 아이콘 · 「복사됨」 · --color-code-success로 바뀌고,
+ * 바뀐 말은 aria-live로 읽어 줍니다.
+ * 가장 가까운 [data-copy-scope] 요소 안의 <pre>를 복사하므로, 단추를 넣는 쪽이 그 요소를 표시합니다.
  * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
- * 가장 가까운 [data-copy-scope] 요소 안의 <pre>를 복사하므로, 버튼을 넣는 쪽이 그 요소를 표시합니다.
  */
 ---
 
@@ -19,7 +19,7 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 </span>
 
 <script>
-  // 「복사함」 표시를 원래대로 돌리기까지의 시간
+  // 「복사됨」 표시를 원래대로 돌리기까지의 시간
   const RESET_DELAY_MS = 2000;
 
   const handleClick = async (event: MouseEvent) => {
@@ -34,7 +34,7 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
     try {
       await navigator.clipboard.writeText(code.textContent ?? "");
       button.dataset.copied = "true";
-      text.textContent = "복사함";
+      text.textContent = "복사됨";
       status.textContent = "코드를 복사했습니다";
       window.setTimeout(() => {
         delete button.dataset.copied;
@@ -60,15 +60,16 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 6px;
+    padding: var(--space-1) 6px;
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
-    color: var(--color-text-muted);
+    color: var(--color-code-meta);
     font-family: var(--font-sans);
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
     cursor: pointer;
+    transition: color var(--duration-base) var(--ease-standard);
   }
 
   .button:hover {
@@ -81,9 +82,12 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
     display: none;
   }
 
+  .button[data-copied] {
+    color: var(--color-code-success);
+  }
+
   .button[data-copied] :global(.checkIcon) {
     display: block;
-    color: var(--color-accent);
   }
 
   @media (max-width: 767.98px) {

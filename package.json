@@ -10,8 +10,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "astro check && node scripts/buildCodeFont.ts --check",
     "test": "vitest run",
+    "fonts:code": "node scripts/buildCodeFont.ts",
     "astro": "astro"
   },
   "dependencies": {
@@ -27,8 +28,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@kfonts/d2coding": "0.2.0",
+    "@shikijs/themes": "4.6.0",
+    "@shikijs/transformers": "4.6.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "fonteditor-core": "^2.6.3",
     "typescript": "^6.0.3",
     "vitest": "^5.1.1"
   }

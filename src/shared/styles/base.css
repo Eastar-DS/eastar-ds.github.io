@@ -7,8 +7,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* 제목 앵커로 이동할 때 제목이 화면 맨 위에 붙지 않게 합니다 */
-  scroll-padding-top: var(--space-6);
+  /* 제목 앵커로 이동할 때 제목이 화면 맨 위에 붙지 않게 합니다. 목차의 sticky top과 같은 값이라 둘이 같은 높이에 섭니다 */
+  scroll-padding-top: var(--toc-sticky-top);
 }
 
 /* 글이 짧은 페이지에서도 꼬리말이 화면 맨 아래에 오도록 본문(main)이 남은 높이를 채웁니다 */
@@ -79,8 +79,11 @@ code,
 kbd,
 pre {
   font-family: var(--font-mono);
-  /* => 가 ⇒ 처럼 합쳐 보이면 글에 적힌 코드와 달라 보이므로 합자를 끕니다 */
+  /* => 가 ⇒ 처럼 합쳐 보이면 글에 적힌 코드와 달라 보이므로 글자 이음을 끕니다 */
   font-variant-ligatures: none;
+  font-feature-settings:
+    "calt" 0,
+    "liga" 0;
 }
 
 /* 키보드로 옮길 때만 보이는 포커스 테두리. 지우거나 box-shadow로 대신하지 않습니다 */

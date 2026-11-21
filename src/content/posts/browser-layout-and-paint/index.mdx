@@ -52,7 +52,7 @@ for (const box of boxes) {
 
 읽기를 먼저 모두 끝내고 쓰기를 나중에 몰아서 하면, 레이아웃은 쓰기가 끝난 뒤 한 번만 계산합니다.
 
-```ts title="resize.ts"
+```ts title="resize.ts" {1}
 const widths = boxes.map((box) => box.offsetWidth); // 읽기를 먼저 모으고
 
 boxes.forEach((box, index) => {

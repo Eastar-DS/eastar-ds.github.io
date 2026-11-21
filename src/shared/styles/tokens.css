@@ -11,7 +11,7 @@
  * - 태블릿: 768px부터 (글자 · 여백 · 머리말 높이가 넓은 화면 값으로 바뀜)
  * - 넓은 화면: 1200px부터 (ShowOn, WithAside의 옆 목차)
  *
- * 코드 칸 색(--color-code-*)은 정본이 바뀌는 중이라 아직 두지 않았습니다.
+ * 코드 칸의 낱말 색은 Shiki 테마(src/shared/content/codeThemes)가 칠합니다. 여기에는 칸의 틀 색만 둡니다.
  */
 :root {
   color-scheme: light dark;
@@ -46,6 +46,17 @@
   --color-warn: light-dark(#8a5a00, #d29922);
   --color-warn-soft: light-dark(#fff5d6, #2b2111);
 
+  /* 코드 칸의 틀 (VS Code Light+ / Dark+ + 대비 보정, docs/design-system.md 2.3 「코드」)
+     --color-code-bg와 --color-code-line-highlight는 codeThemes의 CODE_BACKGROUNDS와 같은 값이어야 합니다 */
+  --color-code-bg: light-dark(#f6f8fa, #1e1e1e);
+  --color-code-text: light-dark(#000000, #d4d4d4);
+  --color-code-border: light-dark(#e5e7eb, #2a2f38);
+  --color-code-meta: light-dark(#59636e, #9aa4b2);
+  --color-code-success: light-dark(#047857, #34d399);
+  --color-code-line-number: light-dark(#237893, #858585);
+  --color-code-line-highlight: light-dark(#f1f5fe, #232830);
+  --color-code-line-highlight-bar: light-dark(#2457d6, #7aa2ff);
+
   /* 데모 데이터. 데모와, 데모를 가리키는 본문 낱말에만 씁니다 */
   --color-data-1: light-dark(#c2410c, #fb923c);
   --color-data-2: light-dark(#0f766e, #2dd4bf);
@@ -57,9 +68,11 @@
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
     sans-serif;
+  /* 코드 속 한글은 D2Coding 부분 글꼴(Blog Code Hangul, codeFont.css)이 그립니다.
+     로컬에 D2Coding이 깔린 사람은 그다음 D2Coding, 둘 다 없으면 Pretendard가 대신합니다 */
   --font-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
-    "Pretendard Variable", monospace;
+    "JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace,
+    SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace;
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
@@ -68,6 +81,7 @@
   /* 글자 단계 (휴대폰 값. 768px부터 아래 @media의 값) */
   --font-size-display: 36px;
   --font-size-h1: 26px;
+  --font-size-title: 24px;
   --font-size-h2: 22px;
   --font-size-h3: 18px;
   --font-size-lead: 16px;
@@ -76,11 +90,12 @@
   --font-size-small: 13px;
   --font-size-caption: 13px;
   --font-size-label: 12px;
-  --font-size-code: 13px;
+  --font-size-code: 14px;
   --font-size-code-sm: 12px;
 
   --line-height-display: 1.2;
   --line-height-h1: 1.4;
+  --line-height-title: 1.4;
   --line-height-h2: 1.4;
   --line-height-h3: 1.5;
   --line-height-lead: 1.65;
@@ -89,10 +104,11 @@
   --line-height-small: 1.5;
   --line-height-caption: 1.6;
   --line-height-label: 1.4;
-  --line-height-code: 1.6;
+  --line-height-code: 1.65;
 
   --letter-spacing-display: -0.02em;
   --letter-spacing-h1: -0.02em;
+  --letter-spacing-title: -0.015em;
   --letter-spacing-h2: -0.015em;
   --letter-spacing-h3: -0.01em;
 
@@ -128,6 +144,8 @@
   --page-max-width: 1200px;
   --page-padding-inline: 20px;
   --header-height: 56px;
+  /* 넓은 화면 목차의 sticky top. 제목 앵커의 scroll-padding-top과 같은 값입니다 */
+  --toc-sticky-top: 24px;
 
   /* 아이콘 */
   --icon-size-sm: 14px;
@@ -155,6 +173,7 @@
   :root {
     --font-size-display: 48px;
     --font-size-h1: 36px;
+    --font-size-title: 28px;
     --font-size-h2: 26px;
     --font-size-h3: 20px;
     --font-size-lead: 18px;
@@ -163,7 +182,7 @@
     --font-size-small: 14px;
     --font-size-caption: 14px;
     --font-size-label: 13px;
-    --font-size-code: 14px;
+    --font-size-code: 15px;
     --font-size-code-sm: 13px;
 
     --line-height-h1: 1.35;
