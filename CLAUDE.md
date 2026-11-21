@@ -58,6 +58,7 @@
 - 디자인 값은 `src/shared/styles/tokens.css`의 CSS 변수만 쓴다. 이름과 값은 `docs/design-system.md`와 같게 두고, 밝은 · 어두운 값은 `light-dark()`로 한 줄에 둔다.
 - `docs/design-system.md`, `docs/content-guide.md`, `design/` 아래는 에이전트가 고치지 않는다. 문서와 코드가 맞지 않거나 문서가 틀렸다고 보면 보고한다.
 - 글에는 공개되면 곤란한 내용을 넣지 않는다. 저장소는 공개 저장소다.
+- 글(`src/content/posts/**/index.mdx`)을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킨다. Write · Edit 뒤에는 같은 검사를 훅(`.claude/settings.json`)이 돌린다.
 - `.references/`(다른 사이트 화면)와 `design/*.pen`(Pencil 원본)은 저장소에 넣지 않는다. 시안은 `design/exports-system/`의 PNG를 보고, `.pen` 파일은 파일 도구로 열거나 고치지 않는다(다룰 때는 Pencil 도구로만, 이스타가 시킬 때만).
 - 커밋 메시지는 `feat: ...함`처럼 한국어로 쓰고, 공동작업자 줄을 넣지 않는다.
 - 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.

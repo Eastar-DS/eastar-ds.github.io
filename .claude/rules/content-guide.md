@@ -10,6 +10,8 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 
 **글쓰기와 게시 정책의 정본은 `docs/content-guide.md`입니다.** 제목 · 요약 길이, 글 구조(답을 먼저), 한글 표기, 코드 칸, 그림 · 공유 이미지, 아티팩트를 데모로 다시 만드는 규칙, 분류 목록, 게시 전 확인 목록은 모두 그 문서를 따릅니다. 이 파일은 코드 쪽에서 지킬 것만 적습니다.
 
+- 글을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킵니다.
+
 ## 글 원본과 스키마
 
 - 글 하나는 `src/content/posts/{slug}/index.mdx`. 그림은 같은 폴더에 둡니다. 폴더 이름이 글 주소(`/posts/{slug}/`)입니다.
