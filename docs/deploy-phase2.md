@@ -15,7 +15,7 @@
 1. Cloudflare 무료 계정 만들기
 2. wrangler 로그인
 3. Turnstile 위젯 만들기
-4. 노션 connection 만들기
+4. 노션 connection 확인하기
 5. 노션 댓글 표 만들기
 6. Worker 비밀값 넣기
 7. Worker 배포
@@ -75,23 +75,20 @@ Turnstile은 댓글을 사람이 쓰는지 확인하는 Cloudflare의 무료 기
    - **Site Key**(공개 값): 8단계에서 블로그에 넣습니다. 이 창을 열어 두거나, 나중에 위젯을 눌러 다시 봅니다.
    - **Secret Key**(비밀값): 어디에도 적지 않습니다. 6단계에서 복사해 바로 붙여 넣습니다. 나중에 다시 보려면 위젯을 열고 **Settings**에서 봅니다.
 
-## 4. 노션 connection 만들기
+## 4. 노션 connection 확인하기
 
-Worker가 노션 표를 읽고 쓰려면 노션 토큰이 필요합니다. 노션은 이것을 connection(예전 이름: 통합, integration)이라고 부릅니다.
+이스타가 2026-11-21에 블로그 워크스페이스에 connection 두 개를 이미 만들어 「DB」 페이지(`https://www.notion.so/41f0627daae580229183f2ea9025bde8`)에 붙여 두었습니다. 새로 만들지 않고 이 둘을 씁니다. 토큰도 그때 따로 저장해 두었습니다.
 
-1. 브라우저에서 `https://app.notion.com/developers/connections`를 엽니다(댓글 표를 둘 워크스페이스에 로그인한 상태로).
-2. **Developer connections** 탭에서 **New connection**을 누릅니다.
-3. 이름에 `eastar-blog 댓글`을 넣고, **Authentication method**는 **API token**을 고른 뒤 **Create connection**을 누릅니다. connection은 지금 들어가 있는 워크스페이스에 붙고, 나중에 옮길 수 없습니다.
-4. **Configuration** 탭에서 기능(Capabilities)을 맞춥니다.
-   - 켬: **Read content**, **Update content**, **Insert content**
-   - 끔: 댓글 기능(**Read comments**, **Insert comments**). 노션 페이지 댓글이 아니라 표의 줄을 쓰기 때문입니다.
-   - 사용자 정보: **No user information**
-   - 바꿨으면 저장합니다.
-5. 댓글 표를 둘 부모 페이지에 이 connection의 접근을 줍니다.
-   - 노션에서 부모 페이지(`https://www.notion.so/41f0627daae580229183f2ea9025bde8`)를 엽니다. 세컨드 브레인이 읽는 knot 페이지 밖의 페이지입니다.
-   - 오른쪽 위 **•••** → **Connections** → **+ Add connection**에서 `eastar-blog 댓글`을 고르고 확인합니다.
-   - (다른 방법: connection 화면의 **Content access** 탭 → **Edit access**에서 그 페이지를 고릅니다)
-6. 토큰은 **Configuration** 탭의 **API token**에 있습니다. 5 · 6단계에서 복사해 붙여 넣습니다. 적어 두지 않습니다.
+| connection | 쓰는 곳 | 기능(Capabilities) |
+|---|---|---|
+| `blog-comments-worker` | Worker, 5단계 표 만들기 스크립트 | Read content, Insert content (표 만들 때만 Update content를 잠깐 켬) |
+| `second-brain-comment-alert` | 세컨드 브레인의 새 댓글 알림 | Read content |
+
+1. 브라우저에서 `https://app.notion.com/developers/connections`를 열고 `blog-comments-worker`를 누릅니다.
+2. **Configuration** 탭의 기능에서 **Update content**를 켜고 저장합니다. 5단계 스크립트가 표에 「부모 댓글」 관계 칸을 더할 때 이 권한이 필요합니다. 5단계가 끝나면 다시 끕니다. Worker는 읽기와 넣기만 합니다.
+3. 댓글 기능(**Read comments**, **Insert comments**)은 꺼 둡니다. 노션 페이지 댓글이 아니라 표의 줄을 쓰기 때문입니다. 사용자 정보는 **No user information**입니다.
+4. 「DB」 페이지 오른쪽 위 **•••** → **Connections**에 두 connection이 모두 보이는지 확인합니다. 없으면 **+ Add connection**으로 붙입니다. 표는 이 페이지 아래에 생기므로, 페이지에 붙어 있으면 표에도 접근할 수 있습니다.
+5. 토큰을 잃어버렸으면 **Configuration** 탭에서 다시 발급할 수 있습니다. 다시 발급하면 옛 토큰은 못 쓰게 되니, 이미 넣은 곳(Worker 비밀값)도 다시 넣습니다.
 
 ## 5. 노션 댓글 표 만들기
 
@@ -100,15 +97,16 @@ cd worker
 pnpm notion:create-table
 ```
 
-1. `노션 토큰을 붙여 넣고 Enter (화면에 보이지 않습니다):`가 나오면, 4단계의 **API token**을 복사해 붙여 넣고 Enter를 누릅니다. 글자가 보이지 않는 것이 맞습니다.
+1. `노션 토큰을 붙여 넣고 Enter (화면에 보이지 않습니다):`가 나오면, `blog-comments-worker`의 토큰을 붙여 넣고 Enter를 누릅니다. 글자가 보이지 않는 것이 맞습니다.
 2. `1/3`, `2/3`, `3/3`이 차례로 나오고 끝에 **표 주소**와 **데이터 소스 id**가 나옵니다.
 3. `worker/wrangler.jsonc`를 열어 `"NOTION_DATA_SOURCE_ID": ""`의 따옴표 안에 데이터 소스 id를 넣고 저장합니다. (비밀값이 아니라 저장소에 올려도 됩니다)
 4. 노션에서 표 주소를 열어, 부모 페이지 아래에 「블로그 댓글」 표가 생겼고 칸이 여덟 개인지 봅니다: 내용(제목) · 닉네임 · 글 주소 · 부모 댓글 · 글쓴이 답글 · 숨김 · 승인 · 작성 시각.
 5. 노션 표에서 **칸 이름을 바꾸지 않습니다.** Worker와 세컨드 브레인 알림이 칸 이름으로 읽습니다.
+6. `blog-comments-worker`의 **Update content**를 다시 끕니다(4단계 2번).
 
-- `object_not_found`나 `restricted_resource` 오류가 나면 4단계 5번(페이지에 connection 연결)이 빠진 것입니다.
+- `object_not_found`나 `restricted_resource` 오류가 나면 4단계 4번(페이지에 connection 연결)이 빠진 것입니다. 관계 칸을 더하는 `3/3`에서 권한 오류가 나면 4단계 2번(Update content)이 빠진 것입니다.
 - 다시 돌리면 표가 하나 더 생깁니다. 잘못 만들었으면 노션에서 지우고 다시 돌립니다.
-- 세컨드 브레인의 새 댓글 알림도 이 표를 읽어야 하므로, 세컨드 브레인이 쓰는 노션 connection도 이 표(또는 부모 페이지)에 같은 방법으로 연결합니다.
+- 세컨드 브레인의 새 댓글 알림은 `second-brain-comment-alert`로 이 표를 읽습니다. 「DB」 페이지에 붙어 있으면 따로 할 일은 없습니다.
 
 ## 6. Worker 비밀값 넣기
 
@@ -118,7 +116,7 @@ pnpm exec wrangler secret put NOTION_TOKEN
 ```
 
 1. 처음이라 Worker가 아직 없으면 `There doesn't seem to be a Worker called "eastar-blog". Do you want to create a new Worker with that name and add secrets to it?`라고 묻습니다. `y`를 누릅니다.
-2. `Enter a secret value:`가 나오면 노션 **API token**을 붙여 넣고 Enter를 누릅니다(보이지 않습니다).
+2. `Enter a secret value:`가 나오면 `blog-comments-worker`의 토큰을 붙여 넣고 Enter를 누릅니다(보이지 않습니다).
 3. `✨ Success! Uploaded secret NOTION_TOKEN`이 나오면 됩니다.
 
 이어서 Turnstile 비밀 키를 넣습니다.
