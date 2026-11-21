@@ -10,4 +10,9 @@ export const SITE = {
     name: "이스타",
     githubUrl: "https://github.com/eastar-DS",
   },
+  /** 이 블로그의 저장소. 댓글(giscus)은 이 저장소의 Discussions에 저장됩니다 */
+  repository: {
+    url: "https://github.com/eastar-DS/eastar-ds.github.io",
+    discussionsUrl: "https://github.com/eastar-DS/eastar-ds.github.io/discussions",
+  },
 } as const;

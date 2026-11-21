@@ -1,4 +1,10 @@
-type DateFormat = "long" | "dot" | "monthDay" | "year" | "iso";
+type DateFormat =
+  | "long"
+  | "dot"
+  | "monthDay"
+  | "monthDayLong"
+  | "year"
+  | "iso";
 
 interface FormatDateParams {
   date: Date;
@@ -6,6 +12,7 @@ interface FormatDateParams {
    * - `long`: 2026년 11월 18일
    * - `dot`: 2026.11.18
    * - `monthDay`: 11.18
+   * - `monthDayLong`: 11월 18일
    * - `year`: 2026
    * - `iso`: 2026-11-18 (`<time datetime>`용)
    */
@@ -36,6 +43,8 @@ const formatDate = ({ date, format }: FormatDateParams) => {
       return `${year}.${month}.${day}`;
     case "monthDay":
       return `${month}.${day}`;
+    case "monthDayLong":
+      return `${Number(month)}월 ${Number(day)}일`;
     case "year":
       return year;
     case "iso":

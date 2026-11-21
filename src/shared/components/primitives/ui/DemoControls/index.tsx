@@ -10,15 +10,19 @@ interface DemoControlsProps {
   /** 슬라이더 값 (0~100) */
   value: number;
   onValueChange: (value: number) => void;
-  /** 슬라이더의 이름. 스크린 리더가 읽습니다 */
+  /** 슬라이더가 무엇을 바꾸는지. 스크린 리더가 읽습니다 */
   sliderLabel: string;
   /** 슬라이더 값을 말로 풀어 쓴 것. 예: `진행 40%` */
   sliderValueText?: string;
-  /** 오른쪽 끝에 보이는 짧은 설명 */
-  label?: string;
+  /** 오른쪽 끝의 상태 글. 예: `멈춤 · width 40%`. 좁은 칸에서는 숨깁니다 */
+  status?: string;
 }
 
-/** 데모 아래의 조작 줄입니다. 재생 · 처음으로 버튼과 슬라이더, 짧은 설명을 한 줄에 둡니다 */
+/**
+ * 데모 아래의 조작 줄입니다. 재생/멈춤 · 처음으로 단추와 슬라이더, 상태 글을 한 줄에 둡니다.
+ * 단추는 「아이콘 단추」, 슬라이더는 「슬라이더」 모양을 따릅니다. React 섬 안이라 Astro의 IconButton 대신 같은 토큰으로 그립니다.
+ * @design design/blog.pen 「데모 틀」 M3NVPX 조작 줄, 「슬라이더」 taHDx (기본 p5EjtZ · 포커스 ZWMAF), 「아이콘 단추」 Bh8HQ
+ */
 export default function DemoControls({
   isPlaying,
   onPlayToggle,
@@ -27,7 +31,7 @@ export default function DemoControls({
   onValueChange,
   sliderLabel,
   sliderValueText,
-  label,
+  status,
 }: DemoControlsProps) {
   const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
     onValueChange(Number(event.target.value));
@@ -39,7 +43,7 @@ export default function DemoControls({
         type="button"
         className={styles.iconButton}
         onClick={onPlayToggle}
-        aria-label={isPlaying ? "일시 정지" : "재생"}
+        aria-label={isPlaying ? "멈춤" : "재생"}
       >
         <ControlIcon name={isPlaying ? "pause" : "play"} />
       </button>
@@ -52,11 +56,11 @@ export default function DemoControls({
         <ControlIcon name="reset" />
       </button>
       <span className={styles.sliderContainer}>
-        {/* 채운 막대는 손잡이 가운데까지 오도록 손잡이 폭(14px)의 절반씩 안쪽에서 셉니다 */}
+        {/* 채운 줄은 손잡이 가운데까지 오도록 손잡이 폭(16px)의 절반씩 안쪽에서 셉니다 */}
         <span className={styles.track} aria-hidden="true">
           <span
             className={styles.fill}
-            style={{ width: `calc(7px + (100% - 14px) * ${value / 100})` }}
+            style={{ width: `calc(8px + (100% - 16px) * ${value / 100})` }}
           />
         </span>
         <input
@@ -71,7 +75,7 @@ export default function DemoControls({
           aria-valuetext={sliderValueText}
         />
       </span>
-      {label && <span className={styles.label}>{label}</span>}
+      {status && <span className={styles.status}>{status}</span>}
     </div>
   );
 }

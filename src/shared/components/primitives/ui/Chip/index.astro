@@ -1,17 +1,29 @@
 ---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
 interface Props {
   /** 있으면 링크로 그립니다 */
   href?: string;
   /** 이름 옆에 옅게 보이는 보조 문구. 예: `3편` */
   count?: string;
+  /** 고른 칩. 바탕 · 선 · 굵기와 체크 아이콘으로 알립니다 (색만으로 알리지 않음) */
+  isSelected?: boolean;
 }
 
-/** 둥근 알약 모양의 작은 이름표입니다 */
-const { href, count } = Astro.props;
+/**
+ * 둥근 알약 모양의 작은 이름표입니다. 시리즈와 분류로 거를 때 씁니다.
+ * @design design/blog.pen 「칩」 prFrh (기본 N1QMkh · 올림 gHGQX · 고름 iJMPy · 포커스 TuSbk)
+ */
+const { href, count, isSelected = false } = Astro.props;
 const Tag = href ? "a" : "span";
 ---
 
-<Tag class="container" href={href}>
+<Tag
+  class:list={["container", { isSelected }]}
+  href={href}
+  aria-current={href && isSelected ? "true" : undefined}
+>
+  {isSelected && <Icon name="check" size="sm" />}
   <span class="label"><slot /></span>
   {count && <span class="count">{count}</span>}
 </Tag>
@@ -19,26 +31,45 @@ const Tag = href ? "a" : "span";
 <style>
   .container {
     display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
-    padding: 5px 12px;
-    border: 1px solid var(--color-border);
+    align-items: center;
+    gap: var(--space-1);
+    /* 높이 32px는 docs/design-system.md 7.4의 값입니다 */
+    height: 32px;
+    padding: 0 var(--space-3);
+    border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-full);
     color: var(--color-text);
     font-size: var(--font-size-small);
-    line-height: 1.5;
+    line-height: var(--line-height-small);
+    white-space: nowrap;
     transition:
-      border-color 0.15s,
-      color 0.15s;
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
   }
 
   a.container:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
+
+  a.container:focus-visible {
+    border-radius: var(--radius-full);
+  }
+
+  .isSelected {
     border-color: var(--color-accent);
+    background: var(--color-accent-soft);
     color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
   }
 
   .count {
     color: var(--color-text-muted);
-    font-size: 12px;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .isSelected .count {
+    color: var(--color-accent);
   }
 </style>

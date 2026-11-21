@@ -1,33 +1,45 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
   margin: 0;
+  container-type: inline-size;
 }
 
 .box {
   overflow: hidden;
-  border: 1px solid var(--color-border-surface);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
+}
+
+/* 휴대폰처럼 좁은 칸은 내용 높이만큼, 넓은 칸은 높이를 200px 이상으로 미리 잡습니다 */
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-5);
   background: var(--color-surface);
 }
 
-.stage {
-  padding: 32px 24px;
+@container (min-width: 600px) {
+  .stage {
+    min-height: 200px;
+    padding: var(--space-10) var(--space-8);
+  }
 }
 
-.controls {
-  border-top: 1px solid var(--color-border);
+.footer {
+  border-top: var(--border-width) solid var(--color-border);
   background: var(--color-bg);
 }
 
-.caption {
-  margin-top: 12px;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-small);
-  line-height: 1.6;
-  text-align: center;
+:global(.no-js) .controls {
+  display: none;
 }
 
-@media (max-width: 640px) {
-  .stage {
-    padding: 20px 16px;
-  }
+.caption {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  text-wrap: pretty;
 }

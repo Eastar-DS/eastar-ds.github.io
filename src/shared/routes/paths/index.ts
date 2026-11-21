@@ -2,8 +2,12 @@
 export const PATHS = {
   home: "/",
   about: "/about/",
+  privacy: "/privacy/",
   rss: "/rss.xml",
 } as const;
+
+/** 페이지마다 하나인 `<main>`의 id. 건너뛰기 링크가 이 자리로 옮겨 줍니다 */
+export const MAIN_CONTENT_ID = "main";
 
 /** 글 목록 페이지에서 시리즈 칩 구획의 id. 머리말의 「시리즈」 링크가 이 자리로 갑니다 */
 export const SERIES_SECTION_ID = "series";

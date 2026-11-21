@@ -1,4 +1,8 @@
 ---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+import toPlainText from "./utils/toPlainText";
+
 interface Props {
   level: 2 | 3;
   /** 제목의 id. 주소 끝의 #id로 이 제목에 바로 올 수 있습니다 */
@@ -6,50 +10,45 @@ interface Props {
 }
 
 /**
- * 스스로를 가리키는 링크가 걸린 제목입니다. 제목을 누르면 주소가 이 제목을 가리키도록 바뀝니다.
- * 넓은 화면에서는 마우스를 올리면 왼쪽에 # 표시가 보입니다.
+ * 스스로를 가리키는 앵커 링크가 붙은 제목입니다. 제목 글 뒤의 링크 아이콘은 마우스를 올리거나 포커스할 때만 보이고,
+ * 숨길 때도 opacity만 바꿔 키보드로 닿게 합니다.
+ * @design design/blog.pen 「제목」 bJWiw (h2 기본 k0eVo · h2 올림 B89Pn · h3 기본 PWOAs · h3 올림 IWHBj)
  */
 const { level, id } = Astro.props;
 const Tag = `h${level}` as const;
+const html = await Astro.slots.render("default");
+const label = `「${toPlainText(html)}」 링크`;
 ---
 
-<Tag id={id} class="root">
-  {id ? (
-    <a class="link" href={`#${id}`}>
-      <slot />
-    </a>
-  ) : (
-    <slot />
-  )}
+<Tag id={id} class="container">
+  <Fragment set:html={html} />
+  {
+    id && (
+      <a class="anchor" href={`#${id}`} aria-label={label}>
+        <Icon name="link" size={level === 2 ? "lg" : "md"} />
+      </a>
+    )
+  }
 </Tag>
 
 <style>
-  .root {
-    position: relative;
-  }
-
-  .link {
-    color: inherit;
-  }
-
-  .link::before {
-    content: "#";
-    position: absolute;
-    left: -1em;
+  .anchor {
+    display: inline-flex;
+    margin-left: var(--space-2);
     color: var(--color-text-muted);
-    font-weight: 400;
+    vertical-align: middle;
     opacity: 0;
-    transition: opacity 0.15s;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
   }
 
-  .link:hover::before,
-  .link:focus-visible::before {
+  .container:hover .anchor,
+  .anchor:focus-visible {
     opacity: 1;
   }
 
-  @media (max-width: 1199.98px) {
-    .link::before {
-      display: none;
-    }
+  .anchor:hover {
+    color: var(--color-accent);
   }
 </style>

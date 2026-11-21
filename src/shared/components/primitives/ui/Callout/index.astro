@@ -1,15 +1,28 @@
 ---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+import { CALLOUT_KINDS } from "./constants/calloutKinds";
+import type { CalloutKind } from "./types/callout";
+
 interface Props {
-  /** 칸 맨 위에 굵게 보이는 이름 */
-  label?: string;
+  /** 핵심(key) · 주의(warn) · 참고(note). 기본은 핵심 */
+  kind?: CalloutKind;
 }
 
-/** 본문에서 꼭 기억할 문장을 강조하는 칸입니다. 글에서는 `<Callout>핵심 문장</Callout>`으로 씁니다 */
-const { label = "핵심" } = Astro.props;
+/**
+ * 본문에서 꼭 기억할 문장을 강조하는 칸입니다. 글에서는 import 없이 `<Callout kind="warn">문장</Callout>`으로 씁니다.
+ * 핵심은 글 하나에 한두 번, 강조 칸 전체로 세 개 이하로 씁니다.
+ * @design design/blog.pen 「강조 칸」 eknYZ (핵심 C5y0qU · 주의 NSuOp · 참고 krx9I)
+ */
+const { kind = "key" } = Astro.props;
+const { title, icon } = CALLOUT_KINDS[kind];
 ---
 
-<div class="container" role="note">
-  <p class="label">{label}</p>
+<div class:list={["container", kind]} role="note">
+  <p class="title">
+    <Icon name={icon} size="md" />
+    {title}
+  </p>
   <div class="content">
     <slot />
   </div>
@@ -17,25 +30,47 @@ const { label = "핵심" } = Astro.props;
 
 <style>
   .container {
-    padding: 16px 20px;
-    border-left: 3px solid var(--color-accent);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    background: var(--color-accent-soft);
+    --callout-line: var(--color-accent);
+    --callout-title: var(--color-accent);
+    --callout-bg: var(--color-accent-soft);
+
+    padding: var(--space-4) var(--space-5);
+    border-left: var(--border-width-callout) solid var(--callout-line);
+    border-radius: var(--radius-md);
+    background: var(--callout-bg);
   }
 
-  .label {
-    margin-bottom: 4px;
-    color: var(--color-accent);
-    font-size: var(--font-size-small);
-    font-weight: 700;
-    line-height: 1.6;
+  .warn {
+    --callout-line: var(--color-warn);
+    --callout-title: var(--color-warn);
+    --callout-bg: var(--color-warn-soft);
   }
 
+  .note {
+    --callout-line: var(--color-border-strong);
+    --callout-title: var(--color-text-muted);
+    --callout-bg: var(--color-surface);
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-bottom: var(--space-1);
+    color: var(--callout-title);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  /* 강조 칸 내용은 body-sm 크기에 줄 간격 1.7입니다 (docs/design-system.md 7.16) */
   .content {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
     line-height: 1.7;
   }
 
   .content :global(p + p) {
-    margin-top: 8px;
+    margin-top: var(--space-2);
   }
 </style>

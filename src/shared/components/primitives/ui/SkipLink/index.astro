@@ -1,0 +1,37 @@
+---
+interface Props {
+  /** 건너뛸 곳의 id. 그 요소에는 `tabindex="-1"`을 함께 둡니다 */
+  targetId: string;
+}
+
+/**
+ * 키보드로 머리말을 건너뛰고 본문으로 가는 링크입니다. 평소엔 화면 밖에 있다가 포커스를 받으면 왼쪽 위에 나타납니다.
+ * @design design/blog.pen 「건너뛰기 링크」 Y9Engv
+ */
+const { targetId } = Astro.props;
+---
+
+<a class="root" href={`#${targetId}`}>본문으로 건너뛰기</a>
+
+<style>
+  .root {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 100;
+    /* 안쪽 10 · 16px는 docs/design-system.md 7.6의 값입니다 */
+    padding: 10px var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-body-sm);
+    transform: translateY(calc(-100% - var(--space-4)));
+  }
+
+  .root:focus-visible {
+    transform: none;
+    outline-color: var(--color-accent);
+  }
+</style>

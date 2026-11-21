@@ -11,13 +11,13 @@ export default function ControlIcon({ name }: ControlIconProps) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"
     >
-      {name === "play" && <path d="M6 3.5v17l14-8.5z" />}
+      {name === "play" && <path d="M6 3 20 12 6 21z" />}
       {name === "pause" && (
         <>
           <rect x="6" y="4" width="4" height="16" rx="1" />

@@ -9,6 +9,7 @@ describe("formatDate", () => {
     ["long", "2026년 11월 8일"],
     ["dot", "2026.11.08"],
     ["monthDay", "11.08"],
+    ["monthDayLong", "11월 8일"],
     ["year", "2026"],
     ["iso", "2026-11-08"],
   ] as const)("%s 형식으로 바꾼다", (format, expected) => {

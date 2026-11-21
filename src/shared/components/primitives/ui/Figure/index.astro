@@ -1,0 +1,61 @@
+---
+interface Props {
+  /** 그림이나 표가 보여 주는 것을 한 문장으로. 「그림 1.」, 「표 1.」로 시작합니다 */
+  caption: string;
+  /**
+   * 설명을 둘 자리
+   * - `bottom`: 그림 아래 (기본)
+   * - `top`: 표 위
+   */
+  captionSide?: "top" | "bottom";
+}
+
+/**
+ * 그림이나 표를 설명과 함께 담는 `<figure>`입니다. 글에서는 import 없이 씁니다.
+ * 그림은 본문 폭으로 넓히고 모서리 12px, 1px 선을 둡니다.
+ *
+ * ```mdx
+ * <Figure caption="그림 1. Performance 패널에서 본 렌더링 단계">
+ *
+ * ![보라색 레이아웃 막대가 상자 수만큼 이어진다](./performance-panel.png)
+ *
+ * </Figure>
+ * ```
+ * @design design/blog.pen 「그림과 설명」 I437uy
+ */
+const { caption, captionSide = "bottom" } = Astro.props;
+---
+
+<figure class="container">
+  {captionSide === "top" && <figcaption class="caption">{caption}</figcaption>}
+  <div class="media">
+    <slot />
+  </div>
+  {captionSide === "bottom" && <figcaption class="caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .caption {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    text-wrap: pretty;
+  }
+
+  /* 마크다운 그림은 <p>로 감싸여 오므로 여백을 지웁니다 */
+  .media > :global(p) {
+    margin: 0;
+  }
+
+  .media :global(:is(img, picture, video)) {
+    width: 100%;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+</style>
