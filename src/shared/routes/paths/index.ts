@@ -2,6 +2,10 @@
 export const PATHS = {
   home: "/",
   about: "/about/",
+  /** 공개 스위치(`IS_RESUME_PUBLIC`)가 꺼져 있으면 배포 빌드에 없는 주소입니다 */
+  resume: "/resume/",
+  /** 공개 스위치(`IS_RESUME_PUBLIC`)가 꺼져 있으면 배포 빌드에 없는 주소입니다 */
+  portfolio: "/portfolio/",
   privacy: "/privacy/",
   rss: "/rss.xml",
 } as const;
@@ -15,9 +19,24 @@ export const SERIES_SECTION_ID = "series";
 /** 글 주소를 만듭니다. 다른 저장소의 Pages 주소와 겹치지 않게 /posts/ 아래에 둡니다 */
 export const getPostPath = (slug: string) => `/posts/${slug}/`;
 
-/** 머리말의 주 메뉴 */
+/** 머리말의 주 메뉴 가운데 늘 보이는 것 */
 export const NAV_ITEMS = [
   { label: "글", href: PATHS.home },
   { label: "시리즈", href: `${PATHS.home}#${SERIES_SECTION_ID}` },
   { label: "소개", href: PATHS.about },
 ] as const;
+
+/** 이력서 · 포트폴리오 메뉴. 두 페이지를 그릴 때만 주 메뉴 뒤에 붙입니다 */
+export const RESUME_NAV_ITEMS = [
+  { label: "이력서", href: PATHS.resume },
+  { label: "포트폴리오", href: PATHS.portfolio },
+] as const;
+
+interface GetNavItemsParams {
+  /** 이력서 · 포트폴리오 페이지를 그리는지 (`shared/constants/features`의 `IS_RESUME_SHOWN`) */
+  isResumeShown: boolean;
+}
+
+/** 머리말의 주 메뉴를 만듭니다. 이력서 · 포트폴리오는 페이지를 그릴 때만 넣어서, 없는 주소로 가는 메뉴가 생기지 않게 합니다 */
+export const getNavItems = ({ isResumeShown }: GetNavItemsParams) =>
+  isResumeShown ? [...NAV_ITEMS, ...RESUME_NAV_ITEMS] : [...NAV_ITEMS];
