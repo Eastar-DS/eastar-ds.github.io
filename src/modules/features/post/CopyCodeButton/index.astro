@@ -1,0 +1,97 @@
+---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+/**
+ * 코드 칸의 코드를 클립보드에 복사하는 버튼입니다.
+ * 가장 가까운 [data-copy-scope] 요소 안의 <pre>를 복사하므로, 버튼을 넣는 쪽이 그 요소를 표시합니다.
+ */
+---
+
+<span class="container" data-copy-code-root>
+  <button type="button" class="button" data-copy-code>
+    <Icon name="copy" size={14} class="copyIcon" />
+    <Icon name="check" size={14} class="checkIcon" />
+    <span class="text" data-copy-code-text>복사</span>
+  </button>
+  <span class="visually-hidden" role="status" data-copy-code-status></span>
+</span>
+
+<script>
+  // 「복사함」 표시를 원래대로 돌리기까지의 시간
+  const RESET_DELAY_MS = 2000;
+
+  const handleClick = async (event: MouseEvent) => {
+    const button = event.currentTarget as HTMLButtonElement;
+    const root = button.closest("[data-copy-code-root]");
+    const text = root?.querySelector("[data-copy-code-text]");
+    const status = root?.querySelector("[data-copy-code-status]");
+    const code = button.closest("[data-copy-scope]")?.querySelector("pre");
+
+    if (!code || !text || !status) return;
+
+    try {
+      await navigator.clipboard.writeText(code.textContent ?? "");
+      button.dataset.copied = "true";
+      text.textContent = "복사함";
+      status.textContent = "코드를 복사했습니다";
+      window.setTimeout(() => {
+        delete button.dataset.copied;
+        text.textContent = "복사";
+        status.textContent = "";
+      }, RESET_DELAY_MS);
+    } catch {
+      status.textContent = "코드를 복사하지 못했습니다";
+    }
+  };
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-copy-code]")
+    .forEach((button) => button.addEventListener("click", handleClick));
+</script>
+
+<style>
+  .container {
+    display: inline-flex;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    color: var(--color-text);
+  }
+
+  /* 아이콘은 Icon 컴포넌트가 그려서 이 컴포넌트의 범위 속성이 없으므로 :global로 고릅니다 */
+  .button :global(.checkIcon),
+  .button[data-copied] :global(.copyIcon) {
+    display: none;
+  }
+
+  .button[data-copied] :global(.checkIcon) {
+    display: block;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+</style>

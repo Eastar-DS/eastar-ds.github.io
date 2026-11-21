@@ -1,0 +1,53 @@
+---
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
+import formatDate from "@/shared/utils/formatDate";
+
+/** 사이트 꼬리말입니다. 저작권 줄과 RSS · GitHub 링크를 둡니다 */
+const year = formatDate({ date: new Date(), format: "year" });
+---
+
+<footer class="root">
+  <Container size="page">
+    <div class="bar">
+      <p class="copyright">© {year} {SITE.author.name}</p>
+      <ul class="links">
+        <li><a class="link" href={PATHS.rss}>RSS</a></li>
+        <li><a class="link" href={SITE.author.githubUrl}>GitHub</a></li>
+      </ul>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .root {
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding-block: 28px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+  }
+
+  .links {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+  }
+
+  .links li + li::before {
+    content: "·";
+    margin-right: 6px;
+  }
+
+  .link:hover {
+    color: var(--color-text);
+  }
+</style>

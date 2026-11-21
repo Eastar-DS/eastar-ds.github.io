@@ -1,0 +1,137 @@
+---
+import getPosts from "@/shared/content/getPosts";
+import groupPostsByYear from "@/shared/content/groupPostsByYear";
+import { getPostPath } from "@/shared/routes/paths";
+import formatDate from "@/shared/utils/formatDate";
+
+/** 모든 글을 연도별로 묶은 목록입니다. 한 줄에 날짜 · 제목 · 한 줄 요약 · 읽는 시간을 둡니다 */
+const yearGroups = groupPostsByYear(await getPosts());
+---
+
+<section class="container" aria-label="글 목록">
+  {
+    yearGroups.length === 0 ? (
+      <p class="empty">아직 글이 없습니다.</p>
+    ) : (
+      yearGroups.map((group) => (
+        <div class="yearGroup">
+          <h2 class="year">{group.year}</h2>
+          <ol class="list">
+            {group.posts.map((post) => (
+              <li class="item">
+                <time
+                  class="date"
+                  datetime={formatDate({ date: post.publishedAt, format: "iso" })}
+                >
+                  {formatDate({ date: post.publishedAt, format: "monthDay" })}
+                </time>
+                <div class="text">
+                  <h3 class="postTitle">
+                    <a class="link" href={getPostPath(post.slug)}>
+                      {post.title}
+                    </a>
+                  </h3>
+                  <p class="description">{post.description}</p>
+                </div>
+                <span class="reading">
+                  <span class="visually-hidden">읽는 시간 </span>
+                  {post.readingMinutes}분
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    )
+  }
+</section>
+
+<style>
+  .container {
+    container-type: inline-size;
+  }
+
+  .yearGroup + .yearGroup {
+    margin-top: 64px;
+  }
+
+  .year {
+    color: var(--color-text-faint);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .list {
+    margin-top: 16px;
+    list-style: none;
+  }
+
+  /* 줄 전체를 누를 수 있게 제목 링크를 줄 크기로 넓힙니다 */
+  .item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+    column-gap: 0;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .date {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+  }
+
+  .postTitle {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .item:hover .postTitle {
+    color: var(--color-accent);
+  }
+
+  .description {
+    margin-top: 4px;
+    color: var(--color-text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .reading {
+    padding-left: 16px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+  }
+
+  @container (max-width: 480px) {
+    .item {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: 4px;
+    }
+
+    .date {
+      grid-column: 1 / -1;
+      font-size: 13px;
+    }
+
+    .year {
+      font-size: 40px;
+    }
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import PostArticle from "@/modules/widgets/post/PostArticle/index.astro";
+import TableOfContents from "@/modules/widgets/post/TableOfContents/index.astro";
+import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
+import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import ShowOn from "@/shared/components/primitives/layout/ShowOn/index.astro";
+import WithAside from "@/shared/components/primitives/layout/WithAside/index.astro";
+import { SITE } from "@/shared/constants/site";
+import getPosts from "@/shared/content/getPosts";
+import { getPostPath, PATHS } from "@/shared/routes/paths";
+import createBlogPostingJsonLd from "@/shared/seo/createBlogPostingJsonLd";
+import createBreadcrumbListJsonLd from "@/shared/seo/createBreadcrumbListJsonLd";
+import createPageMeta from "@/shared/seo/createPageMeta";
+
+/**
+ * 글 화면: 본문 옆에 목차를 둡니다.
+ * 넓은 화면에서는 오른쪽 고정 목차, 좁은 화면에서는 요약 아래 접는 목차를 보입니다.
+ */
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post } = Astro.props as Props;
+const path = getPostPath(post.slug);
+const meta = createPageMeta({
+  title: post.title,
+  description: post.description,
+  path,
+  ogType: "article",
+  publishedAt: post.publishedAt,
+  updatedAt: post.updatedAt,
+});
+const jsonLds = [
+  createBlogPostingJsonLd(post),
+  createBreadcrumbListJsonLd([
+    { name: SITE.title, path: PATHS.home },
+    { name: post.title, path },
+  ]),
+];
+---
+
+<Document meta={meta} jsonLds={jsonLds}>
+  <SiteHeader />
+  <main class="main">
+    <Container size="withAside">
+      <WithAside isAsideSticky>
+        <PostArticle slug={post.slug}>
+          <ShowOn screen="narrow" slot="after-header">
+            <TableOfContents slug={post.slug} variant="collapsible" />
+          </ShowOn>
+        </PostArticle>
+        <ShowOn screen="wide" slot="aside">
+          <TableOfContents slug={post.slug} variant="list" />
+        </ShowOn>
+      </WithAside>
+    </Container>
+  </main>
+  <SiteFooter />
+</Document>
+
+<style>
+  .main {
+    padding-block: 56px 96px;
+  }
+
+  @media (max-width: 640px) {
+    .main {
+      padding-block: 32px 64px;
+    }
+  }
+</style>

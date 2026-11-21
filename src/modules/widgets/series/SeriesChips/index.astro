@@ -1,0 +1,48 @@
+---
+import Chip from "@/shared/components/primitives/ui/Chip/index.astro";
+import getSeriesList from "@/shared/content/getSeriesList";
+import { getPostPath, SERIES_SECTION_ID } from "@/shared/routes/paths";
+
+/** 시리즈 목록을 칩으로 보입니다. 칩을 누르면 시리즈의 첫 글로 갑니다. 시리즈가 없으면 그리지 않습니다 */
+const seriesList = await getSeriesList();
+const titleId = `${SERIES_SECTION_ID}-title`;
+---
+
+{
+  seriesList.length > 0 && (
+    <section id={SERIES_SECTION_ID} class="container" aria-labelledby={titleId}>
+      <h2 class="title" id={titleId}>
+        시리즈
+      </h2>
+      <ul class="list">
+        {seriesList.map((series) => (
+          <li>
+            <Chip
+              href={getPostPath(series.firstPostSlug)}
+              count={`${series.count}편`}
+            >
+              {series.name}
+            </Chip>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .title {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    list-style: none;
+  }
+</style>

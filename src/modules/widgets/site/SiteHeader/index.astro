@@ -1,0 +1,209 @@
+---
+import ThemeToggle from "@/modules/features/site/ThemeToggle/index.astro";
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+import { SITE } from "@/shared/constants/site";
+import { NAV_ITEMS, PATHS } from "@/shared/routes/paths";
+
+import isCurrentPath from "./utils/isCurrentPath";
+
+/**
+ * 사이트 머리말입니다. 사이트 이름, 주 메뉴, RSS, 테마 전환 버튼을 둡니다.
+ * 머리말 칸이 좁으면(640px 이하) 주 메뉴를 메뉴 단추 안으로 접습니다. 메뉴 단추는 JavaScript 없이 열립니다.
+ */
+const { pathname } = Astro.url;
+const navItems = NAV_ITEMS.map((item) => ({
+  ...item,
+  isCurrent: isCurrentPath({ pathname, href: item.href }),
+}));
+---
+
+<header class="root">
+  <Container size="page">
+    <div class="bar">
+      <a class="logo" href={PATHS.home}>{SITE.title}</a>
+      <div class="actions">
+        <nav class="wideNav" aria-label="주 메뉴">
+          <ul class="navList">
+            {
+              navItems.map((item) => (
+                <li>
+                  <a
+                    class="navLink"
+                    href={item.href}
+                    aria-current={item.isCurrent ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <a class="iconLink wideOnly" href={PATHS.rss} aria-label="RSS 구독">
+          <Icon name="rss" />
+        </a>
+        <ThemeToggle />
+        <details class="narrowMenu">
+          <summary class="iconLink" aria-label="메뉴">
+            <Icon name="menu" size={20} />
+          </summary>
+          <nav class="menuPanel" aria-label="주 메뉴">
+            <ul class="menuList">
+              {
+                navItems.map((item) => (
+                  <li>
+                    <a
+                      class="menuLink"
+                      href={item.href}
+                      aria-current={item.isCurrent ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a class="menuLink" href={PATHS.rss}>RSS 구독</a>
+              </li>
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </Container>
+</header>
+
+<style>
+  .root {
+    position: relative;
+    border-bottom: 1px solid var(--color-border-subtle);
+    container-type: inline-size;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 70px;
+  }
+
+  .logo {
+    color: var(--color-text);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .navList {
+    display: flex;
+    gap: 4px;
+    margin-right: 8px;
+    list-style: none;
+  }
+
+  .navLink {
+    display: block;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 15px;
+    transition: color 0.15s;
+  }
+
+  .navLink:hover,
+  .navLink[aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .navLink[aria-current="page"] {
+    font-weight: 600;
+  }
+
+  .iconLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      background-color 0.15s;
+  }
+
+  .iconLink:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .narrowMenu summary {
+    list-style: none;
+  }
+
+  .narrowMenu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menuPanel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    padding: 8px var(--space-page-inline) 16px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .menuList {
+    list-style: none;
+  }
+
+  .menuLink {
+    display: block;
+    padding: 10px 0;
+    color: var(--color-text-muted);
+    font-size: 16px;
+  }
+
+  .menuLink[aria-current="page"] {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  @container (max-width: 640px) {
+    .bar {
+      height: 56px;
+    }
+
+    .logo {
+      font-size: 17px;
+    }
+
+    .wideNav,
+    .wideOnly {
+      display: none;
+    }
+
+    .actions {
+      gap: 4px;
+    }
+  }
+
+  @container (min-width: 641px) {
+    .narrowMenu {
+      display: none;
+    }
+  }
+</style>

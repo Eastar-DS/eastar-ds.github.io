@@ -1,0 +1,109 @@
+---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+/**
+ * 밝은 화면과 어두운 화면을 바꾸는 버튼입니다. 고른 테마는 localStorage에 남고,
+ * 첫 그림 전 적용은 Document의 인라인 스크립트가 맡습니다.
+ * 고르기 전에는 시스템 설정을 따르며, 아이콘은 바뀔 화면을 보여 줍니다(밝을 때 달, 어두울 때 해).
+ */
+---
+
+<button
+  type="button"
+  class="container"
+  data-theme-toggle
+  aria-label="어두운 화면"
+  aria-pressed="false"
+>
+  <Icon name="moon" class="moon" />
+  <Icon name="sun" class="sun" />
+</button>
+
+<script>
+  import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
+
+  import getNextTheme from "./utils/getNextTheme";
+  import resolveTheme from "./utils/resolveTheme";
+
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-theme-toggle]",
+  );
+
+  const getCurrentTheme = () =>
+    resolveTheme({
+      chosenTheme: document.documentElement.dataset.theme,
+      isSystemDark: darkQuery.matches,
+    });
+
+  const syncPressed = () => {
+    const isDark = getCurrentTheme() === "dark";
+
+    buttons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(isDark));
+    });
+  };
+
+  const handleClick = () => {
+    const nextTheme = getNextTheme(getCurrentTheme());
+
+    document.documentElement.dataset.theme = nextTheme;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    } catch {
+      // 저장소를 못 쓰는 환경(사생활 보호 모드 등)에서는 이번 방문 동안만 바뀝니다
+    }
+    syncPressed();
+  };
+
+  buttons.forEach((button) => button.addEventListener("click", handleClick));
+  darkQuery.addEventListener("change", syncPressed);
+  syncPressed();
+</script>
+
+<style>
+  .container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      background-color 0.15s;
+  }
+
+  .container:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  /* 아이콘은 Icon 컴포넌트가 그려서 이 컴포넌트의 범위 속성이 없으므로 :global로 고릅니다 */
+  .container :global(.sun) {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .container :global(.sun) {
+    display: block;
+  }
+
+  :global(:root[data-theme="dark"]) .container :global(.moon) {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .container :global(.sun) {
+      display: block;
+    }
+
+    :global(:root:not([data-theme="light"])) .container :global(.moon) {
+      display: none;
+    }
+  }
+</style>

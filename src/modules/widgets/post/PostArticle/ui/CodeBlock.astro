@@ -1,0 +1,88 @@
+---
+import CopyCodeButton from "@/modules/features/post/CopyCodeButton/index.astro";
+
+interface Props {
+  /** Shiki가 붙인 클래스(astro-code, 테마 이름) */
+  class?: string;
+  className?: string;
+  /** Shiki가 붙인 바탕색. 코드 칸의 바탕은 디자인 기준값으로 칠하므로 쓰지 않습니다 */
+  style?: string;
+  tabindex?: number | string;
+  /** 코드 칸 메타의 title. `shared/content/codeTitleTransformer`가 붙입니다 */
+  "data-title"?: string;
+  "data-language"?: string;
+}
+
+/**
+ * 본문의 코드 칸입니다. MDX의 코드 펜스(```)를 파일 이름 줄과 복사 버튼이 있는 칸으로 바꿉니다.
+ * 파일 이름이 없으면 언어 이름을 보입니다.
+ */
+const {
+  class: shikiClass,
+  className,
+  tabindex,
+  "data-title": title,
+  "data-language": language,
+} = Astro.props;
+const label = title ?? (language && language !== "plaintext" ? language : "");
+---
+
+<figure class="container" data-copy-scope>
+  <figcaption class="head">
+    <span class="label">{label}</span>
+    <CopyCodeButton />
+  </figcaption>
+  <pre
+    class:list={[shikiClass ?? className, "code"]}
+    tabindex={tabindex}
+    data-language={language}><slot /></pre>
+</figure>
+
+<style>
+  .container {
+    overflow: hidden;
+    border: 1px solid var(--color-border-surface);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 40px;
+    padding: 4px 10px 4px 16px;
+    border-bottom: 1px solid var(--color-border-surface);
+  }
+
+  .label {
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .code {
+    margin: 0;
+    padding: 16px 20px;
+    overflow-x: auto;
+    color: var(--color-text);
+    font-size: var(--font-size-code);
+    line-height: 1.85;
+    tab-size: 2;
+    word-break: normal;
+  }
+
+  .code :global(code) {
+    font-family: inherit;
+  }
+
+  @media (max-width: 640px) {
+    .code {
+      padding: 14px 16px;
+    }
+  }
+</style>

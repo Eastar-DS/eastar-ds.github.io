@@ -1,0 +1,54 @@
+---
+import type { TocItem } from "@/modules/widgets/post/TableOfContents/types/toc";
+
+interface Props {
+  items: TocItem[];
+}
+
+/** 목차 링크 목록입니다. 지금 읽는 곳의 링크에는 aria-current가 붙어 강조색으로 보입니다 */
+const { items } = Astro.props;
+---
+
+<ol class="list">
+  {
+    items.map((item) => (
+      <li class:list={["item", { isNested: item.depth === 3 }]}>
+        <a class="link" href={`#${item.id}`} data-toc-link={item.id}>
+          {item.text}
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-left: 1px solid var(--color-border-subtle);
+    list-style: none;
+  }
+
+  .link {
+    display: block;
+    padding: 4px 0 4px 14px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: 1.6;
+    transition: color 0.15s;
+  }
+
+  .isNested .link {
+    padding-left: 26px;
+  }
+
+  .link:hover {
+    color: var(--color-text);
+  }
+
+  .link[aria-current] {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+</style>

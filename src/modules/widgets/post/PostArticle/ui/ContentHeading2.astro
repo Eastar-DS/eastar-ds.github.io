@@ -1,0 +1,12 @@
+---
+import AnchorHeading from "@/shared/components/primitives/ui/AnchorHeading/index.astro";
+
+interface Props {
+  id?: string;
+}
+
+/** 본문의 h2입니다. MDX의 `##`를 앵커가 걸린 제목으로 바꿉니다 */
+const { id } = Astro.props;
+---
+
+<AnchorHeading level={2} id={id}><slot /></AnchorHeading>

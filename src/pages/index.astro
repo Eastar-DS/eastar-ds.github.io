@@ -1,0 +1,41 @@
+---
+import PostList from "@/modules/widgets/post/PostList/index.astro";
+import SeriesChips from "@/modules/widgets/series/SeriesChips/index.astro";
+import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
+import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
+import SiteIntro from "@/modules/widgets/site/SiteIntro/index.astro";
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
+import { PATHS } from "@/shared/routes/paths";
+import createPageMeta from "@/shared/seo/createPageMeta";
+
+/** 글 목록 페이지: 소개, 시리즈 칩, 연도별 글 목록을 본문 폭 한 줄로 쌓습니다 */
+const meta = createPageMeta({ path: PATHS.home });
+---
+
+<Document meta={meta}>
+  <SiteHeader />
+  <main class="main">
+    <Container size="content">
+      <Stack gap={56}>
+        <SiteIntro />
+        <SeriesChips />
+        <PostList />
+      </Stack>
+    </Container>
+  </main>
+  <SiteFooter />
+</Document>
+
+<style>
+  .main {
+    padding-block: 72px 112px;
+  }
+
+  @media (max-width: 640px) {
+    .main {
+      padding-block: 40px 72px;
+    }
+  }
+</style>

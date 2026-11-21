@@ -1,0 +1,143 @@
+---
+import renderPost from "@/shared/content/renderPost";
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+import TocList from "./ui/TocList.astro";
+import toTocItems from "./utils/toTocItems";
+
+interface Props {
+  slug: string;
+  /**
+   * - `list`: 펼친 목록. 옆 칸에 두기 알맞습니다
+   * - `collapsible`: 눌러서 여는 상자. 본문 위에 두기 알맞습니다
+   */
+  variant?: "list" | "collapsible";
+}
+
+/**
+ * 글의 h2, h3로 만든 목차입니다. 스크롤에 맞춰 지금 읽는 곳의 링크를 강조합니다.
+ * 어디에 놓일지(옆 칸, 본문 위)는 페이지가 정하고, 이 컴포넌트는 모양만 고릅니다.
+ */
+const { slug, variant = "list" } = Astro.props;
+const { headings } = await renderPost(slug);
+const items = toTocItems(headings);
+const titleId = `toc-title-${variant}`;
+---
+
+{
+  items.length > 0 && (
+    <nav class:list={["root", variant]} aria-labelledby={titleId} data-toc>
+      {variant === "collapsible" ? (
+        <details class="details">
+          <summary class="summary">
+            <span id={titleId}>이 글의 목차</span>
+            <span class="count">· {items.length}개</span>
+            <Icon name="chevronDown" class="chevron" />
+          </summary>
+          <div class="panel">
+            <TocList items={items} />
+          </div>
+        </details>
+      ) : (
+        <div class="listContainer">
+          <p class="title" id={titleId}>
+            이 글의 목차
+          </p>
+          <TocList items={items} />
+        </div>
+      )}
+    </nav>
+  )
+}
+
+<script>
+  import findActiveHeadingId from "./utils/findActiveHeadingId";
+
+  // 화면 맨 위에서 이 거리를 지난 제목을 지금 읽는 곳으로 봅니다
+  const ACTIVE_OFFSET = 120;
+
+  const links = [
+    ...document.querySelectorAll<HTMLAnchorElement>("[data-toc] [data-toc-link]"),
+  ];
+  const headingIds = [...new Set(links.map((link) => link.dataset.tocLink ?? ""))];
+  const headings = headingIds
+    .map((id) => document.getElementById(id))
+    .filter((heading) => heading !== null);
+  let frameId = 0;
+
+  const update = () => {
+    frameId = 0;
+    const root = document.documentElement;
+    const activeId = findActiveHeadingId({
+      headingTops: headings.map((heading) => ({
+        id: heading.id,
+        top: heading.getBoundingClientRect().top,
+      })),
+      offset: ACTIVE_OFFSET,
+      isAtBottom: window.innerHeight + window.scrollY >= root.scrollHeight - 2,
+    });
+
+    links.forEach((link) => {
+      if (link.dataset.tocLink === activeId) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const requestUpdate = () => {
+    if (frameId === 0) frameId = requestAnimationFrame(update);
+  };
+
+  if (headings.length > 0) {
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    update();
+  }
+</script>
+
+<style>
+  .title {
+    margin-bottom: 12px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .details {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .summary {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summary :global(.chevron) {
+    margin-left: auto;
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+  }
+
+  .details[open] :global(.chevron) {
+    transform: rotate(180deg);
+  }
+
+  .panel {
+    padding: 0 16px 12px;
+  }
+</style>

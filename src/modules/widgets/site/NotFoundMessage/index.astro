@@ -1,0 +1,46 @@
+---
+import { PATHS } from "@/shared/routes/paths";
+
+/** 없는 주소로 왔을 때의 안내입니다. 이 페이지의 h1을 가집니다 */
+---
+
+<section class="container">
+  <p class="code">404</p>
+  <h1 class="title">페이지를 찾을 수 없습니다</h1>
+  <p class="description">주소가 바뀌었거나 없는 글입니다.</p>
+  <a class="link" href={PATHS.home}>글 목록으로 가기</a>
+</section>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .code {
+    color: var(--color-text-faint);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .title {
+    margin-top: 8px;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .description {
+    margin-top: 8px;
+    color: var(--color-text-muted);
+  }
+
+  .link {
+    margin-top: 24px;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

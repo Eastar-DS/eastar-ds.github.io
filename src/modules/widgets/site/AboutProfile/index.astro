@@ -1,0 +1,51 @@
+---
+import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
+
+/** 소개 페이지의 본문입니다. 이 페이지의 h1을 가집니다 */
+---
+
+<section class="container">
+  <h1 class="title">소개</h1>
+  <div class="body">
+    <p>
+      프론트엔드 개발자 이스타입니다. 브라우저, React, 접근성을 주로 다루고, 글마다
+      직접 움직여 볼 수 있는 예시를 넣습니다.
+    </p>
+    <p>
+      이 블로그는 공부하며 배운 것과 만든 것을 읽기 좋은 글로 남기는 곳입니다.
+    </p>
+    <ul class="links">
+      <li><a href={SITE.author.githubUrl}>GitHub</a></li>
+      <li><a href={PATHS.rss}>RSS 구독</a></li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .title {
+    font-size: var(--font-size-h1);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .links {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+  }
+
+  .links a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
