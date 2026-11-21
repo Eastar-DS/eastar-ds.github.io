@@ -4,6 +4,11 @@ import type { CareerProject } from "@/shared/types/career";
 export interface ResumeItem {
   title?: string;
   text: string;
+  /**
+   * 이 줄의 내용을 자세히 쓴 블로그 글 이름(slug, `src/content/posts/{slug}`). 글 아래에 「관련 글: 제목」 링크로 보입니다.
+   * 없는 글 이름을 적으면 이력서를 그릴 때 빌드가 멈춥니다.
+   */
+  relatedPostSlugs?: string[];
   /** 줄 아래에 들여 쓰는 자세한 줄 */
   details?: ResumeItem[];
 }

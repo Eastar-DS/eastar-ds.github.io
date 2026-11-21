@@ -1,4 +1,5 @@
 ---
+import RelatedPostLinks from "@/modules/features/post/RelatedPostLinks/index.astro";
 import type { PortfolioCase } from "@/modules/widgets/career/Portfolio/types/portfolio";
 import toCaseSteps from "@/modules/widgets/career/Portfolio/utils/toCaseSteps";
 
@@ -10,9 +11,12 @@ interface Props {
  * 포트폴리오의 사례 하나입니다. 제목(h3) 아래에 문제 → 가설 → 한 일 → 결과 → 배운 것(있을 때만) 칸을 둡니다.
  * 칸 글이 문자열이면 문단, 배열이면 목록으로 그립니다. 칸이 넓으면 이름표와 글을 두 열로, 좁으면 위아래로 놓습니다.
  * 이름표와 글을 한 줄(`.step`)로 묶어 줄마다 위쪽 선을 하나만 그리고, 두 열은 subgrid로 모든 줄의 이름표 폭을 맞춥니다.
+ * 사례 끝에는 위쪽 선 아래에 관련 글(「관련 글: 제목」)과 블로그 밖 링크를 차례로 둡니다. 둘 다 없으면 그리지 않습니다.
  */
 const { portfolioCase } = Astro.props;
 const steps = toCaseSteps(portfolioCase);
+const relatedPostSlugs = portfolioCase.relatedPostSlugs ?? [];
+const links = portfolioCase.links ?? [];
 ---
 
 <article class="container">
@@ -41,16 +45,21 @@ const steps = toCaseSteps(portfolioCase);
     }
   </dl>
   {
-    portfolioCase.links && (
-      <ul class="links">
-        {portfolioCase.links.map((link) => (
-          <li>
-            <a class="link" href={link.href}>
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+    (relatedPostSlugs.length > 0 || links.length > 0) && (
+      <div class="footer">
+        {relatedPostSlugs.length > 0 && <RelatedPostLinks slugs={relatedPostSlugs} />}
+        {links.length > 0 && (
+          <ul class="links">
+            {links.map((link) => (
+              <li>
+                <a class="link" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     )
   }
 </article>
@@ -125,14 +134,20 @@ const steps = toCaseSteps(portfolioCase);
     line-height: var(--line-height-label);
   }
 
-  .links {
+  .footer {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-4);
+    flex-direction: column;
+    gap: var(--space-2);
     padding-top: var(--space-4);
     border-top: var(--border-width) solid var(--color-border);
     font-size: var(--font-size-body-sm);
     line-height: var(--line-height-body-sm);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
     list-style: none;
   }
 

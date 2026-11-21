@@ -9,7 +9,7 @@ export interface PortfolioListItem {
 /** 사례 칸 하나의 글. 문자열이면 문단 하나, 배열이면 목록입니다 */
 export type PortfolioContent = string | PortfolioListItem[];
 
-/** 사례 끝에 붙이는 링크. 예: 같은 일을 자세히 쓴 글 */
+/** 사례 끝에 붙이는 블로그 밖 링크. 예: 결정 기록(ADR), 검증 보고서. 블로그 글은 `relatedPostSlugs`에 적습니다 */
 export interface PortfolioLink {
   label: string;
   href: string;
@@ -23,6 +23,11 @@ export interface PortfolioCase {
   action: PortfolioContent;
   result: PortfolioContent;
   lesson?: PortfolioContent;
+  /**
+   * 이 사례를 자세히 쓴 블로그 글 이름(slug, `src/content/posts/{slug}`). 사례 끝에 「관련 글: 제목」 링크로 보입니다.
+   * 없는 글 이름을 적으면 빌드가 멈춥니다.
+   */
+  relatedPostSlugs?: string[];
   links?: PortfolioLink[];
 }
 

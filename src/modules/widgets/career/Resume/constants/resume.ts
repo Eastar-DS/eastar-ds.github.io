@@ -8,7 +8,8 @@ import { CAREER_PROJECTS } from "@/shared/constants/career";
 /*
  * 이력서 본문. 이스타가 쓰는 이력서 초안(2차)의 소개 · 경험 · 기술 · 교육을 그대로 옮겨 둡니다.
  * 초안이 바뀌면 여기를 같은 글로 고칩니다. 초안의 빈 곳 표시와 아직 비어 있는 「배운 것」 줄은 넣지 않습니다.
- * 공개 전 초안이라 `IS_RESUME_PUBLIC`이 꺼져 있으면 배포 빌드에 나가지 않습니다.
+ * 이스타가 이력서를 완성하기 전이라 `IS_RESUME_PUBLIC`이 꺼져 있고, 꺼져 있으면 배포 빌드에 나가지 않습니다.
+ * 줄의 내용을 자세히 쓴 블로그 글은 `relatedPostSlugs`에 글 이름(slug)으로 적습니다. 포트폴리오의 같은 사례에도 같은 글 이름을 적습니다.
  */
 
 export const RESUME_ROLE = "프론트엔드 엔지니어";
@@ -32,6 +33,7 @@ const KNOT: ResumeExperience = {
         {
           title: "문서 탭 「주제별」 목록 가상화(우테코 렌더링 성능 과제)",
           text: "문서 1,939개인 팀 워크스페이스에서 탭을 누른 뒤 목록이 보일 때까지 966ms(CPU 4배 느림)가 걸리던 것을 46ms로 줄임. 운영 배포 뒤 같은 조건에서도 1,530ms → 68ms",
+          relatedPostSlugs: ["virtualized-document-list"],
           details: [
             {
               text: "문서를 가져오는 기능(기획 중)으로 문서가 많아질 것에 대비해 대상을 고름. Profiler로 마운트 비용이 큰 것을 찾고 content-visibility(740ms)와 비교한 뒤, 원리를 확인하고 부족할 때만 의존성을 더하려고 라이브러리 없이 화면 근처의 행만 그리는 방식을 직접 구현함",

@@ -1,15 +1,12 @@
 import type { PortfolioProject } from "@/modules/widgets/career/Portfolio/types/portfolio";
 import { CAREER_PROJECTS } from "@/shared/constants/career";
-import { getPostPath } from "@/shared/routes/paths";
 
 /*
  * 포트폴리오 본문. 이력서 초안의 경험을 사례마다 문제 → 가설 → 한 일 → 결과 순서로 다시 썼습니다.
  * 숫자는 이력서 본문에 있는 것만 씁니다. 이력서가 바뀌면 같은 숫자를 함께 고칩니다.
+ * 사례를 자세히 쓴 블로그 글은 `relatedPostSlugs`에 글 이름(slug)으로 적습니다. 이력서의 같은 줄에도 같은 글 이름을 적습니다.
  * 포트폴리오는 이력서와 따로 포트폴리오 공개 스위치(`IS_PORTFOLIO_SHOWN`)를 따르고, 지금은 늘 켜져 있어 배포 빌드에 나갑니다(2026-11-21 이스타 결정).
  */
-
-/** 문서 목록 가상화 글. 다른 브랜치에서 쓰는 중이라, 이 글이 합쳐지기 전에는 링크가 없는 주소를 가리킵니다 */
-const VIRTUALIZATION_POST_SLUG = "virtualized-document-list";
 
 export const PORTFOLIO_INTRO =
   "프로젝트마다 어떤 문제를 찾았고, 어떤 가설을 세워 무엇을 했는지, 결과가 어땠는지를 차례대로 적었습니다.";
@@ -88,12 +85,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
         ],
         result:
           "목록이 보일 때까지 걸리던 966ms가 46ms로 줄었고, 운영 배포 뒤 같은 조건에서도 1,530ms가 68ms로 줄었습니다.",
-        links: [
-          {
-            label: "가상화를 직접 구현한 과정을 적은 글",
-            href: getPostPath(VIRTUALIZATION_POST_SLUG),
-          },
-        ],
+        relatedPostSlugs: ["virtualized-document-list"],
       },
     ],
   },
