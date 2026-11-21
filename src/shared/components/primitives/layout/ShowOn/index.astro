@@ -7,7 +7,10 @@ interface Props {
   screen: "wide" | "narrow";
 }
 
-/** 화면 폭에 따라 내용을 보이거나 숨깁니다. 숨긴 내용은 스크린 리더에도 읽히지 않습니다 */
+/**
+ * 화면 폭에 따라 내용을 보이거나 숨깁니다. 숨긴 내용은 스크린 리더에도 읽히지 않습니다.
+ * @design design/blog.pen 기초 보드 「04 화면 폭과 배치」 e2gfM
+ */
 const { screen } = Astro.props;
 ---
 
@@ -16,14 +19,16 @@ const { screen } = Astro.props;
 </div>
 
 <style>
-  @media (min-width: 1200px) {
-    .narrow {
-      display: none;
-    }
+  .wide {
+    display: none;
   }
 
-  @media (max-width: 1199.98px) {
+  @media (min-width: 1200px) {
     .wide {
+      display: block;
+    }
+
+    .narrow {
       display: none;
     }
   }

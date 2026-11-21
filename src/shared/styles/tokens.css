@@ -1,57 +1,146 @@
 /*
  * 디자인 기준값 (A안: 차분한 문서형)
- * 색은 light-dark()로 밝은 · 어두운 값을 한 줄에 둡니다.
+ * 정본은 docs/design-system.md 입니다. 값을 바꿀 때는 문서를 먼저 고치고 여기를 같은 값으로 맞춥니다.
+ *
+ * 색은 light-dark()로 밝은 값과 어두운 값을 한 줄에 둡니다.
  * - 시스템 설정을 따를 때: :root의 color-scheme이 light dark라서 브라우저가 고릅니다
  * - 사용자가 고르면: <html data-theme="light|dark">가 color-scheme을 하나로 고정합니다
  *
- * 화면 폭 구간 (미디어 쿼리에는 변수를 못 쓰므로 숫자를 그대로 씁니다)
- * - 넓은 화면: 1200px 이상 (ShowOn, WithAside의 옆 칸)
- * - 휴대폰: 640px 이하 (본문 16px)
+ * 화면 폭 구간 (휴대폰부터 짜고 min-width로 넓힙니다. 미디어 쿼리에는 변수를 못 쓰므로 숫자를 그대로 씁니다)
+ * - 휴대폰: 0 – 767px (이 파일의 기본값)
+ * - 태블릿: 768px부터 (글자 · 여백 · 머리말 높이가 넓은 화면 값으로 바뀜)
+ * - 넓은 화면: 1200px부터 (ShowOn, WithAside의 옆 목차)
+ *
+ * 코드 칸 색(--color-code-*)은 정본이 바뀌는 중이라 아직 두지 않았습니다.
  */
 :root {
   color-scheme: light dark;
 
+  /* 바탕과 글자 */
   --color-bg: light-dark(#ffffff, #0f1115);
-  /* 코드 칸, 데모 칸의 바탕 */
   --color-surface: light-dark(#f6f8fa, #171a21);
+  --color-surface-hover: light-dark(#eef1f4, #1f232b);
   --color-text: light-dark(#1f2328, #e6e8eb);
   --color-text-muted: light-dark(#59636e, #9aa4b2);
-  --color-border: light-dark(#e5e7eb, #2a2f38);
-  /* 머리말 · 꼬리말 · 목록 줄 · 목차의 옅은 선 */
-  --color-border-subtle: light-dark(#f2f3f5, #1d2027);
-  /* 코드 칸 · 데모 칸의 테두리 */
-  --color-border-surface: light-dark(#edeff2, #21252d);
-  --color-accent: light-dark(#2457d6, #7aa2ff);
-  /* 「핵심」 칸, 데모에서 다시 하는 단계의 바탕 */
-  --color-accent-soft: light-dark(#eaf0fd, #1b2540);
-  /* 글 목록의 큰 연도 숫자 */
-  --color-text-faint: light-dark(#e5e7eb, #2a2f38);
+  /* 24px 넘는 큰 글자만 (글 목록 연도, 404 숫자) */
+  --color-text-subtle: light-dark(#8a929c, #616a78);
 
+  /* 선 */
+  --color-border: light-dark(#e5e7eb, #2a2f38);
+  /* 조작 장치의 경계처럼 뜻이 있는 선 (3:1 이상) */
+  --color-border-strong: light-dark(#7d8590, #6e7785);
+
+  /* 강조와 링크 */
+  --color-accent: light-dark(#2457d6, #7aa2ff);
+  --color-accent-hover: light-dark(#1a44b0, #a8c2ff);
+  --color-accent-soft: light-dark(#eaf0fd, #1b2540);
+  --color-on-accent: light-dark(#ffffff, #0f1115);
+  --color-focus: light-dark(#2457d6, #7aa2ff);
+  --color-link-visited: light-dark(#6e40c9, #b9a3f5);
+
+  /* 상태 */
+  --color-good: light-dark(#047857, #34d399);
+  --color-good-soft: light-dark(#e7f5ee, #0e2a22);
+  --color-bad: light-dark(#b91c1c, #f87171);
+  --color-bad-soft: light-dark(#fdecec, #2e1618);
+  --color-warn: light-dark(#8a5a00, #d29922);
+  --color-warn-soft: light-dark(#fff5d6, #2b2111);
+
+  /* 데모 데이터. 데모와, 데모를 가리키는 본문 낱말에만 씁니다 */
+  --color-data-1: light-dark(#c2410c, #fb923c);
+  --color-data-2: light-dark(#0f766e, #2dd4bf);
+  --color-data-3: light-dark(#9333ea, #c084fc);
+  --color-data-4: light-dark(#be185d, #f472b6);
+
+  /* 글꼴 */
   --font-sans:
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+    sans-serif;
   --font-mono:
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
     "Pretendard Variable", monospace;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
 
-  --font-size-body: 17px;
+  /* 글자 단계 (휴대폰 값. 768px부터 아래 @media의 값) */
+  --font-size-display: 36px;
+  --font-size-h1: 26px;
+  --font-size-h2: 22px;
+  --font-size-h3: 18px;
+  --font-size-lead: 16px;
+  --font-size-body: 16px;
+  --font-size-body-sm: 14px;
+  --font-size-small: 13px;
+  --font-size-caption: 13px;
+  --font-size-label: 12px;
+  --font-size-code: 13px;
+  --font-size-code-sm: 12px;
+
+  --line-height-display: 1.2;
+  --line-height-h1: 1.4;
+  --line-height-h2: 1.4;
+  --line-height-h3: 1.5;
+  --line-height-lead: 1.65;
   --line-height-body: 1.75;
-  --font-size-h1: 36px;
-  --font-size-h2: 26px;
-  --font-size-h3: 20px;
-  --font-size-small: 14px;
-  --font-size-code: 14px;
+  --line-height-body-sm: 1.6;
+  --line-height-small: 1.5;
+  --line-height-caption: 1.6;
+  --line-height-label: 1.4;
+  --line-height-code: 1.6;
 
-  /* 본문 폭 680px는 한글 약 40자입니다 */
-  --width-content: 680px;
-  --width-page: 1200px;
-  --width-aside: 200px;
-  --space-page-inline: 24px;
+  --letter-spacing-display: -0.02em;
+  --letter-spacing-h1: -0.02em;
+  --letter-spacing-h2: -0.015em;
+  --letter-spacing-h3: -0.01em;
 
-  --radius-sm: 6px;
+  /* 간격 (4px 단위. 번호 × 4 = px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-18: 72px;
+  --space-24: 96px;
+
+  /* 모서리 */
+  --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 999px;
+
+  /* 선 굵기 */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-width-callout: 3px;
+
+  /* 배치 */
+  --content-width: 680px;
+  --toc-width: 220px;
+  --layout-gap: 72px;
+  --page-max-width: 1200px;
+  --page-padding-inline: 20px;
+  --header-height: 56px;
+
+  /* 아이콘 */
+  --icon-size-sm: 14px;
+  --icon-size-md: 16px;
+  --icon-size-lg: 18px;
+  --icon-size-xl: 20px;
+  --icon-button-size: 40px;
+
+  /* 움직임 */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
 :root[data-theme="light"] {
@@ -62,13 +151,25 @@
   color-scheme: dark;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 768px) {
   :root {
-    --font-size-body: 16px;
-    --font-size-h1: 28px;
-    --font-size-h2: 22px;
-    --font-size-h3: 18px;
-    --font-size-code: 13px;
-    --space-page-inline: 20px;
+    --font-size-display: 48px;
+    --font-size-h1: 36px;
+    --font-size-h2: 26px;
+    --font-size-h3: 20px;
+    --font-size-lead: 18px;
+    --font-size-body: 17px;
+    --font-size-body-sm: 15px;
+    --font-size-small: 14px;
+    --font-size-caption: 14px;
+    --font-size-label: 13px;
+    --font-size-code: 14px;
+    --font-size-code-sm: 13px;
+
+    --line-height-h1: 1.35;
+
+    --page-padding-inline: 40px;
+    --header-height: 72px;
+    --icon-button-size: 36px;
   }
 }

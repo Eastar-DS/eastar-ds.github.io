@@ -1,14 +1,14 @@
 ---
 interface Props {
-  /** 요소 사이 간격(px) */
-  gap: number;
+  /** 요소 사이 간격. 간격 토큰 번호(`--space-{번호}`, 번호 × 4 = px)입니다. 예: 14 → 56px */
+  gap: 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 14 | 18 | 24;
 }
 
 /** 요소를 위에서 아래로 쌓고 사이 간격을 고르게 둡니다 */
 const { gap } = Astro.props;
 ---
 
-<div class="root" style={`--stack-gap: ${gap}px`}>
+<div class="root" style={`--stack-gap: var(--space-${gap})`}>
   <slot />
 </div>
 

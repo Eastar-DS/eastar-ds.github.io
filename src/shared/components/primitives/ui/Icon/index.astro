@@ -1,30 +1,41 @@
 ---
 import { ICON_PATHS } from "./constants/iconPaths";
-import type { IconName } from "./types/icon";
+import type { IconName, IconSize } from "./types/icon";
 
 interface Props {
   name: IconName;
-  /** 한 변의 길이(px) */
-  size?: number;
+  /** 크기 토큰 이름. sm 14px · md 16px · lg 18px · xl 20px */
+  size?: IconSize;
   class?: string;
 }
 
-/** 선 아이콘을 그립니다. 꾸밈용이라 스크린 리더는 읽지 않으므로, 뜻은 감싼 요소의 이름으로 전합니다 */
-const { name, size = 18, class: className } = Astro.props;
+/**
+ * Lucide 선 아이콘을 그립니다. 선 굵기 2, 색은 글자색(currentColor)을 따릅니다.
+ * 꾸밈용이라 스크린 리더는 읽지 않으므로, 뜻은 감싼 요소의 이름(aria-label 등)으로 전합니다.
+ * @design design/blog.pen 기초 보드 「05 아이콘 · 움직임 · 포커스」 UGtGw
+ */
+const { name, size = "lg", class: className } = Astro.props;
 ---
 
 <svg
-  class={className}
+  class:list={["root", className]}
+  style={`--icon-size: var(--icon-size-${size})`}
   xmlns="http://www.w3.org/2000/svg"
-  width={size}
-  height={size}
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
-  stroke-width="1.75"
+  stroke-width="2"
   stroke-linecap="round"
   stroke-linejoin="round"
   aria-hidden="true"
   focusable="false"
   set:html={ICON_PATHS[name]}
 />
+
+<style>
+  .root {
+    flex: none;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+</style>
