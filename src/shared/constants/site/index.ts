@@ -16,8 +16,8 @@ export const SITE = {
    */
   verification: {
     /** Google Search Console의 HTML 태그 방식: <meta name="google-site-verification" content="여기"> */
-    google: "",
+    google: "dozu6b55mnzOnfNalOyMYngAv3ErATWIvaa5lMfjcQw",
     /** 네이버 서치어드바이저의 HTML 태그 방식: <meta name="naver-site-verification" content="여기"> */
-    naver: "",
+    naver: "1202f7802ef0ab79f68f2183b48dbf19bfbb8a89",
   },
 } as const;
