@@ -9,6 +9,8 @@ export interface Post {
   updatedAt: Date;
   readingMinutes: number;
   series?: PostSeries;
+  /** 이 글과 이어진 프로젝트 id(`shared/constants/career`). 글 끝에 포트폴리오의 프로젝트 구획으로 잇습니다 */
+  projects?: string[];
 }
 
 export interface PostSeries {

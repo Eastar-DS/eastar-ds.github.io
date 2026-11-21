@@ -13,6 +13,7 @@ const toPost = (entry: CollectionEntry<"posts">) => {
     updatedAt: entry.data.updatedAt ?? entry.data.publishedAt,
     readingMinutes: calculateReadingMinutes(entry.body ?? ""),
     series: entry.data.series,
+    projects: entry.data.projects,
   };
 
   return post;

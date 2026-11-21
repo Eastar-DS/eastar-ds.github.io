@@ -37,3 +37,10 @@ export const CAREER_PROJECTS = {
     role: "기획, 영업, 마케팅, 데이터 분석. 개발자가 개발에 집중할 수 있게 개발 밖의 일을 모두 맡음",
   },
 } satisfies Record<string, CareerProject>;
+
+/**
+ * 프로젝트 id 목록. 글 앞머리의 `projects` 칸(`src/content.config.ts`)이 이 값만 받아서, 없는 프로젝트를 적으면 빌드가 멈춥니다.
+ */
+export const CAREER_PROJECT_IDS = Object.values(CAREER_PROJECTS).map(
+  (project) => project.id,
+);

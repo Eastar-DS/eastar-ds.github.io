@@ -33,11 +33,11 @@ const links = posts.map((post) => {
     <ul class="container">
       {links.map((link) => (
         <li>
-          <span class="label">관련 글</span>
+          <span class="label">관련 글</span>{" "}
           <a class="link" href={link.href}>
             {link.title}
           </a>
-          <span class="printUrl">({link.printUrl})</span>
+          <span class="printUrl"> ({link.printUrl})</span>
         </li>
       ))}
     </ul>
@@ -52,8 +52,9 @@ const links = posts.map((post) => {
     list-style: none;
   }
 
+  /* 이름표와 링크 사이에는 글자 공백을 두어 복사하거나 읽어 줄 때 낱말이 붙지 않게 하고, 모자란 간격만 여백으로 채웁니다 */
   .label {
-    margin-right: var(--space-2);
+    margin-right: var(--space-1);
     color: var(--color-text-muted);
   }
 
@@ -82,7 +83,6 @@ const links = posts.map((post) => {
 
     .printUrl {
       display: inline;
-      margin-left: var(--space-1);
       overflow-wrap: anywhere;
     }
   }

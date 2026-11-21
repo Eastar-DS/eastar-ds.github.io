@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
+import PostProjectLinks from "@/modules/features/post/PostProjectLinks/index.astro";
 import Comments from "@/modules/widgets/post/Comments/index.astro";
 import PostBody from "@/modules/widgets/post/PostBody/index.astro";
 import PostHeader from "@/modules/widgets/post/PostHeader/index.astro";
@@ -22,7 +23,8 @@ import createPageMeta from "@/shared/seo/createPageMeta";
 
 /**
  * 글 화면: 글 머리를 첫 줄에, 본문과 목차를 둘째 줄에 두어 목차가 본문 첫 문단과 같은 높이에서 시작합니다.
- * 넓은 화면에서는 오른쪽 고정 목차, 좁은 화면에서는 글 머리 아래 접는 목차를 보입니다. 글 끝에 이전 · 다음 글과 댓글 자리를 둡니다.
+ * 넓은 화면에서는 오른쪽 고정 목차, 좁은 화면에서는 글 머리 아래 접는 목차를 보입니다.
+ * 본문 바로 뒤에 이 글과 이어진 프로젝트(앞머리 `projects`가 있을 때만)를, 글 끝에 이전 · 다음 글과 댓글 자리를 둡니다.
  */
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
@@ -63,6 +65,7 @@ const jsonLds = [
               <TableOfContents slug={post.slug} variant="collapsible" />
             </ShowOn>
             <PostBody slug={post.slug} />
+            <PostProjectLinks slug={post.slug} />
           </Stack>
           <PostNav slug={post.slug} />
           <Comments slug={post.slug} />
