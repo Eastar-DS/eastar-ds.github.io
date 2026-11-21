@@ -85,7 +85,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
         ],
         result:
           "목록이 보일 때까지 걸리던 966ms가 46ms로 줄었고, 운영 배포 뒤 같은 조건에서도 1,530ms가 68ms로 줄었습니다.",
-        relatedPostSlugs: ["virtualized-document-list"],
+        relatedPostSlugs: [
+          "virtualized-document-list",
+          "virtual-list-blank-frames",
+          "virtual-list-back-navigation",
+        ],
       },
     ],
   },

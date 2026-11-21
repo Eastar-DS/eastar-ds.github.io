@@ -33,7 +33,11 @@ const KNOT: ResumeExperience = {
         {
           title: "문서 탭 「주제별」 목록 가상화(우테코 렌더링 성능 과제)",
           text: "문서 1,939개인 팀 워크스페이스에서 탭을 누른 뒤 목록이 보일 때까지 966ms(CPU 4배 느림)가 걸리던 것을 46ms로 줄임. 운영 배포 뒤 같은 조건에서도 1,530ms → 68ms",
-          relatedPostSlugs: ["virtualized-document-list"],
+          relatedPostSlugs: [
+            "virtualized-document-list",
+            "virtual-list-blank-frames",
+            "virtual-list-back-navigation",
+          ],
           details: [
             {
               text: "문서를 가져오는 기능(기획 중)으로 문서가 많아질 것에 대비해 대상을 고름. Profiler로 마운트 비용이 큰 것을 찾고 content-visibility(740ms)와 비교한 뒤, 원리를 확인하고 부족할 때만 의존성을 더하려고 라이브러리 없이 화면 근처의 행만 그리는 방식을 직접 구현함",
