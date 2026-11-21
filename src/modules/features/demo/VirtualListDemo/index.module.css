@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  container: virtual-list / inline-size;
+}
+
+/* 목록과 구조 보기를 3 : 1 폭으로 나란히 둡니다 */
+.panes {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.paneLabel {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
+ * 높이 240px는 constants/virtualList.ts의 VIEWPORT_HEIGHT_PX, ui/StructureView.module.css의 .root 높이와 같아야 합니다.
+ * JavaScript가 붙기 전(.isReady 없음)에는 서버에서 그린 첫 화면 밖의 빈 높이가 보이지 않게 스크롤을 막습니다.
+ */
+.viewport {
+  height: 240px;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  overscroll-behavior: contain;
+}
+
+.viewport.isReady {
+  overflow-y: auto;
+}
+
+.viewport:focus-visible {
+  border-radius: var(--radius-md);
+}

@@ -33,10 +33,10 @@ description: 컴포넌트가 지켜야 하는 폴더/index.astro(index.tsx) 방�
 - 컴포넌트 폴더명은 구현체 이름으로 짓고, 구현체 파일은 `index.astro` 또는 `index.tsx`로 통일. (예: `Chip/index.astro`, `DemoFrame/index.tsx`)
 - 네이밍은 카멜(파스칼 포함)로 통일. (예: `site`, `SiteHeader`)
 - 폴더 + `index` 형태는 컴포넌트 폴더 자체에만 적용. **세그먼트 내부에서는 폴더 + `index`를 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠.**
-  - 서브 컴포넌트·훅·유틸은 세그먼트 폴더 바로 아래의 플랫 파일. (예: `ui/CodeBlock.astro`, `model/useRenderingPipeline.ts`, `utils/getStepStates.ts`)
+  - 서브 컴포넌트·훅·유틸은 세그먼트 폴더 바로 아래의 플랫 파일. (예: `ui/CodeBlock.astro`, `model/useVirtualList.ts`, `utils/getListRanges.ts`)
   - 타입 파일은 항상 `types/` 폴더 안에 `types/toc.ts`처럼 내용을 나타내는 이름으로 작성.
-  - React 컴포넌트의 스타일은 같은 이름의 `.module.css`를 바로 옆에 둠. (예: `index.tsx` + `index.module.css`, `ui/PreviewBox.tsx` + `ui/PreviewBox.module.css`) Astro 컴포넌트는 같은 파일의 `<style>`을 씀.
-  - 통합 테스트(`test.ts(x)`)는 세그먼트 밖, 컴포넌트 폴더 바로 아래의 일반 파일. 단위 테스트는 `utils/getStepStates.test.ts`처럼 구현 파일 옆에 둠.
+  - React 컴포넌트의 스타일은 같은 이름의 `.module.css`를 바로 옆에 둠. (예: `index.tsx` + `index.module.css`, `ui/StructureView.tsx` + `ui/StructureView.module.css`) Astro 컴포넌트는 같은 파일의 `<style>`을 씀.
+  - 통합 테스트(`test.ts(x)`)는 세그먼트 밖, 컴포넌트 폴더 바로 아래의 일반 파일. 단위 테스트는 `utils/getListRanges.test.ts`처럼 구현 파일 옆에 둠.
 
 ### 폴더 구조 예시
 
@@ -56,19 +56,19 @@ src/
 │   │               └── toc.ts
 │   └── features/
 │       └── demo/
-│           └── RenderingPipelineDemo/
+│           └── VirtualListDemo/
 │               ├── index.tsx                   # React 섬 (글에서 client:visible로 씀)
 │               ├── index.module.css
 │               ├── ui/
-│               │   ├── PipelineStep.tsx
-│               │   └── PipelineStep.module.css
+│               │   ├── DocumentRows.tsx
+│               │   └── DocumentRows.module.css
 │               ├── model/
-│               │   └── useRenderingPipeline.ts # 이 데모에 강결합된 상태
+│               │   └── useVirtualList.ts       # 이 데모에 강결합된 상태
 │               ├── constants/
-│               │   └── pipeline.ts
+│               │   └── virtualList.ts
 │               └── utils/
-│                   ├── getStepStates.ts
-│                   └── getStepStates.test.ts
+│                   ├── getListRanges.ts
+│                   └── getListRanges.test.ts
 └── shared/
     └── components/
         └── primitives/

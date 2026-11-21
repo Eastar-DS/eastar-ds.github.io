@@ -18,7 +18,7 @@ e.g.
 - usePrefersReducedMotion, useAnimationFrame → common 훅
 - usePlaybackProgress(데모 공통 재생 상태) → domain 훅 (`demo` 도메인)
 
-단, 특정 컴포넌트와 강결합된 훅은 `shared/hooks`에 두지 않고 해당 컴포넌트 폴더의 `model`에 코로케이션 (예: `RenderingPipelineDemo/model/useRenderingPipeline.ts`). **훅의 위치는 사용 횟수("지금은 여기서만 쓴다")가 아니라 컴포넌트와의 강결합 여부로 판단**하며, 세부 기준은 `project-structure` 스킬의 「코드를 shared로 내리는 기준」 참고. 덕분에 재사용 가능한 훅을 찾을 때는 `shared/hooks`만 확인하면 됨.
+단, 특정 컴포넌트와 강결합된 훅은 `shared/hooks`에 두지 않고 해당 컴포넌트 폴더의 `model`에 코로케이션 (예: `VirtualListDemo/model/useVirtualList.ts`). **훅의 위치는 사용 횟수("지금은 여기서만 쓴다")가 아니라 컴포넌트와의 강결합 여부로 판단**하며, 세부 기준은 `project-structure` 스킬의 「코드를 shared로 내리는 기준」 참고. 덕분에 재사용 가능한 훅을 찾을 때는 `shared/hooks`만 확인하면 됨.
 
 데모가 여러 개 생겨 재생 · 처음으로 · 슬라이더 상태가 겹치면, 그 부분을 `shared/hooks/domain/demo/`로 내림.
 

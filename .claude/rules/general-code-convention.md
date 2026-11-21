@@ -15,9 +15,9 @@ paths:
 - 파일명:
   - 컴포넌트 파일: 컴포넌트 폴더의 구현체는 `index.astro`. 움직이는 칸 중 React로 만드는 것만 `index.tsx`. 세그먼트 `ui` 안의 서브 컴포넌트는 `PascalCase` + `.astro`(`.tsx`)
   - 컴포넌트 외 파일: `camelCase` + `.ts`
-  - React 컴포넌트의 스타일: 같은 이름의 CSS Modules 파일을 옆에 둠 (e.g. `index.tsx` + `index.module.css`, `ui/PipelineStep.tsx` + `ui/PipelineStep.module.css`)
+  - React 컴포넌트의 스타일: 같은 이름의 CSS Modules 파일을 옆에 둠 (e.g. `index.tsx` + `index.module.css`, `ui/DocumentRows.tsx` + `ui/DocumentRows.module.css`)
 - 인덱스(`index.ts`, `index.astro`, `index.tsx`)를 제외한 나머지는 폴더 + `index` 형태로 두되, 테스트 파일(`test.ts`, 컴포넌트 통합 테스트는 `test.ts(x)`)은 예외로 일반 파일로 둠
-- **컴포넌트 폴더의 세그먼트(`ui`/`model`/`utils`/`types`/`constants`/`context`) 내부는 예외**: 폴더 + `index`를 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠 (e.g. `ui/CodeBlock.astro`, `model/useRenderingPipeline.ts`, `constants/pipeline.ts`). 단위 테스트는 `utils/getStepStates.test.ts`처럼 구현 파일 옆에 둠. `shared` 레이어는 기존대로 폴더 + `index.ts`
+- **컴포넌트 폴더의 세그먼트(`ui`/`model`/`utils`/`types`/`constants`/`context`) 내부는 예외**: 폴더 + `index`를 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠 (e.g. `ui/CodeBlock.astro`, `model/useVirtualList.ts`, `constants/virtualList.ts`). 단위 테스트는 `utils/getListRanges.test.ts`처럼 구현 파일 옆에 둠. `shared` 레이어는 기존대로 폴더 + `index.ts`
 - 타입 파일은 항상 `types/` 폴더로 감싸고, `index.ts` 없이 내용을 나타내는 이름으로 분리:
 
   ```
@@ -32,7 +32,7 @@ paths:
   - Boolean 타입은 `is`로 시작 (`isOpen`, `isAsideSticky`)
   - 여러 요소를 담는 경우 `s` 접미사 (`posts`)
   - UI가 리스트 형태인 경우 `List` 접미사 (`PostList`)
-- 커스텀 훅(React 섬 안에서만): `use` + 훅 이름 (`useRenderingPipeline`)
+- 커스텀 훅(React 섬 안에서만): `use` + 훅 이름 (`useVirtualList`)
 - 컨텍스트(React 섬 안에서만): 이름 + `Context`
 
 ### 핸들러 함수
@@ -96,7 +96,7 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 ## 주석
 
 - JSDoc은 무엇을 하는지·쓰임새를 설명함. 코드 안 인라인 주석은 코드로 드러나지 않는 이유·제약만 적고, 코드를 다시 말하지 않음.
-- 두 곳이 같은 값을 맞춰야 하면 양쪽에 서로를 가리키는 주석을 둠 (e.g. `getPreviewStyle.ts`의 `BOX_SIZE`와 `PreviewBox.module.css`의 `.box` 폭)
+- 두 곳이 같은 값을 맞춰야 하면 양쪽에 서로를 가리키는 주석을 둠 (e.g. `VirtualListDemo/constants/virtualList.ts`의 `ROW_HEIGHT_PX`와 `ui/DocumentRows.module.css`의 `.row` 높이)
 
 ## 스타일
 
@@ -117,7 +117,7 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 | 경우 | 방법 | 예 |
 | --- | --- | --- |
 | 상태가 작고 DOM 몇 개만 바꾸는 동작 | `.astro`의 `<script>`. 판단 로직은 `utils`로 떼어 단위 테스트 | `ThemeToggle`, `CopyCodeButton`, 목차의 지금 읽는 곳 |
-| 상태가 여럿이고 화면을 다시 그리는 데모 | React 컴포넌트(`index.tsx`) + `client:visible` | `RenderingPipelineDemo` |
+| 상태가 여럿이고 화면을 다시 그리는 데모 | React 컴포넌트(`index.tsx`) + `client:visible` | `VirtualListDemo` |
 
 - React 섬은 처음 그림을 서버에서 만들어 두므로, 서버 HTML과 첫 클라이언트 그림이 같아야 함. 인라인 `style`에 CSS 변수(`--x`)를 넣으면 하이드레이션 경고가 나므로 일반 속성(`width` 등)을 씀
 - 첫 그림 전에 꼭 돌아야 하는 코드(테마, `no-js` 클래스 지우기)는 `Document`의 `is:inline` 스크립트만 씀

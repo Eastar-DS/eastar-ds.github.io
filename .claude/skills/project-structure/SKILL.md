@@ -79,10 +79,10 @@ src/
 │           ├── index.tsx
 │           ├── index.module.css
 │           ├── ui/
-│           │   ├── PipelineStep.tsx
-│           │   └── PipelineStep.module.css
+│           │   ├── DocumentRows.tsx
+│           │   └── DocumentRows.module.css
 │           ├── model/
-│           │   └── useRenderingPipeline.ts
+│           │   └── useVirtualList.ts
 │           ├── constants/
 │           ├── types/
 │           └── utils/
@@ -90,7 +90,7 @@ src/
 ├── shared/
 │   ├── components/
 │   │   ├── primitives/
-│   │   │   ├── ui/                  # Icon, IconButton, Chip, Callout, Figure, SkipLink, AnchorHeading, DemoFrame, DemoControls
+│   │   │   ├── ui/                  # Icon, IconButton, Chip, Callout, Figure, SkipLink, AnchorHeading, DemoFrame, DemoControls, DemoSlider
 │   │   │   ├── layout/              # Document, Container, Stack, WithAside, ShowOn
 │   │   │   └── animation/
 │   │   └── composites/
@@ -151,21 +151,21 @@ formatDate({ date, format }); // ✅ 컴포넌트와 무관한 이름 → shared
 ### 기준 2. 인자가 도메인 값인가, 컴포넌트의 내부 값인가
 
 ```ts
-getStepStates({ propertyId, frameCount }); // 데모의 내부 상태 → 데모 utils
+getStructureRows({ scrollTop, scale, ranges }); // 데모의 내부 상태 → 데모 utils
 groupPostsByYear(posts); // ✅ 도메인 값만 받음 → shared/content
 ```
 
 ### 기준 3. 반환값이 도메인 개념인가, 특정 JSX용 묶음인가
 
 ```ts
-getPreviewStyle({ propertyId, progress }); // 미리보기 상자의 style → 데모 utils
+getRowCounts({ rowCount, ranges }); // 데모 숫자 칸에 보일 값 묶음 → 데모 utils
 getPostPath(slug); // ✅ 보편적인 값 → shared/routes
 ```
 
 ### 기준 4. 다른 화면에 붙여보는 상상 테스트
 
 - `calculateReadingMinutes`처럼 글이 있는 화면이면 어디서든 말이 되는 함수는 `shared/content`.
-- `useRenderingPipeline`처럼 특정 데모의 화면 구조 안에서만 의미가 있는 훅은 `model`에 코로케이션.
+- `useVirtualList`처럼 특정 데모의 화면 구조 안에서만 의미가 있는 훅은 `model`에 코로케이션.
 
 ## 콘텐츠 · SEO · Routes
 

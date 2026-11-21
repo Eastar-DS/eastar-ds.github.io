@@ -5,8 +5,8 @@ import type { Post } from "@/shared/types/post";
 import createBlogPostingJsonLd from ".";
 
 const post: Post = {
-  slug: "browser-layout-and-paint",
-  title: "브라우저는 언제 화면을 다시 그릴까",
+  slug: "virtualized-document-list",
+  title: "라이브러리 없이 목록 가상화하기",
   description: "요약",
   category: "브라우저",
   publishedAt: new Date("2026-11-18T00:00:00Z"),
@@ -19,7 +19,7 @@ describe("createBlogPostingJsonLd", () => {
     expect(createBlogPostingJsonLd(post)).toMatchObject({
       "@type": "BlogPosting",
       headline: post.title,
-      url: "https://eastar-ds.github.io/posts/browser-layout-and-paint/",
+      url: "https://eastar-ds.github.io/posts/virtualized-document-list/",
       datePublished: "2026-11-18T00:00:00.000Z",
       dateModified: "2026-11-20T00:00:00.000Z",
       author: { "@type": "Person", name: "이스타" },

@@ -5,7 +5,7 @@ import type { Post } from "@/shared/types/post";
 import createRssItems from ".";
 
 const post: Post = {
-  slug: "browser-layout-and-paint",
+  slug: "virtualized-document-list",
   title: "제목",
   description: "요약",
   category: "브라우저",
@@ -21,7 +21,7 @@ describe("createRssItems", () => {
         title: "제목",
         description: "요약",
         pubDate: post.publishedAt,
-        link: "/posts/browser-layout-and-paint/",
+        link: "/posts/virtualized-document-list/",
         categories: ["브라우저"],
       },
     ]);

@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-4) var(--space-1) var(--space-2);
+  container-type: inline-size;
+}
+
+/* 「칩」 모양(docs/design-system.md 7.4). 누르는 단추라서 높이는 아이콘 단추 크기(36px · 휴대폰 40px)로 키웁니다 */
+.toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--icon-button-size);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.toggle:hover {
+  background: var(--color-surface-hover);
+}
+
+.toggle:focus-visible {
+  border-radius: var(--radius-full);
+}
+
+.toggle[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.check {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.sliderLabel {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.status {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+@container (max-width: 479.98px) {
+  .status {
+    display: none;
+  }
+}

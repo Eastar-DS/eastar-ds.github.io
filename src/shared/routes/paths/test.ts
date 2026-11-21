@@ -4,8 +4,8 @@ import { getNavItems, getPostPath, NAV_ITEMS } from ".";
 
 describe("getPostPath", () => {
   it("글 주소를 /posts/글-이름/ 으로 만든다", () => {
-    expect(getPostPath("browser-layout-and-paint")).toBe(
-      "/posts/browser-layout-and-paint/",
+    expect(getPostPath("virtualized-document-list")).toBe(
+      "/posts/virtualized-document-list/",
     );
   });
 });

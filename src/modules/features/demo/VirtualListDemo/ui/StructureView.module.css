@@ -1,0 +1,61 @@
+/* 높이 240px는 스크롤 칸(index.module.css의 .viewport)과 같습니다 */
+.root {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+/* 행 막대 사이는 바탕색 2px 틈으로 나눕니다(선을 따로 긋지 않음) */
+.row {
+  position: absolute;
+  right: var(--space-2);
+  left: var(--space-2);
+  box-sizing: border-box;
+  border-bottom: var(--border-width-strong) solid var(--color-bg);
+}
+
+.visible {
+  background: var(--color-accent);
+}
+
+.overscan {
+  background: var(--color-data-1);
+}
+
+.offscreen {
+  background: var(--color-border-strong);
+}
+
+/* 그리지 않은 행은 높이만 있다는 것을 옅은 막대로 알립니다 */
+.notDrawn {
+  background: var(--color-border);
+}
+
+/* 화면(스크롤 칸)에 해당하는 구간 */
+.view {
+  position: absolute;
+  right: var(--space-1);
+  left: var(--space-1);
+  box-sizing: border-box;
+  border: var(--border-width-strong) solid var(--color-text);
+  border-radius: var(--radius-sm);
+}
+
+@media (forced-colors: active) {
+  .row {
+    border-bottom-color: Canvas;
+  }
+
+  .visible,
+  .overscan,
+  .offscreen {
+    background: CanvasText;
+  }
+
+  .notDrawn {
+    background: GrayText;
+  }
+}

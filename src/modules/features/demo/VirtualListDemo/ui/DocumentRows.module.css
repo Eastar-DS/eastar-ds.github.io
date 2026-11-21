@@ -1,0 +1,35 @@
+.list {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 높이 40px는 constants/virtualList.ts의 ROW_HEIGHT_PX와 같아야 합니다. 아래 선은 높이 안에 들어갑니다 */
+.row {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  gap: var(--space-3);
+  height: 40px;
+  padding: 0 var(--space-3);
+  border-bottom: var(--border-width) solid var(--color-border);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  white-space: nowrap;
+}
+
+.number {
+  flex: none;
+  min-width: 5ch;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.title {
+  overflow: hidden;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+}

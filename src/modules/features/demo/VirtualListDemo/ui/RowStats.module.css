@@ -1,0 +1,84 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+  container-type: inline-size;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+/*
+ * 값은 스크롤하거나 가상화를 끄고 켤 때 길이가 바뀝니다. 숫자 폭을 고정해 글자가 흔들리지 않게 하고,
+ * 좁은 칸에서는 값이 두 줄로 넘어가도 데모 높이가 바뀌지 않게 두 줄 높이를 미리 잡습니다.
+ */
+.value {
+  min-height: 2lh;
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+@container (min-width: 480px) {
+  .value {
+    min-height: 0;
+    white-space: nowrap;
+  }
+}
+
+.detail {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* 막대 색과 같은 표시. 모양으로도 나눕니다(● 보이는 행, ▲ 여유 행, ■ 화면 밖에 그린 행, □ 그리지 않은 행). 크기는 이름 글자를 따라갑니다 */
+.marker {
+  flex: none;
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.visible {
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.overscan {
+  background: var(--color-data-1);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.offscreen {
+  background: var(--color-border-strong);
+}
+
+.notDrawn {
+  box-sizing: border-box;
+  border: var(--border-width) solid var(--color-border-strong);
+  background: var(--color-border);
+}
+
+@media (forced-colors: active) {
+  .visible,
+  .overscan,
+  .offscreen {
+    background: CanvasText;
+  }
+}

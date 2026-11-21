@@ -5,16 +5,16 @@ import createPageMeta from ".";
 describe("createPageMeta", () => {
   it("제목 뒤에 사이트 이름을 붙이고 canonical을 절대 주소로 만든다", () => {
     const meta = createPageMeta({
-      title: "레이아웃과 페인트",
+      title: "목록 가상화",
       description: "요약",
-      path: "/posts/browser-layout-and-paint/",
+      path: "/posts/virtualized-document-list/",
       ogType: "article",
       publishedAt: new Date("2026-11-18T00:00:00Z"),
     });
 
-    expect(meta.title).toBe("레이아웃과 페인트 · 이스타의 개발 노트");
+    expect(meta.title).toBe("목록 가상화 · 이스타의 개발 노트");
     expect(meta.canonicalUrl).toBe(
-      "https://eastar-ds.github.io/posts/browser-layout-and-paint/",
+      "https://eastar-ds.github.io/posts/virtualized-document-list/",
     );
     expect(meta.ogType).toBe("article");
     expect(meta.publishedTime).toBe("2026-11-18T00:00:00.000Z");

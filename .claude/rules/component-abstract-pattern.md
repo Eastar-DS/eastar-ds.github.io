@@ -57,7 +57,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
   - composites끼리도 조합 불가. 공통 UI가 겹치면 primitives로 내려서 재사용.
   - primitives끼리 조합한 결과는 primitives로 둠.
 - **페이지가 layout primitive의 슬롯으로 이어 붙이는 것은 조합이 아님.** `WithAside`의 `top` 슬롯에 `PostHeader`를, 둘째 줄에 `PostBody`와 `TableOfContents`를 놓는 것처럼, 두 widgets를 이어 붙이는 쪽은 페이지임. widgets는 서로를 import하지 않음.
-- React 컴포넌트(섬)는 `.astro` 컴포넌트를 쓸 수 없음. React 섬이 쓰는 하위 컴포넌트도 React로 만듦 (e.g. `DemoFrame`, `DemoControls`).
+- React 컴포넌트(섬)는 `.astro` 컴포넌트를 쓸 수 없음. React 섬이 쓰는 하위 컴포넌트도 React로 만듦 (e.g. `DemoFrame`, `DemoControls`, `DemoSlider`).
 - 도메인이 겹치는 상황에서는 컴포넌트 재사용 대신, 도메인 로직을 함수로 만들어 `shared/content`(콘텐츠) 또는 `shared/hooks/domain`(React 섬 상태)으로 내려서 재사용.
 
 ### 주의사항
@@ -83,7 +83,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - 도메인 로직을 다루는 작은 컴포넌트. 대부분 움직이는 칸임
 - 섹션이 되지 못하는 작은 단위로, 여러 widgets·pages에서 재사용 가능한 단위로 작성
 - 하위에 도메인별 디렉토리로 작성
-  - e.g. `site/ThemeToggle`, `post/CopyCodeButton`, `demo/RenderingPipelineDemo`
+  - e.g. `site/ThemeToggle`, `post/CopyCodeButton`, `demo/VirtualListDemo`
 - 글 속 데모는 `demo/{데모 이름}`으로 둠. 데모는 글 본문(MDX)이 직접 import하므로 widgets를 거치지 않음
 
 #### shared/components/composites
@@ -110,13 +110,13 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 
 1. 도메인 로직 확인하기
 
-글 속 렌더링 단계 데모를 만든다면 도메인 로직은 "렌더링 단계와 CSS 속성의 관계".
+글 속 가상화 목록 데모를 만든다면 도메인 로직은 "스크롤 위치와 DOM에 그릴 행의 관계".
 
 2. 추상화 레벨에 맞추어 구현 계획 세우기
 
-- **렌더링 단계 데모** → `modules/features/demo/RenderingPipelineDemo`
-- 데모를 담는 틀, 재생·슬라이더 조작 줄 → `shared/components/primitives/ui/DemoFrame`, `DemoControls`
-- 데모 안에서만 쓰는 단계 칸, 속성 고르기 → 데모의 `ui` 세그먼트
+- **가상화 목록 데모** → `modules/features/demo/VirtualListDemo`
+- 데모를 담는 틀, 재생·슬라이더 조작 줄, 슬라이더 → `shared/components/primitives/ui/DemoFrame`, `DemoControls`, `DemoSlider`
+- 데모 안에서만 쓰는 구조 보기, 숫자 칸, 조작 줄 → 데모의 `ui` 세그먼트
 
 3. 구현하기
 

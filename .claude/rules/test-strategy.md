@@ -17,7 +17,7 @@ AI로 기능 개발 시 검증 루프가 필요한데, 검증 루프를 테스�
 
 | 종류        | 위치                                                                                                                                                                                           | 대상                                        | 지금 상태                    |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------- |
-| 단위 테스트 | 유틸 구현 파일 옆에 나란히 코로케이션. 세그먼트 `utils`는 `utils/getStepStates.ts` + `utils/getStepStates.test.ts`, `shared`는 `formatDate/index.ts` + `formatDate/test.ts`                     | 유틸 함수, 콘텐츠 변환, SEO 값 만들기       | vitest (`pnpm test`)         |
+| 단위 테스트 | 유틸 구현 파일 옆에 나란히 코로케이션. 세그먼트 `utils`는 `utils/getListRanges.ts` + `utils/getListRanges.test.ts`, `shared`는 `formatDate/index.ts` + `formatDate/test.ts`                     | 유틸 함수, 콘텐츠 변환, SEO 값 만들기       | vitest (`pnpm test`)         |
 | 통합 테스트 | 최종 책임 컴포넌트(대부분 widgets) 폴더 안의 `test.ts(x)`                                                                                                                                        | 콘텐츠를 읽어 화면에 그리기까지 한 구획 전체 | 아직 없음. 필요해지면 Astro Container API로 씀 |
 | E2E 테스트  | 전역 `src/__test__/`에 페이지 이름을 붙인 파일 (예: `postPage.test.ts`)                                                                                                                         | 페이지 단위 수행 권장                       | 아직 없음. 필요해지면 Playwright로 씀 |
 

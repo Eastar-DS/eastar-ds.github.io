@@ -6,7 +6,7 @@ describe("createBreadcrumbListJsonLd", () => {
   it("순서대로 position을 매기고 절대 주소를 쓴다", () => {
     const jsonLd = createBreadcrumbListJsonLd([
       { name: "이스타의 개발 노트", path: "/" },
-      { name: "레이아웃과 페인트", path: "/posts/browser-layout-and-paint/" },
+      { name: "목록 가상화", path: "/posts/virtualized-document-list/" },
     ]);
 
     expect(jsonLd.itemListElement).toEqual([
@@ -19,8 +19,8 @@ describe("createBreadcrumbListJsonLd", () => {
       {
         "@type": "ListItem",
         position: 2,
-        name: "레이아웃과 페인트",
-        item: "https://eastar-ds.github.io/posts/browser-layout-and-paint/",
+        name: "목록 가상화",
+        item: "https://eastar-ds.github.io/posts/virtualized-document-list/",
       },
     ]);
   });

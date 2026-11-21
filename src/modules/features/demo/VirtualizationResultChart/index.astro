@@ -1,0 +1,184 @@
+---
+import { MEASUREMENTS } from "./constants/measurements";
+import toResultRows from "./utils/toResultRows";
+
+/**
+ * Knot 「주제별」 목록 가상화의 개선 전과 후를 항목마다 막대 둘로 견주는 차트입니다. JavaScript 없이 서버에서 그립니다.
+ * 항목마다 단위와 크기가 달라 한 축에 두지 않고, 막대 길이는 항목마다 개선 전 값에 맞춥니다.
+ * 개선 후는 강조색, 개선 전은 회색(--color-border-strong)으로 두고, 막대마다 이름과 값을 글로 붙여 색만으로 나누지 않습니다.
+ * 값은 모두 글로 읽히므로 표를 따로 두지 않습니다. 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
+ */
+const rows = toResultRows(MEASUREMENTS);
+
+/** 막대 끝 글자(값)가 들어갈 폭. 가장 긴 개선 전 값 「37,168개」가 막대 오른쪽에 들어가게 잡습니다 */
+const barWidth = (ratio: number) => `width: calc((100% - 6em) * ${ratio})`;
+---
+
+<div class="container">
+  <ul class="legend">
+    <li class="legendItem"><span class="swatch before"></span>개선 전 (develop 11ac67db)</li>
+    <li class="legendItem"><span class="swatch after"></span>개선 후 (PR #1142)</li>
+  </ul>
+  <ul class="groups">
+    {
+      rows.map((row) => (
+        <li class="group">
+          <p class="label">
+            {row.label}
+            {row.condition && <span class="condition"> ({row.condition})</span>}
+          </p>
+          <dl class="bars">
+            <div class="barRow">
+              <dt class="name">개선 전</dt>
+              <dd class="track">
+                <span class="fill before" style={barWidth(row.before.ratio)} />
+                <span class="value">{row.before.text}</span>
+              </dd>
+            </div>
+            <div class="barRow">
+              <dt class="name">개선 후</dt>
+              <dd class="track">
+                <span class="fill after" style={barWidth(row.after.ratio)} />
+                <span class="value">{row.after.text}</span>
+                <span class="reduction">{row.reduction}</span>
+              </dd>
+            </div>
+          </dl>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    list-style: none;
+  }
+
+  .legendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .swatch {
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: var(--radius-sm);
+  }
+
+  .groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .label {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .condition {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+  }
+
+  .barRow {
+    display: grid;
+    grid-template-columns: 4em minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .name {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  /* 막대는 왼쪽 기준선에서 자라고, 값은 막대 끝에 붙습니다 */
+  .track {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    margin: 0;
+  }
+
+  /* 굵기 1.25em(24px 이하), 끝 모서리만 4px로 둥글게 둡니다 */
+  .fill {
+    flex: none;
+    min-width: 2px;
+    height: 1.25em;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .before {
+    background: var(--color-border-strong);
+  }
+
+  .after {
+    background: var(--color-accent);
+  }
+
+  .value {
+    flex: none;
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .reduction {
+    flex: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+  }
+
+  @media (forced-colors: active) {
+    .before {
+      background: GrayText;
+    }
+
+    .after {
+      background: CanvasText;
+    }
+  }
+</style>

@@ -19,13 +19,13 @@ features, widgets, composites 레이어의 세그먼트는 `ui`, `model`, `utils
 
 `primitives`와 `pages`는 세그먼트를 강제하지 않음. 다만 필요해지면 동일한 세그먼트 규칙을 그대로 적용. (예: `primitives/ui/Icon/constants/iconPaths.ts`)
 
-세그먼트는 항상 폴더로 두되, **세그먼트 내부에서는 폴더 + `index` 코로케이션을 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠**. (예: `utils/getStepStates.ts` ✅ / `utils/getStepStates/index.ts` ❌)
+세그먼트는 항상 폴더로 두되, **세그먼트 내부에서는 폴더 + `index` 코로케이션을 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠**. (예: `utils/getListRanges.ts` ✅ / `utils/getListRanges/index.ts` ❌)
 
-- `ui` : 서브 컴포넌트. `ui/CodeBlock.astro`, `ui/PipelineStep.tsx`처럼 플랫 파일로 둠. React 서브 컴포넌트의 스타일은 `ui/PipelineStep.module.css`처럼 옆에 둠.
-- `model` : 해당 컴포넌트에 강결합된 React 훅·상태 로직. `model/useRenderingPipeline.ts`처럼 플랫 파일로 둠. (`hooks` 폴더는 `shared` 전용이므로 컴포넌트 폴더에는 만들지 않음) `.astro` 컴포넌트에는 상태가 없으므로 `model`이 생기지 않음.
+- `ui` : 서브 컴포넌트. `ui/CodeBlock.astro`, `ui/DocumentRows.tsx`처럼 플랫 파일로 둠. React 서브 컴포넌트의 스타일은 `ui/DocumentRows.module.css`처럼 옆에 둠.
+- `model` : 해당 컴포넌트에 강결합된 React 훅·상태 로직. `model/useVirtualList.ts`처럼 플랫 파일로 둠. (`hooks` 폴더는 `shared` 전용이므로 컴포넌트 폴더에는 만들지 않음) `.astro` 컴포넌트에는 상태가 없으므로 `model`이 생기지 않음.
 - `utils` : 유틸 함수. `utils/findActiveHeadingId.ts`와 `utils/findActiveHeadingId.test.ts`(단위 테스트)를 나란히 코로케이션. `.astro`의 `<script>`가 쓰는 판단 로직도 여기에 둠.
-- `types` : 타입. 항상 `types/` 폴더로 두고, `types/pipeline.ts`처럼 내용을 나타내는 이름의 파일로 나눔. (`types.ts` 단일 파일·`types/index.ts`는 쓰지 않음)
-- `constants` : 상수. `constants/pipeline.ts`처럼 플랫 파일로 둠.
+- `types` : 타입. 항상 `types/` 폴더로 두고, `types/virtualList.ts`처럼 내용을 나타내는 이름의 파일로 나눔. (`types.ts` 단일 파일·`types/index.ts`는 쓰지 않음)
+- `constants` : 상수. `constants/virtualList.ts`처럼 플랫 파일로 둠.
 - `context` (선택, React 섬 전용) : 특정 컴포넌트 전용 컨텍스트. Provider(JSX)를 함께 작성하므로 `context/demoContext.tsx`처럼 `.tsx` 플랫 파일로 둠.
 
 ## model 세그먼트 — 강결합된 훅만 둠
@@ -55,7 +55,7 @@ features, widgets, composites 레이어의 세그먼트는 `ui`, `model`, `utils
 
 | 종류        | 위치                                                                                                                   | 대상                                        |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| 단위 테스트 | `utils` 세그먼트 안에 구현 파일과 `*.test.ts`를 나란히 코로케이션 (예: `utils/getStepStates.ts` + `utils/getStepStates.test.ts`) | 유틸 함수 (훅은 테스트하지 않음)            |
+| 단위 테스트 | `utils` 세그먼트 안에 구현 파일과 `*.test.ts`를 나란히 코로케이션 (예: `utils/getListRanges.ts` + `utils/getListRanges.test.ts`) | 유틸 함수 (훅은 테스트하지 않음)            |
 | 통합 테스트 | 최종 책임 컴포넌트(대부분 widgets) 폴더 안의 `test.ts(x)`                                                                 | 콘텐츠를 읽어 화면에 그리기까지 한 구획 전체 |
 | E2E 테스트  | 전역 `src/__test__/`에 페이지 이름을 붙인 파일(`postPage.test.ts`)                                                      | 페이지 단위 수행 권장                       |
 
