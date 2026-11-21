@@ -1,19 +1,22 @@
 ---
-import splitTitle from "@/modules/widgets/post/PostArticle/utils/splitTitle";
-import type { Post } from "@/shared/types/post";
+import getPost from "@/shared/content/getPost";
 import formatDate from "@/shared/utils/formatDate";
 
+import splitTitle from "./utils/splitTitle";
+
 interface Props {
-  post: Post;
+  slug: string;
 }
 
 /**
- * 글 머리입니다. 글 정보 줄(분류 · 쓴 날 · 읽는 시간 · 고친 날) → 제목(h1) → 요약 → 구분선 순서입니다.
+ * 글 머리입니다. 글 정보 줄(분류 · 쓴 날 · 읽는 시간 · 고친 날) → 제목(h1) → 요약 → 구분선 순서이고, 이 페이지의 h1을 가집니다.
  * 쓴 날은 넓은 칸에서 「2026년 11월 18일」, 좁은 칸에서 「2026.11.18」입니다.
  * 고친 날은 frontmatter의 updatedAt이 쓴 날과 다를 때만 보입니다.
+ * 본문과 어떻게 놓일지(목차와의 줄 맞춤 등)는 페이지가 정합니다.
  * @design design/blog.pen 「글 머리」 tV22U
  */
-const { post } = Astro.props;
+const { slug } = Astro.props;
+const post = await getPost(slug);
 const publishedIso = formatDate({ date: post.publishedAt, format: "iso" });
 const updatedIso = formatDate({ date: post.updatedAt, format: "iso" });
 const isUpdated = publishedIso !== updatedIso;

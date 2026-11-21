@@ -1,82 +1,70 @@
 ---
 import Callout from "@/shared/components/primitives/ui/Callout/index.astro";
 import Figure from "@/shared/components/primitives/ui/Figure/index.astro";
-import getPost from "@/shared/content/getPost";
 import renderPost from "@/shared/content/renderPost";
 
 import CodeBlock from "./ui/CodeBlock.astro";
 import ContentHeading2 from "./ui/ContentHeading2.astro";
 import ContentHeading3 from "./ui/ContentHeading3.astro";
 import ContentTable from "./ui/ContentTable.astro";
-import PostHeader from "./ui/PostHeader.astro";
 
 interface Props {
   slug: string;
 }
 
 /**
- * 글 한 편입니다. 글 머리와 본문을 그립니다.
+ * 글의 본문(MDX)을 그립니다. 글 머리는 `PostHeader`가 따로 그리고, 둘을 어떻게 놓을지는 페이지가 정합니다.
  * 본문의 코드 칸 · 제목 · 표는 이 컴포넌트가 정한 모양으로 바뀌고, 글에서는 `<Callout>`과 `<Figure>`를 import 없이 씁니다.
  * 본문 속 링크 · 코드 · 인용의 모양도 여기서 정합니다.
- *
- * - `after-header` 슬롯: 글 머리와 본문 사이에 넣을 내용. 예: 좁은 화면의 접는 목차
  *
  * @design design/blog.pen 「링크」 fXlRl (기본 SdtPK · 올림 RTZf1 · 포커스 QGa2Z · 방문 IQdpC),
  * 「본문 속 코드」 egCcp, 「인용」 Myj7O
  */
 const { slug } = Astro.props;
-const post = await getPost(slug);
 const { Content } = await renderPost(slug);
 ---
 
-<article class="container">
-  <PostHeader post={post} />
-  <slot name="after-header" />
-  <div class="body">
-    <Content
-      components={{
-        pre: CodeBlock,
-        h2: ContentHeading2,
-        h3: ContentHeading3,
-        table: ContentTable,
-        Callout,
-        Figure,
-      }}
-    />
-  </div>
-</article>
+<div class="container">
+  <Content
+    components={{
+      pre: CodeBlock,
+      h2: ContentHeading2,
+      h3: ContentHeading3,
+      table: ContentTable,
+      Callout,
+      Figure,
+    }}
+  />
+</div>
 
 <style>
   .container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    container: article / inline-size;
+    container: post-body / inline-size;
   }
 
   /*
    * 본문(MDX)의 모양. 본문 요소는 MDX가 그리므로 :global로 고릅니다.
-   * 데모처럼 본문에 끼워 넣은 컴포넌트에 규칙이 새지 않게, 마크다운이 만드는 .body의 바로 아래 요소만 고릅니다.
+   * 데모처럼 본문에 끼워 넣은 컴포넌트에 규칙이 새지 않게, 마크다운이 만드는 바로 아래 요소만 고릅니다.
    * 간격은 docs/design-system.md 3.4 「본문 흐름 간격」을 따릅니다.
    */
-  .body > :global(* + *) {
+  .container > :global(* + *) {
     margin-top: var(--space-5);
   }
 
   /* 데모를 감싼 astro-island는 display: contents라서 여백을 안쪽 요소에 줍니다 */
-  .body > :global(astro-island > *) {
+  .container > :global(astro-island > *) {
     margin-top: var(--space-5);
   }
 
-  .body > :global(p) {
+  .container > :global(p) {
     text-wrap: pretty;
   }
 
-  .body > :global(:is(h2, h3)) {
+  .container > :global(:is(h2, h3)) {
     text-wrap: balance;
   }
 
-  .body > :global(h2) {
+  .container > :global(h2) {
     margin-top: var(--space-10);
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
@@ -84,11 +72,11 @@ const { Content } = await renderPost(slug);
     letter-spacing: var(--letter-spacing-h2);
   }
 
-  .body > :global(h2 + *) {
+  .container > :global(h2 + *) {
     margin-top: var(--space-5);
   }
 
-  .body > :global(h3) {
+  .container > :global(h3) {
     margin-top: var(--space-8);
     font-size: var(--font-size-h3);
     font-weight: var(--font-weight-semibold);
@@ -96,42 +84,42 @@ const { Content } = await renderPost(slug);
     letter-spacing: var(--letter-spacing-h3);
   }
 
-  .body > :global(h3 + *) {
+  .container > :global(h3 + *) {
     margin-top: var(--space-3);
   }
 
-  @container article (min-width: 560px) {
-    .body > :global(h2) {
+  @container post-body (min-width: 560px) {
+    .container > :global(h2) {
       margin-top: var(--space-14);
     }
 
-    .body > :global(h2 + *) {
+    .container > :global(h2 + *) {
       margin-top: var(--space-6);
     }
 
-    .body > :global(h3) {
+    .container > :global(h3) {
       margin-top: var(--space-10);
     }
   }
 
-  .body > :global(:is(ul, ol)) {
+  .container > :global(:is(ul, ol)) {
     padding-left: 1.4em;
   }
 
-  .body > :global(:is(ul, ol) li + li) {
+  .container > :global(:is(ul, ol) li + li) {
     margin-top: var(--space-2);
   }
 
-  .body > :global(:is(ul, ol) li::marker) {
+  .container > :global(:is(ul, ol) li::marker) {
     color: var(--color-text-muted);
   }
 
-  .body > :global(:is(p, ul, ol, blockquote, div) strong) {
+  .container > :global(:is(p, ul, ol, blockquote, div) strong) {
     font-weight: var(--font-weight-bold);
   }
 
   /* 링크: 늘 밑줄. 방문한 링크는 본문에서만 색을 바꿉니다 */
-  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a) {
+  .container > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a) {
     color: var(--color-accent);
     text-decoration: underline;
     text-decoration-thickness: var(--border-width);
@@ -139,33 +127,34 @@ const { Content } = await renderPost(slug);
     transition: color var(--duration-fast) var(--ease-standard);
   }
 
-  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:visited) {
+  .container > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:visited) {
     color: var(--color-link-visited);
   }
 
-  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:hover) {
+  .container > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:hover) {
     color: var(--color-accent-hover);
     text-decoration-thickness: var(--border-width-strong);
   }
 
   /* 본문 속 코드: 0.9em, 안쪽 1 · 6px (docs/design-system.md 7.14) */
-  .body
+  .container
     > :global(:is(p, ul, ol, blockquote, h2, h3, div, figure, [role="note"]) code:not(pre code)) {
     padding: 1px 6px;
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-sm);
     background: var(--color-surface);
+    color: var(--color-code-text);
     font-size: 0.9em;
     overflow-wrap: anywhere;
   }
 
-  .body > :global(blockquote) {
+  .container > :global(blockquote) {
     padding-left: var(--space-5);
     border-left: var(--border-width-callout) solid var(--color-border-strong);
     color: var(--color-text-muted);
   }
 
-  .body > :global(blockquote cite) {
+  .container > :global(blockquote cite) {
     display: block;
     margin-top: var(--space-2);
     font-size: var(--font-size-small);
@@ -173,7 +162,7 @@ const { Content } = await renderPost(slug);
     line-height: var(--line-height-small);
   }
 
-  .body > :global(hr) {
+  .container > :global(hr) {
     margin-block: var(--space-10);
     border: 0;
     border-top: var(--border-width) solid var(--color-border);

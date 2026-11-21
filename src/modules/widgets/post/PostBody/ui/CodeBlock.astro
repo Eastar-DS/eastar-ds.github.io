@@ -1,0 +1,162 @@
+---
+import CopyCodeButton from "@/modules/features/post/CopyCodeButton/index.astro";
+
+interface Props {
+  /** Shiki가 붙인 클래스(astro-code, 테마 이름, 강조 줄이 있으면 has-highlighted) */
+  class?: string;
+  className?: string;
+  /** Shiki가 붙인 글자색 · 바탕색(light-dark()). --color-code-bg와 같은 값입니다 */
+  style?: string;
+  tabindex?: number | string;
+  /** 코드 칸 메타의 title. `shared/content/codeTitleTransformer`가 붙입니다 */
+  "data-title"?: string;
+  "data-language"?: string;
+  /** 20줄 넘는 코드에 붙습니다. `shared/content/codeLineNumbersTransformer`가 붙입니다 */
+  "data-line-numbers"?: string;
+}
+
+/**
+ * 본문의 코드 칸입니다. MDX의 코드 펜스(```)를 파일 이름 줄과 복사 단추가 있는 칸으로 바꿉니다.
+ * 파일 이름이 없으면 언어 이름을 보입니다. 색은 VS Code Light+ / Dark+를 대비 보정한 Shiki 테마가 칠합니다.
+ *
+ * - 강조 줄: ```ts {3,5-6} 처럼 메타에 줄 번호를 적습니다 (한 칸에 세 줄 이하)
+ * - 줄 번호: 20줄 넘는 코드만. CSS counter로 그려 복사에 섞이지 않습니다
+ * - 긴 줄은 줄바꿈하지 않고 칸 안에서 가로로 밉니다(tabindex="0"으로 키보드로도 밂)
+ *
+ * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
+ */
+const {
+  class: shikiClass,
+  className,
+  style,
+  tabindex,
+  "data-title": title,
+  "data-language": language,
+  "data-line-numbers": lineNumbers,
+} = Astro.props;
+const label = title ?? (language && language !== "plaintext" ? language : "");
+---
+
+<figure class="container" data-copy-scope>
+  <figcaption class="head">
+    <span class="label">{label}</span>
+    <CopyCodeButton />
+  </figcaption>
+  <pre
+    class:list={[shikiClass ?? className, "code"]}
+    style={style}
+    tabindex={tabindex}
+    data-language={language}
+    data-line-numbers={lineNumbers !== undefined ? "" : undefined}><slot /></pre>
+</figure>
+
+<style>
+  .container {
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-code-border);
+    border-radius: var(--radius-md);
+    background: var(--color-code-bg);
+  }
+
+  /* 머리 줄 높이 40px는 「코드 칸」 시안의 값입니다 */
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 40px;
+    padding: var(--space-1) var(--space-3) var(--space-1) var(--space-5);
+    border-bottom: var(--border-width) solid var(--color-code-border);
+  }
+
+  .label {
+    overflow: hidden;
+    color: var(--color-code-meta);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-code-sm);
+    line-height: var(--line-height-label);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 가독성 값 (docs/design-system.md 2.3): 15px(휴대폰 14px) · 줄 간격 1.65 · 글자 이음 끔 · 탭 2 · 가로 스크롤 */
+  .code {
+    margin: 0;
+    padding: var(--space-4) 0;
+    overflow-x: auto;
+    font-size: var(--font-size-code);
+    line-height: var(--line-height-code);
+    font-variant-ligatures: none;
+    font-feature-settings:
+      "calt" 0,
+      "liga" 0;
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+    tab-size: 2;
+  }
+
+  .code:focus-visible {
+    outline-offset: -2px;
+  }
+
+  /* 줄마다 좌우 20px를 두고 가장 긴 줄 폭으로 맞춰, 강조 줄 바탕이 가로로 밀어도 칸 끝까지 닿게 합니다 */
+  .code :global(code) {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    font-family: inherit;
+  }
+
+  .code :global(.line) {
+    display: inline-block;
+    width: 100%;
+    min-height: calc(var(--line-height-code) * 1em);
+    padding-inline: var(--space-5);
+  }
+
+  .code :global(.line.highlighted) {
+    padding-left: calc(var(--space-5) - var(--border-width-callout));
+    border-left: var(--border-width-callout) solid var(--color-code-line-highlight-bar);
+    background: var(--color-code-line-highlight);
+  }
+
+  /* 줄 번호 열 22px, 코드와 사이 16px. 가상 요소라 복사에 섞이지 않습니다 */
+  .code[data-line-numbers] :global(code) {
+    counter-reset: code-line;
+  }
+
+  .code[data-line-numbers] :global(.line)::before {
+    content: counter(code-line);
+    counter-increment: code-line;
+    display: inline-block;
+    width: 22px;
+    margin-right: var(--space-4);
+    color: var(--color-code-line-number);
+    text-align: right;
+    user-select: none;
+  }
+
+  /* 강조 줄의 줄 번호는 본문 글자색 */
+  .code[data-line-numbers] :global(.line.highlighted)::before {
+    color: inherit;
+  }
+
+  @media (max-width: 767.98px) {
+    .head {
+      padding-left: var(--space-4);
+    }
+
+    .code {
+      padding-block: var(--space-3);
+    }
+
+    .code :global(.line) {
+      padding-inline: var(--space-4);
+    }
+
+    .code :global(.line.highlighted) {
+      padding-left: calc(var(--space-4) - var(--border-width-callout));
+    }
+  }
+</style>

@@ -1,39 +1,71 @@
 ---
 interface Props {
-  /** 옆 칸을 스크롤해도 화면 위에 붙여 둡니다 */
+  /** 옆 칸을 스크롤해도 화면 위(--toc-sticky-top)에 붙여 둡니다 */
   isAsideSticky?: boolean;
+  /** 감싸는 요소. 글 한 편을 배치할 때는 `article` */
+  as?: "div" | "article";
 }
 
 /**
  * 본문 칸(680px) 옆에 좁은 옆 칸(220px)을 둡니다. 넓은 화면(1200px 이상)에서만 나란히 놓고,
- * 그보다 좁으면 옆 칸을 본문 아래로 내립니다. 좁은 화면에서 옆 칸을 숨길지는 `ShowOn`으로 정합니다.
+ * 그보다 좁으면 위에서 아래로 쌓습니다. 좁은 화면에서 옆 칸을 숨길지는 `ShowOn`으로 정합니다.
  *
- * - 기본 슬롯: 본문 칸
- * - `aside` 슬롯: 옆 칸
+ * 넓은 화면의 짜임 (docs/design-system.md 5.2)
+ * ```
+ * [ top  ] [       ]   ← 첫 줄: 본문 칸에만. 옆 칸은 비워 둡니다
+ * [ 기본 ] [ aside ]   ← 둘째 줄: 옆 칸이 본문 첫 줄과 같은 높이에서 시작합니다
+ * ```
+ *
+ * - `top` 슬롯: 첫 줄의 본문 칸. 예: 글 머리. 넣으면 아래 칸과 20px 띄웁니다
+ * - 기본 슬롯: 둘째 줄의 본문 칸
+ * - `aside` 슬롯: 둘째 줄의 옆 칸
  *
  * @design design/blog.pen 기초 보드 「04 화면 폭과 배치」 e2gfM
  */
-const { isAsideSticky = false } = Astro.props;
+const { isAsideSticky = false, as: Tag = "div" } = Astro.props;
+const hasTop = Astro.slots.has("top");
 ---
 
-<div class="container">
+<Tag class="container">
+  {
+    hasTop && (
+      <div class="top">
+        <slot name="top" />
+      </div>
+    )
+  }
   <div class="main">
     <slot />
   </div>
   <div class:list={["aside", { isAsideSticky }]}>
     <slot name="aside" />
   </div>
-</div>
+</Tag>
 
 <style>
   .container {
     display: grid;
     grid-template-columns: minmax(0, var(--content-width));
+    grid-template-areas:
+      "top"
+      "main"
+      "aside";
     justify-content: center;
   }
 
-  .main {
+  .top {
+    grid-area: top;
     min-width: 0;
+    margin-bottom: var(--space-5);
+  }
+
+  .main {
+    grid-area: main;
+    min-width: 0;
+  }
+
+  .aside {
+    grid-area: aside;
   }
 
   @media (min-width: 1200px) {
@@ -41,16 +73,18 @@ const { isAsideSticky = false } = Astro.props;
       grid-template-columns:
         minmax(0, var(--content-width))
         var(--toc-width);
+      grid-template-areas:
+        "top ."
+        "main aside";
       column-gap: var(--layout-gap);
-      justify-content: center;
     }
 
-    /* 머리말이 따라오지 않으므로 화면 위에서 96px 아래에 붙입니다 (docs/design-system.md 5.2) */
+    /* 머리말이 따라오지 않으므로 화면 위에서 --toc-sticky-top(24px)에 붙입니다. 제목 앵커의 scroll-padding-top과 같은 값입니다 */
     .isAsideSticky {
       position: sticky;
-      top: var(--space-24);
+      top: var(--toc-sticky-top);
       align-self: start;
-      max-height: calc(100vh - var(--space-24) * 2);
+      max-height: calc(100vh - var(--toc-sticky-top) * 2);
       overflow-y: auto;
     }
   }
