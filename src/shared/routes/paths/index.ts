@@ -9,6 +9,8 @@ export const PATHS = {
   privacy: "/privacy/",
   rss: "/rss.xml",
   sitemap: "/sitemap-index.xml",
+  /** AI 에이전트가 읽는 사이트 안내 (https://llmstxt.org) */
+  llms: "/llms.txt",
 } as const;
 
 /** 페이지마다 하나인 `<main>`의 id. 건너뛰기 링크가 이 자리로 옮겨 줍니다 */
