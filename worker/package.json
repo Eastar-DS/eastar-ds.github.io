@@ -1,0 +1,35 @@
+{
+  "name": "eastar-blog-worker",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "dev:fake-notion": "node scripts/fakeNotionServer.ts",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "notion:create-table": "node scripts/createNotionCommentsTable.ts"
+  },
+  "dependencies": {
+    "hono": "^4.13.19"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.9.0",
+    "@cloudflare/workers-types": "^5.20261121.1",
+    "@types/node": "^24.10.1",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.166.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
+  }
+}

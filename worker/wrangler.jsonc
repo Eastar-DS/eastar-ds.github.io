@@ -1,0 +1,38 @@
+// 블로그(https://eastar-ds.github.io)의 노션 댓글과 PostHog 중계를 맡는 Cloudflare Worker 설정입니다.
+// 배포 순서는 docs/deploy-phase2.md, 구조와 노션 표 칸은 docs/worker.md에 있습니다.
+// 비밀값(NOTION_TOKEN, TURNSTILE_SECRET_KEY)은 여기에 쓰지 않고 `wrangler secret put`으로만 넣습니다.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // 주소가 https://<이 이름>.<계정 하위 도메인>.workers.dev 가 됩니다. 광고 차단 목록에 걸리기 쉬운 낱말(analytics, posthog 등)을 넣지 않습니다
+  "name": "eastar-blog",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-21",
+  // Workers Logs를 켜면 요청 정보가 Cloudflare에 남습니다. IP를 남기지 않으려고 끄고, 문제를 볼 때는 `wrangler tail`로 그때그때 봅니다
+  "observability": {
+    "enabled": false
+  },
+  "vars": {
+    // 노션 댓글 표의 데이터 소스 id. `pnpm notion:create-table`이 알려 주는 값을 넣습니다 (비밀값이 아닙니다)
+    "NOTION_DATA_SOURCE_ID": "",
+    // 공개 방식. immediate: 쓰면 바로 보임(기본) · approval: 노션에서 「승인」을 체크해야 보임
+    "COMMENT_MODERATION": "immediate",
+    // 댓글 목록을 Worker가 저장해 두는 시간(초). 노션 API는 초당 약 3회라서 목록을 잠깐 저장해 둡니다
+    "COMMENTS_CACHE_TTL_SECONDS": "60",
+    // Turnstile 검증 결과의 hostname이 이 가운데 하나여야 합니다(쉼표로 나눔). 비우면 검사하지 않습니다
+    "TURNSTILE_EXPECTED_HOSTNAMES": "eastar-ds.github.io",
+    // PostHog 프로젝트를 만든 지역. us 또는 eu
+    "POSTHOG_REGION": "us"
+  },
+  // 같은 곳에서 1분에 3번 넘게 댓글을 쓰면 잠시 막습니다. 키는 IP를 해시한 값이고, 셈은 Cloudflare 안에서만 잠깐 남습니다
+  // namespace_id는 이 계정 안에서 겹치지 않는 아무 양의 정수 문자열입니다
+  "ratelimits": [
+    {
+      "name": "COMMENT_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 3,
+        "period": 60
+      }
+    }
+  ]
+}

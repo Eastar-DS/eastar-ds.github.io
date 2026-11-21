@@ -13,6 +13,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
+    "test:worker": "pnpm --dir worker test",
+    "check:worker": "pnpm --dir worker typecheck",
+    "test:all": "pnpm check && pnpm test && pnpm check:worker && pnpm test:worker",
     "fonts": "node scripts/buildFonts.ts",
     "fonts:check": "node scripts/buildFonts.ts --check",
     "astro": "astro"

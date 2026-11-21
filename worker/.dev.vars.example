@@ -1,0 +1,13 @@
+# 로컬 개발(wrangler dev)용 설정의 예입니다. 이 파일을 .dev.vars로 복사해서 씁니다. .dev.vars는 저장소에 올리지 않습니다.
+#   cp .dev.vars.example .dev.vars
+# 아래 값은 모두 가짜이거나 Cloudflare가 공개한 시험용 값이라 그대로 써도 됩니다. 진짜 토큰은 여기에 쓰지 않습니다.
+
+# 가짜 노션 서버(pnpm dev:fake-notion)를 부르므로 아무 값이나 됩니다
+NOTION_TOKEN="fake-local-token"
+NOTION_DATA_SOURCE_ID="00000000-0000-4000-8000-000000000000"
+NOTION_API_BASE="http://127.0.0.1:8790"
+
+# Cloudflare Turnstile 시험용 비밀 키(늘 통과). 블로그에는 시험용 사이트 키 1x00000000000000000000AA를 씁니다
+TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
+# 시험용 키는 hostname으로 example.com을 돌려주므로 로컬에서는 hostname 검사를 끕니다
+TURNSTILE_EXPECTED_HOSTNAMES=""
