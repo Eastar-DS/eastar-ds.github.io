@@ -1,28 +1,33 @@
 ---
-import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
-import { SITE } from "@/shared/constants/site";
+import { IS_COMMENTS_ENABLED } from "@/shared/constants/features";
 
 /**
- * 글 맨 끝의 댓글 자리입니다. 지금은 giscus를 붙이기 전이라 안내 칸만 그립니다.
- * giscus를 붙이면 화면에 가까워질 때 이 칸 안에 불러오고, 이 칸의 높이를 최소 높이로 잡아 아래가 밀리지 않게 합니다.
- * JavaScript가 없을 때도 이 칸이 보입니다.
+ * 글 맨 끝의 댓글 자리입니다. 댓글은 로그인 없는 익명 댓글로, Cloudflare Worker를 거쳐 노션 DB에 저장합니다(docs/plan.md).
+ * Worker가 생기기 전에는 `IS_COMMENTS_ENABLED`(shared/constants/features)가 꺼져 있어 아무것도 그리지 않습니다.
+ * 켜면 이 칸 안에 댓글 목록과 입력 칸을 불러오고, 이 칸의 높이를 최소 높이로 잡아 아래가 밀리지 않게 합니다.
+ * JavaScript가 없을 때도 이 칸의 안내가 보입니다.
  * @design design/blog.pen 「댓글 자리」 GbsK7
  */
 ---
 
-<section class="container" aria-labelledby="comments-title">
-  <h2 class="title" id="comments-title">댓글</h2>
-  <div class="placeholder">
-    <p class="description">
-      GitHub 계정으로 댓글을 남길 수 있습니다. 댓글은 이 블로그 저장소의 GitHub
-      Discussions에 저장됩니다.
-    </p>
-    <a class="link" href={SITE.repository.discussionsUrl}>
-      GitHub Discussions에서 보기
-      <Icon name="externalLink" size="sm" />
-    </a>
-  </div>
-</section>
+{
+  IS_COMMENTS_ENABLED && (
+    <section class="container" aria-labelledby="comments-title">
+      <h2 class="title" id="comments-title">
+        댓글
+      </h2>
+      <div class="placeholder">
+        <p class="description">
+          로그인 없이 닉네임만 적고 댓글을 남길 수 있습니다. 닉네임과 댓글은 이
+          블로그가 관리하는 노션 표에 저장되고, IP 주소는 저장하지 않습니다.
+        </p>
+        <p class="description">
+          댓글은 JavaScript가 켜져 있어야 보입니다.
+        </p>
+      </div>
+    </section>
+  )
+}
 
 <style>
   .container {
@@ -39,12 +44,11 @@ import { SITE } from "@/shared/constants/site";
     letter-spacing: var(--letter-spacing-h3);
   }
 
-  /* giscus가 들어와도 아래가 밀리지 않도록 최소 높이를 잡습니다 */
+  /* 댓글을 불러와도 아래가 밀리지 않도록 최소 높이를 잡습니다. 136px는 입력 칸이 들어올 자리입니다 */
   .placeholder {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    /* 최소 높이 136px는 giscus 입력 칸이 들어올 자리입니다 */
     min-height: 136px;
     padding: var(--space-6);
     border: var(--border-width) dashed var(--color-border);
@@ -56,23 +60,5 @@ import { SITE } from "@/shared/constants/site";
     font-size: var(--font-size-body-sm);
     line-height: var(--line-height-body-sm);
     text-wrap: pretty;
-  }
-
-  .link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    align-self: flex-start;
-    color: var(--color-accent);
-    font-size: var(--font-size-body-sm);
-    line-height: var(--line-height-body-sm);
-    text-decoration: underline;
-    text-decoration-thickness: var(--border-width);
-    text-underline-offset: 3px;
-  }
-
-  .link:hover {
-    color: var(--color-accent-hover);
-    text-decoration-thickness: var(--border-width-strong);
   }
 </style>

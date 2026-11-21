@@ -6,6 +6,7 @@ import sansFontUrl from "@/shared/styles/fonts/blog-sans.woff2?url";
 
 import SkipLink from "@/shared/components/primitives/ui/SkipLink/index.astro";
 import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
+import { SITE } from "@/shared/constants/site";
 import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
 import type { JsonLd, PageMeta } from "@/shared/types/seo";
 
@@ -71,6 +72,16 @@ const serializeJsonLd = (jsonLd: JsonLd) =>
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
+    {
+      SITE.verification.google && (
+        <meta name="google-site-verification" content={SITE.verification.google} />
+      )
+    }
+    {
+      SITE.verification.naver && (
+        <meta name="naver-site-verification" content={SITE.verification.naver} />
+      )
+    }
 
     <meta property="og:type" content={meta.ogType} />
     <meta property="og:site_name" content={meta.siteName} />
