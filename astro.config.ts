@@ -11,6 +11,8 @@ import { POSTHOG_PROJECT_KEY, TURNSTILE_SITE_KEY, WORKER_URL } from "./src/share
 import codeLineNumbersTransformer from "./src/shared/content/codeLineNumbersTransformer";
 import { CODE_THEMES } from "./src/shared/content/codeThemes";
 import codeTitleTransformer from "./src/shared/content/codeTitleTransformer";
+import readPostLastmods from "./src/shared/content/readPostLastmods";
+import addPostLastmod from "./src/shared/seo/addPostLastmod";
 import isCommentsReady from "./src/shared/utils/isCommentsReady";
 import shouldLoadAnalytics from "./src/shared/utils/shouldLoadAnalytics";
 
@@ -28,12 +30,20 @@ const optionalPartAliases = [
     : [{ find: /^\.\/ui\/AnalyticsScript\.astro$/, replacement: EMPTY_PART }]),
 ];
 
+// 사이트맵의 글 주소에 붙일 lastmod(고친 날, 없으면 쓴 날). 사이트맵 통합은 콘텐츠 모음을 읽지 못해 글 원본의 앞머리를 직접 읽습니다
+const postLastmods = readPostLastmods();
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://eastar-ds.github.io",
   // GitHub Pages는 /posts/글-이름/ 을 posts/글-이름/index.html 로 내보내므로 주소 끝의 / 를 늘 붙입니다
   trailingSlash: "always",
-  integrations: [mdx(), react(), sitemap()],
+  integrations: [
+    mdx(),
+    react(),
+    // 글 주소에만 lastmod를 붙이고, 글이 아닌 페이지에는 붙이지 않습니다(빌드 시각을 넣지 않음, docs/content-guide.md 9장)
+    sitemap({ serialize: (item) => addPostLastmod({ item, lastmods: postLastmods }) }),
+  ],
   vite: {
     resolve: {
       alias: optionalPartAliases,

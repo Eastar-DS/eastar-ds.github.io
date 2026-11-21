@@ -52,6 +52,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `calculateReadingMinutes` · `groupPostsByYear` · `toSeriesList` · `findAdjacentPosts` · `findPostsBySlugs` | 위 함수들이 쓰는 순수 계산. 단위 테스트함 |
 | `splitTitle` | 제목을 첫 `: ` 뒤에서 두 덩어리로 나눔. 글 머리와 공유 미리보기 그림이 함께 씀 |
 | `readPostOgImage` | 글 폴더의 `og.png`를 읽고 크기를 검사함. 없으면 `undefined` |
+| `readPostLastmods` | 모든 글 원본의 앞머리에서 사이트맵 `lastmod`(고친 날, 없으면 쓴 날)를 글 이름별로 읽음. `astro.config.ts`가 부르므로 `@/` 별칭 없이 씀. 날짜는 `YYYY-MM-DD`로 적고, 날짜로 읽을 수 없으면 빌드를 멈춤 |
 | `codeTitleTransformer` · `codeLineNumbersTransformer` | 코드 칸 메타의 `title`을 `<pre data-title>`로 옮기고, 20줄 넘는 코드에 `data-line-numbers`를 붙이는 Shiki transformer. `astro.config.ts`에서 씀 |
 | `codeThemes` | VS Code Light+ / Dark+에서 대비가 모자란 색만 고친 Shiki 테마 두 벌(`blog-light-plus` · `blog-dark-plus`). 테스트가 모든 글자색의 대비를 확인함 |
 

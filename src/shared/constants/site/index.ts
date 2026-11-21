@@ -4,11 +4,13 @@ const AUTHOR_NAME = "이스타";
 /** 본명. 이스타가 2026-11-21에 공개하기로 정했습니다 */
 const AUTHOR_REAL_NAME = "김동성";
 
+/** 글쓴이를 한 줄로 소개하는 말. 사이트 설명, 첫 화면 소개, 글쓴이 Person의 description이 함께 씁니다 */
+const AUTHOR_TAGLINE = "도메인에 진심으로 달려드는 프론트엔드 엔지니어";
+
 /** 사이트 전체에서 쓰는 기본 정보 */
 export const SITE = {
   title: "이스타의 개발 노트",
-  description:
-    `도메인에 진심으로 달려드는 프론트엔드 엔지니어 ${AUTHOR_NAME}(${AUTHOR_REAL_NAME})가 공부하며 배운 것과 만든 것을 적습니다.`,
+  description: `${AUTHOR_TAGLINE} ${AUTHOR_NAME}(${AUTHOR_REAL_NAME})가 공부하며 배운 것과 만든 것을 적습니다.`,
   url: "https://eastar-ds.github.io",
   locale: "ko_KR",
   language: "ko",
@@ -19,6 +21,13 @@ export const SITE = {
     realName: AUTHOR_REAL_NAME,
     /** 소개 첫 문장과 이력서 머리(h1)에 보이는 이름. 닉네임만 두지 않고 본명을 함께 씁니다 */
     displayName: `${AUTHOR_NAME}(${AUTHOR_REAL_NAME})`,
+    /** 한 줄 소개. 첫 화면 소개 문장과 글쓴이 Person 구조화 데이터의 description에 씁니다. 직함(jobTitle)으로는 쓰지 않습니다 */
+    tagline: AUTHOR_TAGLINE,
+    /**
+     * 소개 페이지의 내용이나 글쓴이 정보를 사람이 마지막으로 고친 날(한국 날짜). 소개의 ProfilePage 구조화 데이터 `dateModified`가 됩니다.
+     * 소개 페이지(`widgets/site/AboutProfile`)나 위 이름 · 소개 말을 고치면 이 날짜도 함께 바꿉니다.
+     */
+    profileUpdatedAt: "2026-11-21",
     githubUrl: "https://github.com/eastar-DS",
     /**
      * 연락받을 이메일. 소개와 이력서에 mailto 링크로 보입니다. 비우면 두 페이지가 이메일을 그리지 않습니다.

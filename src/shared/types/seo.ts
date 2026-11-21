@@ -5,12 +5,13 @@ export interface PageMeta {
   /** 공유 카드의 제목(og:title, twitter:title). 사이트 이름은 og:site_name이 알리므로 붙이지 않습니다 */
   ogTitle: string;
   description: string;
-  canonicalUrl: string;
+  /** canonical과 og:url에 쓰는 절대 주소. 주소가 정해지지 않는 페이지(404)는 비웁니다 */
+  canonicalUrl?: string;
   siteName: string;
   locale: string;
   ogType: "website" | "article";
   image: OgImage;
-  /** ISO 8601. 글 화면에서만 씁니다 */
+  /** ISO 8601, 한국 시간(+09:00). 글 화면에서만 씁니다 */
   publishedTime?: string;
   modifiedTime?: string;
 }

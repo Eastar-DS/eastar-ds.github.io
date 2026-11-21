@@ -9,12 +9,17 @@ import Document from "@/shared/components/primitives/layout/Document/index.astro
 import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
 import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
+import createWebSiteJsonLd from "@/shared/seo/createWebSiteJsonLd";
 
-/** 글 목록 페이지: 소개, 시리즈 칩, 연도별 글 목록을 본문 폭 한 줄로 쌓습니다 */
+/**
+ * 글 목록 페이지: 소개, 시리즈 칩, 연도별 글 목록을 본문 폭 한 줄로 쌓습니다.
+ * 첫 화면이라 검색 결과의 사이트 이름을 알리는 WebSite 구조화 데이터를 둡니다(Google은 첫 화면의 것만 읽음).
+ */
 const meta = createPageMeta({ path: PATHS.home });
+const jsonLds = [createWebSiteJsonLd()];
 ---
 
-<Document meta={meta}>
+<Document meta={meta} jsonLds={jsonLds}>
   <SiteHeader />
   <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="content">

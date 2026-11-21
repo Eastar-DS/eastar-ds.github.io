@@ -32,7 +32,8 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
   ```
 
 - canonical은 늘 절대 주소이고 끝에 `/`가 붙음 (`trailingSlash: "always"`)
-- 검색에 나오면 안 되는 페이지(404)는 `head` 슬롯으로 `<meta name="robots" content="noindex">`를 더함
+- 검색에 나오면 안 되는 페이지(404)는 `head` 슬롯으로 `<meta name="robots" content="noindex">`를 더함. 404는 어느 주소로 와도 같은 내용이라 `createPageMeta({ hasCanonical: false })`로 canonical과 og:url을 그리지 않음
+- 글의 날짜(article:published_time · modified_time, 구조화 데이터의 날짜)는 `formatDate({ format: "isoDateTime" })`로 한국 시간(+09:00)을 붙여 씀. `toISOString()`(UTC, `Z`)을 쓰지 않음
 
 ## 구조화 데이터 (JSON-LD)
 
@@ -40,15 +41,18 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 | --- | --- | --- |
 | 글 화면 | BlogPosting (제목, 요약, 작성자 Person, 발행일, 수정일, 주소, 공유 그림 `image`) | `createBlogPostingJsonLd(post)` |
 | 글 화면 | BreadcrumbList (사이트 → 글) | `createBreadcrumbListJsonLd([...])` |
-| 소개 | ProfilePage (소개하는 사람 mainEntity = 글쓴이 Person) | `createProfilePageJsonLd()` |
+| 첫 화면 | WebSite (사이트 이름, 첫 화면 주소). Google이 검색 결과의 사이트 이름으로 읽으며 첫 화면에만 둠 | `createWebSiteJsonLd()` |
+| 소개 | ProfilePage (소개하는 사람 mainEntity = 글쓴이 Person, 소개를 고친 날 dateModified) | `createProfilePageJsonLd()` |
 
 - `Document`의 `jsonLds`로 넘기면 `<script type="application/ld+json">`으로 그림. `</script>`가 끼지 않게 `<`를 바꿔 넣음
 - 수정일은 앞머리의 `updatedAt`, 없으면 발행일
-- 글쓴이 Person(name 본명 「김동성」, alternateName 블로그 이름 「이스타」, 소개 페이지 주소, `sameAs`에 GitHub, `@id`는 `소개 주소#person`)은 `createPersonJsonLd()` 하나로 만들어 BlogPosting의 author와 ProfilePage가 함께 씀. 이메일과 전화번호는 넣지 않음(2026-11-21 이스타 결정). 직함은 이스타가 정하기 전에는 넣지 않음
+- 글쓴이 Person(name 본명 「김동성」, alternateName 블로그 이름 「이스타」, description 한 줄 소개 `SITE.author.tagline`, 소개 페이지 주소, `sameAs`에 GitHub, `@id`는 `소개 주소#person`)은 `createPersonJsonLd()` 하나로 만들어 BlogPosting의 author와 ProfilePage가 함께 씀. 이메일과 전화번호는 넣지 않음(2026-11-21 이스타 결정). 직함(jobTitle)과 사진(image)은 이스타가 정하기 전에는 넣지 않음
+- ProfilePage의 dateModified는 사람이 소개를 고친 날인 `SITE.author.profileUpdatedAt`을 씀. 빌드한 날을 넣지 않음. 소개 페이지(`AboutProfile`)나 글쓴이 정보를 고치면 이 날짜도 함께 고침
+- WebSite의 alternateName은 이스타가 정한 다른 이름이 없어 넣지 않음
 
 ## 사이트맵과 RSS
 
-- 사이트맵은 `@astrojs/sitemap`이 빌드할 때 만듦(`/sitemap-index.xml`). 404는 빠짐. 기능 스위치가 꺼진 페이지(공개 전 이력서)는 빌드에 없어서 사이트맵에도 없음. 포트폴리오는 `IS_PORTFOLIO_SHOWN`(지금은 늘 참)을 따라 들어감. 엔드포인트(`og.png`, `llms.txt`, `robots.txt`, `rss.xml`)는 사이트맵에 들어가지 않음
+- 사이트맵은 `@astrojs/sitemap`이 빌드할 때 만듦(`/sitemap-index.xml`). 404는 빠짐. 글 주소에만 `lastmod`(앞머리의 `updatedAt`, 없으면 `publishedAt`)를 붙이고, 글이 아닌 페이지에는 붙이지 않음. 빌드 시각은 넣지 않음. 사이트맵 통합은 콘텐츠 모음을 읽지 못해서 `astro.config.ts`가 `shared/content/readPostLastmods`로 글 원본의 앞머리를 읽고 `serialize`에서 `shared/seo/addPostLastmod`로 붙임 기능 스위치가 꺼진 페이지(공개 전 이력서)는 빌드에 없어서 사이트맵에도 없음. 포트폴리오는 `IS_PORTFOLIO_SHOWN`(지금은 늘 참)을 따라 들어감. 엔드포인트(`og.png`, `llms.txt`, `robots.txt`, `rss.xml`)는 사이트맵에 들어가지 않음
 - RSS는 `src/pages/rss.xml.ts`(`/rss.xml`). 항목은 `createRssItems(posts)`로 만듦
 - 둘 다 `astro.config.ts`의 `site`(`https://eastar-ds.github.io`)로 절대 주소를 만듦
 

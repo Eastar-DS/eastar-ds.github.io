@@ -12,7 +12,7 @@ import createProfilePageJsonLd from "@/shared/seo/createProfilePageJsonLd";
 /** 소개 페이지. 글의 작성자(BlogPosting의 author)가 가리키는 곳이라 ProfilePage(Person) 구조화 데이터를 둡니다 */
 const meta = createPageMeta({
   title: "소개",
-  description: `도메인에 진심으로 달려드는 프론트엔드 엔지니어 ${SITE.author.displayName}를 소개합니다. 창업한 비드, 혼자 만든 셀러홈, 팀 프로젝트 Knot에서 한 일을 적었습니다.`,
+  description: `${SITE.author.tagline} ${SITE.author.displayName}를 소개합니다. 창업한 비드, 혼자 만든 셀러홈, 팀 프로젝트 Knot에서 한 일을 적었습니다.`,
   path: PATHS.about,
 });
 const jsonLds = [createProfilePageJsonLd()];
