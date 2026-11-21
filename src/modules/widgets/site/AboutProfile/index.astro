@@ -1,5 +1,5 @@
 ---
-import { IS_RESUME_SHOWN } from "@/shared/constants/features";
+import { IS_PORTFOLIO_SHOWN, IS_RESUME_SHOWN } from "@/shared/constants/features";
 import { SITE } from "@/shared/constants/site";
 import { PATHS } from "@/shared/routes/paths";
 
@@ -7,18 +7,15 @@ import { PATHS } from "@/shared/routes/paths";
  * 소개 페이지의 본문입니다. 이 페이지의 h1을 가집니다.
  * 첫 문단에 어떤 사람인지 쓰고, 도메인에 직접 뛰어든 세 경험(비드, 셀러홈, Knot)을 목록으로 둡니다.
  * 첫 문장의 이름은 닉네임과 본명을 함께 쓴 `SITE.author.displayName`(「이스타(김동성)」)입니다.
- * 이력서 · 포트폴리오 링크는 두 페이지를 그릴 때(`IS_RESUME_SHOWN`)만, 이메일 링크는 `SITE.author.email`이 있을 때만 둡니다.
+ * 포트폴리오 링크는 포트폴리오 페이지가 있을 때(`IS_PORTFOLIO_SHOWN`, 지금은 늘), 이력서 링크는 이력서 페이지를 그릴 때(`IS_RESUME_SHOWN`)만,
+ * 이메일 링크는 `SITE.author.email`이 있을 때만 둡니다.
  * 이메일 링크는 주소를 바로 읽고 옮겨 적을 수 있게 주소 글자를 그대로 씁니다.
  * 공개 전 숫자를 바로 내보내지 않도록, 기억에 의한 비드의 숫자(구독자 수 등)는 여기에 쓰지 않습니다.
  */
 const { displayName, email, githubUrl } = SITE.author;
 const links = [
-  ...(IS_RESUME_SHOWN
-    ? [
-        { label: "이력서", href: PATHS.resume },
-        { label: "포트폴리오", href: PATHS.portfolio },
-      ]
-    : []),
+  ...(IS_PORTFOLIO_SHOWN ? [{ label: "포트폴리오", href: PATHS.portfolio }] : []),
+  ...(IS_RESUME_SHOWN ? [{ label: "이력서", href: PATHS.resume }] : []),
   { label: "GitHub", href: githubUrl },
   ...(email ? [{ label: email, href: `mailto:${email}` }] : []),
   { label: "RSS 구독", href: PATHS.rss },

@@ -4,7 +4,7 @@ export const PATHS = {
   about: "/about/",
   /** 공개 스위치(`IS_RESUME_PUBLIC`)가 꺼져 있으면 배포 빌드에 없는 주소입니다 */
   resume: "/resume/",
-  /** 공개 스위치(`IS_RESUME_PUBLIC`)가 꺼져 있으면 배포 빌드에 없는 주소입니다 */
+  /** 공개 스위치(`IS_PORTFOLIO_SHOWN`, 지금은 늘 참)를 따릅니다. 프로젝트 구획으로 가는 주소는 `getPortfolioProjectPath`로 만듭니다 */
   portfolio: "/portfolio/",
   privacy: "/privacy/",
   rss: "/rss.xml",
@@ -28,6 +28,13 @@ export const getPostPath = (slug: string) => `/posts/${slug}/`;
  */
 export const getOgImagePath = (pagePath: string) => `${pagePath}og.png`;
 
+/**
+ * 포트폴리오 페이지에서 프로젝트 구획으로 가는 주소를 만듭니다. 구획 id는 프로젝트 id(`shared/constants/career`)이고,
+ * 포트폴리오의 프로젝트 구획(`widgets/career/Portfolio`)이 같은 id를 씁니다.
+ */
+export const getPortfolioProjectPath = (projectId: string) =>
+  `${PATHS.portfolio}#${projectId}`;
+
 /** 머리말의 주 메뉴 가운데 늘 보이는 것 */
 export const NAV_ITEMS = [
   { label: "글", href: PATHS.home },
@@ -35,17 +42,28 @@ export const NAV_ITEMS = [
   { label: "소개", href: PATHS.about },
 ] as const;
 
-/** 이력서 · 포트폴리오 메뉴. 두 페이지를 그릴 때만 주 메뉴 뒤에 붙입니다 */
-export const RESUME_NAV_ITEMS = [
-  { label: "이력서", href: PATHS.resume },
-  { label: "포트폴리오", href: PATHS.portfolio },
-] as const;
+/** 포트폴리오 메뉴. 포트폴리오 페이지가 있을 때(`IS_PORTFOLIO_SHOWN`, 지금은 늘 참) 소개 뒤에 붙입니다 */
+export const PORTFOLIO_NAV_ITEM = {
+  label: "포트폴리오",
+  href: PATHS.portfolio,
+} as const;
+
+/** 이력서 메뉴. 이력서 페이지를 그릴 때만 주 메뉴 끝에 붙입니다 */
+export const RESUME_NAV_ITEM = { label: "이력서", href: PATHS.resume } as const;
 
 interface GetNavItemsParams {
-  /** 이력서 · 포트폴리오 페이지를 그리는지 (`shared/constants/features`의 `IS_RESUME_SHOWN`) */
+  /** 이력서 페이지를 그리는지 (`shared/constants/features`의 `IS_RESUME_SHOWN`) */
   isResumeShown: boolean;
+  /** 포트폴리오 페이지가 있는지 (`shared/constants/features`의 `IS_PORTFOLIO_SHOWN`) */
+  isPortfolioShown: boolean;
 }
 
-/** 머리말의 주 메뉴를 만듭니다. 이력서 · 포트폴리오는 페이지를 그릴 때만 넣어서, 없는 주소로 가는 메뉴가 생기지 않게 합니다 */
-export const getNavItems = ({ isResumeShown }: GetNavItemsParams) =>
-  isResumeShown ? [...NAV_ITEMS, ...RESUME_NAV_ITEMS] : [...NAV_ITEMS];
+/**
+ * 머리말의 주 메뉴를 만듭니다. 글 · 시리즈 · 소개 뒤에 포트폴리오, 이력서 순서로 붙이되,
+ * 각 페이지가 있을 때만 넣어서 없는 주소로 가는 메뉴가 생기지 않게 합니다.
+ */
+export const getNavItems = ({ isResumeShown, isPortfolioShown }: GetNavItemsParams) => [
+  ...NAV_ITEMS,
+  ...(isPortfolioShown ? [PORTFOLIO_NAV_ITEM] : []),
+  ...(isResumeShown ? [RESUME_NAV_ITEM] : []),
+];

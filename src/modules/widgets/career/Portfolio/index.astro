@@ -1,4 +1,5 @@
 ---
+import { IS_RESUME_SHOWN } from "@/shared/constants/features";
 import { PATHS } from "@/shared/routes/paths";
 
 import { PORTFOLIO_INTRO, PORTFOLIO_PROJECTS } from "./constants/portfolio";
@@ -7,6 +8,7 @@ import PortfolioProject from "./ui/PortfolioProject.astro";
 /**
  * 포트폴리오 페이지의 본문입니다. 머리(h1, 소개 문단, 프로젝트 바로 가기) 아래에 프로젝트를 Knot → 셀러홈 → 비드 순서로 쌓고, 이 페이지의 h1을 가집니다.
  * 프로젝트마다 사례를 문제 → 가설 → 한 일 → 결과 순서로 보여 줍니다.
+ * 이력서로 가는 문장은 이력서 페이지를 그릴 때(`IS_RESUME_SHOWN`)만 붙여, 공개 전 이력서로 가는 링크가 생기지 않게 합니다.
  */
 ---
 
@@ -14,9 +16,15 @@ import PortfolioProject from "./ui/PortfolioProject.astro";
   <header class="header">
     <h1 class="title">포트폴리오</h1>
     <p class="intro">
-      {PORTFOLIO_INTRO} 줄여 정리한 경력은 <a class="link" href={PATHS.resume}
-        >이력서</a
-      >에 있습니다.
+      {PORTFOLIO_INTRO}
+      {
+        IS_RESUME_SHOWN && (
+          <>
+            줄여 정리한 경력은 <a class="link" href={PATHS.resume}>이력서</a>에
+            있습니다.
+          </>
+        )
+      }
     </p>
     <nav aria-label="프로젝트 바로 가기">
       <ul class="projectLinks">
