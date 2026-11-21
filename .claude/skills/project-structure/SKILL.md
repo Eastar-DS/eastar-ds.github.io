@@ -40,7 +40,10 @@ astro.config.ts                      # site, trailingSlash, MDX · React · site
 scripts/buildFonts.ts                # 사이트 글자만 담은 글꼴 만들기 · 빠진 글자 검사 (pnpm build가 돌림)
 scripts/fonts/                       # 글자 모으기 · 글꼴 이름 바꾸기 (단위 테스트 포함)
 scripts/EmptyPart.astro              # 아무것도 그리지 않는 빈 부품 (댓글 · 방문 통계 설정이 비면 astro.config.ts가 대신 넣음)
-.github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · GitHub Pages 배포
+scripts/indexNow.ts                  # 배포 때 글이 바뀐 페이지를 골라(plan) IndexNow로 알림(submit). 바깥 패키지 없이 Node만으로 돎
+scripts/indexNow/                    # 페이지 글 해시 · 바뀐 주소 고르기 · 요청 만들기 순수 함수와 IndexNow 키 (단위 테스트 포함)
+public/{IndexNow 키}.txt             # IndexNow 키 파일 (규격상 공개 값)
+.github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · GitHub Pages 배포, 배포 뒤 IndexNow 알리기
 worker/                              # Cloudflare Worker: 노션 댓글(/comments)과 PostHog 중계(/bridge). 블로그와 따로 설치 · 시험 · 배포 (docs/worker.md)
 src/
 ├── content.config.ts                # 글 모음 스키마 (Astro가 요구하는 위치)
@@ -56,8 +59,12 @@ src/
 │   ├── portfolio/[...path]/index.astro # 포트폴리오 (/portfolio/). 이력서와 같은 스위치
 │   ├── privacy/index.astro          # 개인정보 처리 안내 (/privacy/)
 │   ├── posts/[slug]/index.astro     # 글 화면 (/posts/{slug}/)
+│   ├── posts/[slug]/og.png.ts       # 글의 공유 미리보기 그림 (/posts/{slug}/og.png)
+│   ├── [...page]/og.png.ts          # 글 아닌 페이지의 공유 그림 (/og.png 사이트 기본, /resume/og.png, /portfolio/og.png)
 │   ├── 404.astro
-│   └── rss.xml.ts                   # RSS (/rss.xml)
+│   ├── rss.xml.ts                   # RSS (/rss.xml)
+│   ├── robots.txt.ts                # robots.txt
+│   └── llms.txt.ts                  # AI 에이전트용 사이트 안내 (/llms.txt)
 │
 ├── modules/
 │   ├── widgets/{domain}/AComponent/
@@ -103,22 +110,23 @@ src/
 │   │   └── groupPostsByYear/
 │   │       ├── index.ts
 │   │       └── test.ts
-│   ├── seo/                         # 메타, 구조화 데이터, RSS 항목
-│   │   └── createPageMeta/
-│   │       ├── index.ts
-│   │       └── test.ts
+│   ├── seo/                         # 메타, 공유 미리보기 그림, 구조화 데이터, RSS 항목, robots.txt, llms.txt
+│   │   ├── createPageMeta/
+│   │   │   ├── index.ts
+│   │   │   └── test.ts
+│   │   └── createOgImage/           # satori + sharp로 1200×630 PNG (Pretendard 원본 글꼴)
 │   ├── hooks/                       # React 섬용 (필요할 때)
 │   │   ├── domain/
 │   │   └── common/
 │   ├── routes/
-│   │   ├── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
+│   │   ├── paths/index.ts           # PATHS, getPostPath, getOgImagePath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
 │   │   └── getSwitchPagePaths/      # 스위치로 켜고 끄는 고정 주소 페이지의 getStaticPaths 값
 │   ├── utils/
 │   │   ├── formatDate/
 │   │   │   ├── index.ts
 │   │   │   └── test.ts
 │   │   └── isCommentsReady/         # astro.config.ts도 부르므로 import 없는 순수 함수 (shouldLoadAnalytics도 같음)
-│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기), career(이력서 · 포트폴리오의 프로젝트 정보), services(Worker · Turnstile · PostHog 설정)
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기, 포트폴리오 공개 판단), career(이력서 · 포트폴리오의 프로젝트 정보), services(Worker · Turnstile · PostHog 설정), ogImage(공유 그림 크기)
 │   ├── types/                       # post.ts, seo.ts, theme.ts, career.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
 │       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문

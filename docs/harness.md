@@ -105,3 +105,18 @@
 | `docs/design-system.md` | 7.21을 댓글 칸 부품(목록, 「글쓴이」 표시, 쓰기 칸, 남기기 단추, 글자 단추)으로 고치고, 10장 바깥 스크립트 줄과 12장 부록에 Pencil 미반영을 적음 | 오케스트레이터 지시(새 부품은 문서에 기록). Pencil과 `design/` PNG는 고치지 않았습니다 |
 | `docs/worker.md`, `docs/deploy-phase2.md` | 새로 씀 | Worker 구조 · 노션 표 칸(세컨드 브레인도 읽음) · 무료 한도, 이스타가 따라 할 배포 순서 |
 | `.gitignore` | `.wrangler/`, `.dev.vars*`(예시 파일 빼고), `.env*` | Worker 로컬 상태와 로컬 비밀값 |
+
+## 7단계에서 더 바꾼 것 (2026-11-21, 2차 작업: 공유 미리보기 그림, llms.txt, IndexNow)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `shared/seo/createOgImage`, `pages/posts/[slug]/og.png.ts`, `pages/[...page]/og.png.ts` | 빌드할 때 글마다 1200×630 PNG를 그리고, 글이 아닌 페이지는 사이트 기본 그림(`/og.png`)을 씀. 이력서와 포트폴리오는 페이지가 있을 때만 자기 그림을 만듦 | `docs/plan.md`의 「글별 og:image」. satori(배치)와 sharp(PNG)를 개발 의존성으로 더했습니다. sharp는 Astro가 이미 쓰는 판과 같습니다 |
+| `shared/seo/getOgImage`, `getPageOgCards`, `createPageMeta`, `Document` | og:image와 너비, 높이, 형식, 설명, `twitter:card` `summary_large_image`, twitter:image를 그림. og:title과 twitter:title에서 사이트 이름을 뺌 | `docs/content-guide.md` 2.1(og:title에는 사이트 이름을 붙이지 않음)과 6.2. 어떤 페이지가 자기 그림을 갖는지는 `getPageOgCards` 한곳에서 정하고 메타와 그림 엔드포인트가 같은 목록을 봅니다 |
+| `shared/constants/features`의 `IS_PORTFOLIO_SHOWN` | 포트폴리오 그림과 llms.txt가 볼 값 하나를 둠. 지금은 `IS_RESUME_SHOWN`과 같음 | 이스타가 포트폴리오를 이력서보다 먼저 공개하기로 정했고(2026-11-21), 포트폴리오를 스위치에서 떼는 작업과 합칠 때 이 줄만 `true`로 바꾸면 됩니다 |
+| `shared/content/splitTitle` | `widgets/post/PostHeader/utils`에서 옮김 | 글 머리와 공유 그림이 같은 규칙(첫 `: ` 뒤에서 줄을 나눔)을 써서, 컴포넌트 이름이 없는 함수라 shared로 내렸습니다 |
+| `shared/content/readPostOgImage` | 글 폴더의 `og.png`가 있으면 그 그림을 쓰고 크기를 검사함 | `docs/content-guide.md` 6.2의 「직접 만든 그림이 있으면 글 폴더의 og.png」 |
+| `shared/seo/createLlmsTxt`, `pages/llms.txt.ts`, `Document`의 `rel="describedby"` | llms.txt(규격 v2)를 만듦 | `docs/plan.md`의 llms.txt |
+| `scripts/buildFonts.ts` | llms.txt의 글자를 사이트 글꼴에 넣지 않음 | 화면에 그리지 않는 글이라 넣으면 글꼴만 커집니다 |
+| `scripts/indexNow.ts`, `scripts/indexNow/`, `public/{키}.txt`, `.github/workflows/deploy.yml` | 배포 뒤 글이 바뀐 페이지를 IndexNow로 알림 | 새 글을 검색 엔진이 사이트맵을 다시 읽기 전에 알 수 있게 합니다. 워크플로는 로컬에서 돌릴 수 없어서 고르는 부분을 순수 함수로 떼어 시험합니다 |
+| `vitest.config.ts` | `css.include`에 `tokens.css` | vitest는 CSS를 빈 글로 불러와서, 공유 그림이 `?raw`로 읽는 색 토큰을 시험에서도 읽게 했습니다 |
+| `.claude/rules/seo-guide.md`, `shared-layer.md`, `content-guide.md`, 스킬 | 공유 그림, llms.txt, IndexNow 절과 새 함수, 폴더 나무를 더함 | 코드가 바뀐 만큼 맞춤 |

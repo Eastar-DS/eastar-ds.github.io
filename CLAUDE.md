@@ -65,6 +65,7 @@
 - 글(`src/content/posts/**/index.mdx`)을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킨다. Write · Edit 뒤에는 같은 검사를 훅(`.claude/settings.json`)이 돌린다.
 - `.references/`(다른 사이트 화면)와 `design/*.pen`(Pencil 원본)은 저장소에 넣지 않는다. 시안은 `design/exports-system/`의 PNG를 보고, `.pen` 파일은 파일 도구로 열거나 고치지 않는다(다룰 때는 Pencil 도구로만, 이스타가 시킬 때만).
 - 커밋 메시지는 `feat: ...함`처럼 한국어로 쓰고, 공동작업자 줄을 넣지 않는다.
-- 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.
+- 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 배포가 끝나면 글이 바뀐 페이지 주소를 IndexNow로 알린다(`scripts/indexNow.ts`, 실패해도 배포는 성공). 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.
+- IndexNow 키(`public/{키}.txt`, `scripts/indexNow/constants.ts`)는 규격상 공개 값이라 저장소에 둔다. 비밀값이 아니다.
 - Worker 배포(`wrangler deploy`)와 Cloudflare · 노션 · PostHog 계정 작업은 이스타가 한다. 비밀값(노션 토큰, Turnstile 비밀 키)은 `wrangler secret put`과 로컬 `worker/.dev.vars`(저장소에 올리지 않음)로만 다루고, 코드 · 문서 · 로그 · 커밋에 쓰지 않는다.
 - `shared/constants/services`의 값이 비어 있으면 댓글 · PostHog 부품이 빌드에서 빠진다(`astro.config.ts`). 확인하려고 값을 채웠으면 커밋 전에 되돌린다.
