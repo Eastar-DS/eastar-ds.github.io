@@ -9,6 +9,7 @@
 - **디자인의 정본은 `docs/design-system.md`**(A안 디자인 시스템: 토큰, 부품, 접근성, 속도 예산)이고, 시안 그림은 `design/exports-system/`의 Pencil PNG입니다. `docs/design-references.md`와 `design/exports-a/`는 방향을 고를 때의 기록입니다.
 - **글쓰기 · 게시 정책의 정본은 `docs/content-guide.md`**입니다.
 - 폴더 구조와 규칙은 Knot 하네스의 프론트엔드 부분을 Astro에 맞게 옮긴 것입니다. 무엇을 바꿨는지는 `docs/harness.md`에 있습니다.
+- 노션 익명 댓글과 PostHog 중계는 `worker/`의 Cloudflare Worker가 맡습니다. 구조 · 노션 표 칸 · 무료 한도는 `docs/worker.md`, 이스타가 할 배포 순서는 `docs/deploy-phase2.md`에 있습니다. Worker는 블로그와 따로 설치 · 시험 · 배포합니다.
 
 ### 명령
 
@@ -19,6 +20,9 @@
 | `pnpm check` | 타입 검사 (`astro check`, TypeScript strict) |
 | `pnpm test` | 단위 테스트 (vitest) |
 | `pnpm fonts` · `pnpm fonts:check` | `dist`로 글꼴만 다시 만들기 · 빠진 글자만 검사 (보통은 `pnpm build`가 함께 함) |
+| `pnpm test:worker` · `pnpm check:worker` | Worker 시험 · 타입 검사. 먼저 `pnpm --dir worker install` |
+| `pnpm test:all` | 블로그 타입 검사 · 시험과 Worker 타입 검사 · 시험을 한 번에 |
+| `worker`에서 `pnpm dev` · `pnpm dev:fake-notion` | 로컬 Worker(8787)와 가짜 노션 서버(8790). `worker/.dev.vars.example`을 `.dev.vars`로 복사해 씀 |
 
 ---
 
@@ -31,7 +35,7 @@
 3. **주입된 규칙을 확인한 뒤 구현한다.** 규칙이 주입되지 않았다면 아직 대상 영역의 파일을 읽지 않은 것이므로 2단계로 돌아간다.
 4. **판단 로직은 테스트와 함께 쓴다.** `utils`, `shared/content`, `shared/seo`의 함수는 단위 테스트를 함께 쓰고 `pnpm test`로 확인한다.
 5. **화면을 바꿨다면 브라우저로 본다.** 개발 서버에서 넓은 화면(1440px), 휴대폰(390px), 어두운 화면을 보고 `design/exports-system/`의 Pencil PNG와 비교한다. 새 색을 썼다면 대비를 잰다. 확인 캡처는 저장소에 넣지 않는다.
-6. **마치기 전에 `pnpm check`, `pnpm test`, `pnpm build`를 모두 통과시킨다.**
+6. **마치기 전에 `pnpm check`, `pnpm test`, `pnpm build`를 모두 통과시킨다.** `worker/`를 고쳤다면 `pnpm test:worker` · `pnpm check:worker`도 통과시킨다.
 
 하네스의 「스토리 작성」 단계는 블로그에서 뺐다. Astro 컴포넌트는 Storybook 지원이 약하고, 화면 확인은 5단계의 브라우저 확인으로 한다.
 
@@ -62,3 +66,5 @@
 - `.references/`(다른 사이트 화면)와 `design/*.pen`(Pencil 원본)은 저장소에 넣지 않는다. 시안은 `design/exports-system/`의 PNG를 보고, `.pen` 파일은 파일 도구로 열거나 고치지 않는다(다룰 때는 Pencil 도구로만, 이스타가 시킬 때만).
 - 커밋 메시지는 `feat: ...함`처럼 한국어로 쓰고, 공동작업자 줄을 넣지 않는다.
 - 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.
+- Worker 배포(`wrangler deploy`)와 Cloudflare · 노션 · PostHog 계정 작업은 이스타가 한다. 비밀값(노션 토큰, Turnstile 비밀 키)은 `wrangler secret put`과 로컬 `worker/.dev.vars`(저장소에 올리지 않음)로만 다루고, 코드 · 문서 · 로그 · 커밋에 쓰지 않는다.
+- `shared/constants/services`의 값이 비어 있으면 댓글 · PostHog 부품이 빌드에서 빠진다(`astro.config.ts`). 확인하려고 값을 채웠으면 커밋 전에 되돌린다.

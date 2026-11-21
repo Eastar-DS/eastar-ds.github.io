@@ -89,3 +89,19 @@
 | `.claude/rules/design-system.md` | 인쇄 규칙(밝은 값 고정, 머리말과 꼬리말 숨김, `Container` 여백 풀기, 이력서 인쇄는 정본 7.23)을 더함 | 이력서를 종이로 뽑을 일이 생김 |
 | `.claude/skills/project-structure/SKILL.md` | 폴더 나무에 이력서와 포트폴리오 페이지, `routes/getSwitchPagePaths`, `constants/career`, `types/career.ts`를 더함 | 새 파일 |
 
+## 6단계에서 더 바꾼 것 (2026-11-21, 2차 작업: 노션 댓글과 PostHog 중계)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `worker/` | 새로 둠. Cloudflare Worker(Hono)와 그 시험, 노션 표 만들기 · 가짜 노션 서버 스크립트. 블로그와 따로 설치하는 패키지(`worker/package.json`, 자기 lockfile) | Worker는 블로그 빌드와 다른 실행 환경(workerd)이고 배포도 따로라서, `src/`의 레이어 규칙 밖에 둡니다. 블로그의 GitHub Pages 배포가 wrangler를 설치하지 않게 pnpm workspace로 묶지 않았습니다 |
+| `tsconfig.json` | `exclude`에 `worker` | Worker는 Cloudflare 타입을 써서 블로그의 `astro check`와 따로 검사합니다(`pnpm check:worker`) |
+| `package.json` | `test:worker`, `check:worker`, `test:all` | 루트에서 블로그와 Worker 시험을 한 번에 돌리는 방법 |
+| `astro.config.ts`, `scripts/EmptyPart.astro` | 설정 값이 비어 있으면 `./ui/CommentSection.astro` · `./ui/AnalyticsScript.astro`를 빈 부품으로 바꾸는 별칭(alias) | Astro는 그리지 않는 부품이라도 import되어 있으면 CSS와 스크립트를 빌드 결과에 넣고, 글꼴 만들기가 그 글자까지 모읍니다. 1차 배포 상태의 빌드에 댓글 · PostHog 코드가 실리지 않게 합니다 |
+| `shared/constants/services` | 새로 둠. `WORKER_URL`, `TURNSTILE_SITE_KEY`, `POSTHOG_PROJECT_KEY`, `POSTHOG_RELAY_PATH`, `POSTHOG_UI_HOST`, `SESSION_REPLAY_SAMPLE_RATE` | 바깥 서비스 설정을 한곳에. seo-guide가 적었던 「중계 주소는 `shared/constants/site`」 대신 따로 뒀습니다(사이트 정보와 바뀌는 까닭이 다름) |
+| `shared/utils/isCommentsReady`, `shared/utils/shouldLoadAnalytics` | 새로 둠 | 댓글 위젯 · `Document` · 개인정보 안내 · `astro.config.ts`가 같은 판단을 씁니다. `astro.config.ts`는 `@/` 별칭을 못 쓰므로 import가 없는 순수 함수로 둡니다 |
+| `widgets/post/Comments` | 자리만 그리던 칸을 노션 댓글 화면으로 바꿈. `slug`를 받음. `model/mountComments.ts`에 댓글 동작 코드 | 댓글 코드를 동적 import로 나눠 첫 화면에 싣지 않으려고, `.astro` 스크립트의 상태 · DOM 코드를 `model`에 뒀습니다(세그먼트 규칙에 이 경우를 더함). 판단 로직은 `utils`에서 단위 시험합니다 |
+| `primitives/layout/Document` | `ui/AnalyticsScript.astro`(PostHog 늦게 불러오기), `utils/createPosthogConfig` · `isSessionSampled` | seo-guide대로 `Document` 안에 한 번만 둡니다. `Document`가 서비스 상수와 `shared/utils`를 읽는 것은 문서 뼈대의 일이라 예외에 더함 |
+| `widgets/site/PrivacyNotice` | 댓글 · 방문 통계 문단을 설정 값이 있을 때만 보임 | 기능을 켜기 전과 뒤 모두 안내가 실제와 같게 |
+| `docs/design-system.md` | 7.21을 댓글 칸 부품(목록, 「글쓴이」 표시, 쓰기 칸, 남기기 단추, 글자 단추)으로 고치고, 10장 바깥 스크립트 줄과 12장 부록에 Pencil 미반영을 적음 | 오케스트레이터 지시(새 부품은 문서에 기록). Pencil과 `design/` PNG는 고치지 않았습니다 |
+| `docs/worker.md`, `docs/deploy-phase2.md` | 새로 씀 | Worker 구조 · 노션 표 칸(세컨드 브레인도 읽음) · 무료 한도, 이스타가 따라 할 배포 순서 |
+| `.gitignore` | `.wrangler/`, `.dev.vars*`(예시 파일 빼고), `.env*` | Worker 로컬 상태와 로컬 비밀값 |

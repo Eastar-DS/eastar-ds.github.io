@@ -494,7 +494,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 | 표 | 표 | `J9t3G` | 없음 | `PostBody/ui/ContentTable` (표 설명은 `Figure captionSide="top"`) |
 | 인용 | 인용 | `Myj7O` | 없음 | 본문 `blockquote` 스타일 (`widgets/post/PostBody`) |
 | 데모 틀 | 데모 틀 | `M3NVPX` | state: paused · playing · no-js | `primitives/ui/DemoFrame`, `primitives/ui/DemoControls` |
-| 댓글 자리 | 댓글 자리 | `GbsK7` | 없음 | `widgets/post/Comments` |
+| 댓글 칸 | 댓글 자리 | `GbsK7` (불러온 뒤 모습은 Pencil에 없음, 12장) | state: 안내(불러오기 전 · JavaScript 없음) · 목록 · 빈 목록 · 불러오기 실패 | `widgets/post/Comments` (`ui/CommentSection`, `ui/CommentForm`, `model/mountComments`) |
 | 404 본문 | 404 본문 | `W40Po` | 없음 | `widgets/site/NotFoundMessage` |
 | 이력서 | (시안 없음) | 없음 | 없음 | `widgets/career/Resume` (`ui/ResumeExperience`, `ui/ResumeItemList`) |
 | 포트폴리오 사례 | (시안 없음) | 없음 | 없음 | `widgets/career/Portfolio` (`ui/PortfolioProject`, `ui/PortfolioCase`) |
@@ -679,12 +679,38 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 - 쓰는 법: 아티팩트를 다시 만든 데모만 넣습니다. 조작은 세 개 이하입니다. 화면에 들어올 때 불러옵니다(`client:visible`). 자세한 규칙은 content-guide의 「아티팩트를 데모로 다시 만드는 규칙」을 따릅니다.
 - 쓰지 않는 법: 데모 틀 밖에 따로 조작 장치 두기, 본문 폭보다 넓히기, 자동 재생.
 
-### 7.21 댓글 자리 (노션 DB 익명 댓글)
+### 7.21 댓글 칸 (노션 DB 익명 댓글)
 
-- Pencil: 「댓글 자리」 `GbsK7` (그림은 giscus 시절의 「GitHub Discussions에서 보기」 링크가 남아 있습니다. 2026-11-21 댓글이 노션 DB 익명 댓글로 바뀌어 코드에서는 링크를 뺐습니다)
-- 구성: 「댓글」 제목(h3 크기, `<h2>` 태그) + 점선 테두리 칸(안내 글: 로그인 없이 닉네임만 적고 남김, 닉네임과 댓글은 노션 표에 저장, IP는 저장하지 않음, JavaScript가 필요함).
-- 쓰는 법: 글 맨 끝, 이전 · 다음 글 아래입니다. Cloudflare Worker를 거쳐 댓글 목록과 입력 칸을 이 칸 안에 불러옵니다(docs/plan.md 「댓글」). 불러오기 전과 JavaScript가 없을 때 이 칸의 안내가 보입니다. 이 칸의 높이를 최소 높이로 잡아 댓글이 들어와도 아래가 밀리지 않게 합니다.
-- 1차 배포(Worker 전)에는 `src/shared/constants/features`의 `IS_COMMENTS_ENABLED`가 꺼져 있어 이 칸을 그리지 않습니다.
+- Pencil: 「댓글 자리」 `GbsK7`는 불러오기 전 안내 칸만 그렸습니다(그림에는 giscus 시절의 「GitHub Discussions에서 보기」 링크가 남아 있음). 아래 목록 · 쓰기 칸의 부품은 2026-11-21 2차 작업에서 기존 토큰과 부품 규칙으로 코드에 먼저 만들었고, Pencil에는 아직 없습니다(12장).
+- 자리: 글 맨 끝, 이전 · 다음 글 아래입니다. `IS_COMMENTS_ENABLED`(shared/constants/features)가 켜져 있고 Worker 주소 · Turnstile 사이트 키(shared/constants/services)가 모두 있을 때만 그립니다. 값이 비어 있으면 CSS와 스크립트도 빌드에 싣지 않습니다.
+- 구성(위에서 아래로, 사이 20px `--space-5`):
+  - **제목:** 「댓글」(h3 크기, `<h2>` 태그) + 불러온 뒤 댓글 수(같은 크기, 400, `--color-text-muted`). 예: 「댓글 3」
+  - **안내 칸:** 점선 `--color-border` 칸, 안쪽 24px, 최소 높이 136px. 안내 글(body-sm, 보조색): 로그인 없이 닉네임만 적고 남김, 닉네임과 댓글은 노션 표에 저장, IP는 저장하지 않음. JavaScript가 없으면 「댓글은 JavaScript가 켜져 있어야 보입니다」, 있으면 「댓글을 불러오는 중입니다」, 실패하면 「댓글을 불러오지 못했습니다」와 「다시 불러오기」 글자 단추(밑줄). 목록을 불러오면 이 칸은 사라집니다.
+  - **목록:** 댓글 사이 1px `--color-border` 선(목록 위 · 아래 끝에도), 댓글 위아래 안쪽 20px. 빈 목록이면 「아직 댓글이 없습니다. 첫 댓글을 남겨 주세요.」(body-sm, 보조색).
+  - **댓글 하나:** 정보 줄(small) — 닉네임(600, `--color-text`) · 「글쓴이」 표시(이스타 답글만) · 쓴 시각(보조색, 「2026.11.20 18:12」 한국 시간, `<time datetime>`) → 내용(body-sm, `--color-text`, 줄바꿈 살림, 긴 주소는 칸 안에서 줄바꿈) → 「답글」 글자 단추(최상위 댓글만). 사이 8px.
+  - **「글쓴이」 표시:** label 크기 700, `--color-accent` 글자, `--color-accent-soft` 바탕, 좌우 8px, `--radius-sm`. 대비 5.39 / 6.09. 색만이 아니라 「글쓴이」 글자로 알립니다.
+  - **답글 목록:** 최상위 댓글 안, 「답글」 단추 아래 16px, 왼쪽 1px `--color-border` 선과 왼쪽 안쪽 20px. 답글 사이 16px. 답글에는 「답글」 단추가 없습니다(한 단계).
+  - **방금 남긴 댓글:** 왼쪽 2px `--color-accent` 선과 왼쪽 안쪽 12px. 바탕은 칠하지 않습니다.
+  - **「승인 뒤 보임」 안내:** Worker가 승인 방식이면 쓰기 칸 위에 「댓글은 이스타가 확인한 뒤 보입니다.」(body-sm, 보조색).
+  - **쓰기 칸:** 1px `--color-border` 테두리, `--radius-md`, 안쪽 20px, 칸 사이 16px.
+    - 답글 대상(답글을 고를 때만): `--color-accent-soft` 바탕, `--radius-md`, 안쪽 8 · 12px. 「「닉네임」님의 댓글에 답글을 씁니다.」(body-sm) + 「답글 그만 쓰기」 글자 단추(밑줄).
+    - 입력 칸 둘(닉네임 최대 20자, 댓글 최대 1000자): 이름표(small 600) 아래 입력 칸. 입력 칸은 1px `--color-border-strong`(조작 장치 경계, 바탕과 3.73 / 4.18), `--radius-md`, 안쪽 8 · 12px, `--color-bg` 바탕, 글자는 body 크기(휴대폰 16px. iOS Safari가 16px보다 작은 입력 칸에서 화면을 키우기 때문). 댓글 칸은 4줄 높이에서 세로로만 늘릴 수 있고, 아래 오른쪽에 「0 / 1000」(small, 보조색).
+    - 숨은 입력 칸(스팸 막기): 화면에 보이지 않고 스크린 리더도 읽지 않습니다.
+    - Turnstile 자리: 사람 확인이 필요할 때만 Cloudflare 위젯이 나타납니다(평소엔 자리를 차지하지 않음).
+    - 안내와 단추 줄: 왼쪽에 저장 안내(small, 보조색, 「개인정보 처리 안내」 링크는 밑줄), 오른쪽에 남기기 단추. 좁은 칸(480px 미만, container query)에서는 단추가 칸 폭을 채웁니다.
+    - 결과 줄: body-sm. 진행 중 보조색, 실패 `--color-bad`(6.47 / 6.83), 성공 `--color-good`(5.48 / 9.83). `role="status"`로 읽어 줍니다.
+  - **남기기 단추(글자 단추, 강조):** 높이 `--icon-button-size`(36px, 휴대폰 40px), 좌우 16px, `--radius-md`, `--color-accent` 바탕 · `--color-on-accent` 글자(6.16 / 7.59), body-sm 600. 올림은 `--color-accent-hover` 바탕(8.41 / 10.64). 보내는 중은 `--color-surface-hover` 바탕 · `--color-text-muted` 글자(5.39 / 6.24)와 「남기는 중」, `aria-disabled="true"`(포커스를 잃지 않게 `disabled` 대신).
+  - **글자 단추(보조):** 「답글」 · 「다시 불러오기」 · 「답글 그만 쓰기」. small, `--color-text-muted`, 바탕과 테두리 없음, 누르는 높이 24px 이상(WCAG 2.5.8). 올림은 `--color-text`와 밑줄. 문장 아래 홀로 있는 단추(「다시 불러오기」 · 「답글 그만 쓰기」)는 늘 밑줄을 둡니다.
+- 상태와 움직임:
+  - 칸이 화면 아래 200px 안으로 오면 댓글 코드와 목록을 불러옵니다. 그 전에는 댓글 관련 요청이 없습니다.
+  - Turnstile 스크립트는 목록을 그린 뒤 쓰기 칸이 화면에 들어오거나 쓰기 칸에 포커스가 갈 때만 불러옵니다.
+  - 오류가 난 입력 칸은 `aria-invalid="true"`, 테두리 `--color-bad`, 결과 줄을 `aria-describedby`로 잇고 그 칸으로 포커스를 옮깁니다.
+  - 「답글」을 누르면 답글 대상이 나타나고 댓글 입력 칸으로 포커스가 갑니다. 쓰기 칸을 옮기지 않습니다(Turnstile 위젯이 다시 그려지지 않게).
+- 쓰는 법:
+  - 댓글은 HTML이 아니라 글(`textContent`)로만 그립니다. 주소도 누를 수 없는 글로 보입니다.
+  - 「답글」 단추의 이름은 「「닉네임」님의 댓글에 답글 쓰기」입니다(보이는 「답글」을 이름 안에 둠, WCAG 2.5.3).
+  - 같은 토큰을 쓰므로 어두운 화면에서 따로 칠하지 않습니다. Turnstile 위젯은 밝기 단추로 고른 값이 있으면 그 밝기로, 없으면 시스템 설정을 따릅니다.
+- 쓰지 않는 법: 댓글에 HTML · 마크다운 그리기, 링크를 누를 수 있게 만들기, 두 단계 답글, 쓰기 칸을 답글 자리로 옮기기, 바탕을 칠해 방금 남긴 댓글 알리기.
 
 ### 7.22 404 본문
 
@@ -764,7 +790,7 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
 | CSS | 페이지 합계 30KB 이하(gzip) |
 | 글꼴 | 글 한 편을 캐시 없이 처음 열 때 받는 글꼴 파일 합계(전송 크기) 150KB 이하. preload는 Blog Sans 하나. 2026-11-21 시험 글: 90KB(Blog Sans 69 · JetBrains Mono 16 · Blog Code Hangul 5). 2026-11-21 첫 글(목록 가상화): 98KB(Blog Sans 80 · JetBrains Mono 16, 코드 칸에 한글이 없어 Blog Code Hangul은 받지 않음) |
 | LCP | 2.5초 이하 (휴대폰, 느린 4G 기준). 보통 글 제목이 LCP라서 1.5초 안쪽을 노립니다 |
-| CLS | 0.1 이하, 목표 0. 그림 · 댓글 자리는 높이를 미리 잡고, 데모 화면은 고정 높이나 서버에서 그린 첫 화면으로 높이가 변하지 않게 합니다 |
+| CLS | 0.1 이하, 목표 0. 그림 · 댓글 칸(안내 칸 최소 136px)은 높이를 미리 잡고, 데모 화면은 고정 높이나 서버에서 그린 첫 화면으로 높이가 변하지 않게 합니다 |
 | INP | 200ms 이하 |
 | Lighthouse (휴대폰) | 성능 95 이상, 접근성 100, 권장사항 100, SEO 100 |
 
@@ -775,7 +801,10 @@ Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴�
   - JetBrains Mono와 Blog Code Hangul은 미리 받지 않습니다. 코드 칸은 대개 첫 화면 밑에 있습니다.
 - 글이 늘 때 Blog Sans가 커지는 어림: 새 한글 한 자에 약 0.1KB입니다. 지금 글자(한글 310자, 68KB)에 자주 쓰는 한글(KS X 1001 2,350자)을 앞에서부터 500자 더하면 120KB, 1,000자 더하면 162KB, 2,350자를 모두 담으면 304KB로 쟀습니다(2026-11-21). 글 한 편이 새 한글을 50~150자 더한다고 보면 처음 몇 편은 편마다 5~15KB씩 커지고, 쓰는 글자가 겹칠수록 덜 커집니다. 글꼴 합계가 150KB를 넘기 시작하면(Blog Sans 약 130KB, 지금보다 새 한글 약 600자 더) 글꼴을 다시 나눌지(자주 쓰는 글자 묶음 + 나머지) 정합니다.
 - 데모는 `client:visible`로 화면에 들어올 때 불러옵니다. 첫 화면 안에 데모가 있으면 `client:idle`로 바꿉니다.
-- 바깥 스크립트는 PostHog와 노션 댓글뿐이고, 둘 다 우리 Cloudflare Worker 주소를 거칩니다.
+- 바깥 스크립트는 PostHog와 Cloudflare Turnstile뿐입니다.
+  - PostHog SDK와 이벤트는 우리 Cloudflare Worker 주소(`/bridge`)를 거칩니다. 페이지를 다 받은 뒤 브라우저가 한가할 때(늦어도 3초) 불러와 첫 화면을 막지 않습니다.
+  - Turnstile(`challenges.cloudflare.com`)은 Cloudflare 규칙상 중계하거나 복사해 둘 수 없어 직접 불러옵니다. 댓글 쓰기 칸이 화면에 들어올 때만 불러옵니다.
+  - 노션 댓글은 바깥 스크립트가 아니라 우리 코드가 Worker의 `/comments`를 부릅니다. 페이지에는 「댓글 칸이 다가오는지」만 보는 작은 코드(gzip 약 1.2KB)를 싣고, 칸이 다가오면 댓글 코드(gzip 약 3.1KB)를 받습니다(2026-11-21 잼).
 - 예산을 넘는 글은 올리기 전에 데모를 가볍게 하거나 정지 그림으로 바꿉니다.
 
 ## 11. Pencil과 코드 잇기
@@ -800,7 +829,7 @@ Knot에서는 컴포넌트마다 Figma 프레임 링크(`@see`)를 스토리에 
   4. `design/exports-system/`의 PNG를 다시 내보냅니다.
 - Pencil 변수 이름은 CSS 변수에서 `--`만 뺀 것입니다(`color-bg` = `--color-bg`). 다만 Pencil은 너비 · 높이에 변수를 받지 않아서, `--content-width`, `--toc-width`, `--header-height`, `--icon-button-size` 같은 크기 토큰은 Pencil에 숫자로 들어가 있습니다. 이 값들은 이 문서가 정본입니다.
 
-## 12. 부록: 지금 코드와 다른 점 (2026-11-21 4단계 기준)
+## 12. 부록: 지금 코드와 다른 점 (2026-11-21 5단계 기준)
 
 1단계 코드와 이 문서의 차이는 2단계(토큰 · 부품 · 상태), 3단계(코드 칸, 페이지 제목 `title` 단계, 글 페이지 grid와 `--toc-sticky-top`), 4단계(사이트 글자 글꼴과 대체 글꼴 크기 맞춤)에서 모두 코드에 반영했습니다. 아래는 남은 차이와, 문서와 다르게 둔 까닭입니다.
 
@@ -809,3 +838,4 @@ Knot에서는 컴포넌트마다 Figma 프레임 링크(`@see`)를 스토리에 
 | 데모 화면 높이 | 200px로 미리 정함 (7.20) | 넓은 칸에서 최소 200px. 목록 가상화 데모는 목록 칸 · 구조 보기 · 숫자 칸이 있어 그보다 높음(약 595px, 하이드레이션 전후 같음) | 서버에서 그린 첫 화면이 그대로 있어 JavaScript가 늦게 와도 높이가 변하지 않습니다(10장의 CLS 줄과 같음) |
 | 표 설명 | `<caption>` (7.18) | `<Figure caption="표 1. …" captionSide="top">`의 `<figcaption>` | 마크다운(GFM) 표에는 `<caption>`을 넣을 수 없습니다 |
 | 글 제목 줄바꿈 | 손으로 줄바꿈을 넣지 않음 (3.3) | 제목의 첫 `: ` 앞뒤를 두 덩어리로 그려, 줄을 바꿔야 할 때 콜론 뒤에서 먼저 바꿈 (`widgets/post/PostHeader/utils/splitTitle`) | 손 줄바꿈이 아니라 「무엇: 어떻게」 꼴의 제목을 읽기 좋게 나누는 규칙입니다. 좁은 칸에서는 덩어리 안에서 다시 줄을 바꿉니다 |
+| 댓글 칸의 목록 · 쓰기 칸 (2차, 2026-11-21) | 7.21에 부품을 적음 | 코드(`widgets/post/Comments`)에 있음. Pencil 「댓글 자리」 `GbsK7`와 `design/exports-system/` PNG는 불러오기 전 안내 칸만 있음 | 에이전트는 Pencil과 `design/`을 고치지 않습니다. 이스타가 Pencil에 목록 · 「글쓴이」 표시 · 쓰기 칸 · 남기기 단추를 더하고 PNG를 다시 내보내면 이 줄을 지웁니다 |

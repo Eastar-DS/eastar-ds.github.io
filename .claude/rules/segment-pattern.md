@@ -22,7 +22,7 @@ features, widgets, composites 레이어의 세그먼트는 `ui`, `model`, `utils
 세그먼트는 항상 폴더로 두되, **세그먼트 내부에서는 폴더 + `index` 코로케이션을 다시 쓰지 않고 구현체 이름의 플랫 파일로 둠**. (예: `utils/getListRanges.ts` ✅ / `utils/getListRanges/index.ts` ❌)
 
 - `ui` : 서브 컴포넌트. `ui/CodeBlock.astro`, `ui/DocumentRows.tsx`처럼 플랫 파일로 둠. React 서브 컴포넌트의 스타일은 `ui/DocumentRows.module.css`처럼 옆에 둠.
-- `model` : 해당 컴포넌트에 강결합된 React 훅·상태 로직. `model/useVirtualList.ts`처럼 플랫 파일로 둠. (`hooks` 폴더는 `shared` 전용이므로 컴포넌트 폴더에는 만들지 않음) `.astro` 컴포넌트에는 상태가 없으므로 `model`이 생기지 않음.
+- `model` : 해당 컴포넌트에 강결합된 React 훅·상태 로직. `model/useVirtualList.ts`처럼 플랫 파일로 둠. (`hooks` 폴더는 `shared` 전용이므로 컴포넌트 폴더에는 만들지 않음) `.astro` 컴포넌트에는 보통 `model`이 생기지 않음. 예외: `.astro`의 `<script>`가 커서 첫 화면에 싣지 않으려고 동적 import로 나눌 때, 나눈 상태 · DOM 코드는 `model`에 둠 (예: `Comments/model/mountComments.ts`). 판단 로직은 여전히 `utils`로 떼어 테스트함.
 - `utils` : 유틸 함수. `utils/findActiveHeadingId.ts`와 `utils/findActiveHeadingId.test.ts`(단위 테스트)를 나란히 코로케이션. `.astro`의 `<script>`가 쓰는 판단 로직도 여기에 둠.
 - `types` : 타입. 항상 `types/` 폴더로 두고, `types/virtualList.ts`처럼 내용을 나타내는 이름의 파일로 나눔. (`types.ts` 단일 파일·`types/index.ts`는 쓰지 않음)
 - `constants` : 상수. `constants/virtualList.ts`처럼 플랫 파일로 둠.

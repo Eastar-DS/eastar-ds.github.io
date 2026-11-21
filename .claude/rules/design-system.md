@@ -42,6 +42,7 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 ## 부품
 
 - 이미 있는 부품을 먼저 씁니다: `Icon`, `IconButton`, `Chip`, `Callout`(kind: key · warn · note), `Figure`, `SkipLink`, `AnchorHeading`, `DemoFrame`, `DemoControls`, `DemoSlider`.
+- 댓글 칸의 부품(목록, 「글쓴이」 표시, 입력 칸, 남기기 단추, 글자 단추)은 정본 7.21에 있고 지금은 `widgets/post/Comments` 안에만 있습니다. 다른 곳에서 입력 칸 · 글자 단추가 필요해지면 primitives로 내립니다. Pencil에는 아직 없습니다(정본 12장).
 - 페이지 제목(글 목록 · 시리즈 · 소개 같은 페이지의 h1)은 `title` 단계(`--font-size-title` 28px · 휴대폰 24px), 글 제목은 `h1` 단계(36px · 26px)입니다.
 - 코드 칸
   - 낱말 색은 VS Code Light+ / Dark+를 대비 보정한 `blog-light-plus` · `blog-dark-plus`입니다. 테마를 바꾸거나 Shiki를 올리면 `codeThemes/test.ts`가 모든 글자색의 대비(바탕 · 강조 줄 위 4.5:1)를 확인합니다.

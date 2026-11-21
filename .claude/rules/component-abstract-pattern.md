@@ -98,7 +98,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - props를 그리는 방법만 정하고, props로 받은 값 자체는 바꾸지 않음. 숫자를 문구로, 날짜를 형식으로 바꾸는 일은 primitives 밖에서 끝내고 결과만 넘김
   - e.g. `<Chip count={`${series.count}편`}>` ⭕ / `<Chip seriesCount={3} />` ❌
 - 파생값 계산이 허용되는 경우는 어떤 디자인 변형을 그릴지 고르는 계산뿐
-- `shared/utils`와 도메인 상수를 import하지 않음. `Document`가 테마 저장 키(`shared/constants/theme`), RSS 주소, 검색 등록 메타 값(`SITE.verification`)을 쓰는 것은 문서 뼈대의 일이라 예외
+- `shared/utils`와 도메인 상수를 import하지 않음. `Document`가 테마 저장 키(`shared/constants/theme`), RSS 주소, 검색 등록 메타 값(`SITE.verification`), 방문 통계 설정(`shared/constants/services`와 `shared/utils/shouldLoadAnalytics`)을 쓰는 것은 문서 뼈대의 일이라 예외
 - 종류에 따라 `ui`, `layout`, `animation`으로 나뉨
   - `ui` : 색상이나 모형 등 실체가 있는 컴포넌트 (e.g. `Icon`, `IconButton`, `Chip`, `Callout`, `Figure`, `SkipLink`, `AnchorHeading`, `DemoFrame`)
   - `layout` : 특정 요소를 위치시키는 컴포넌트 (e.g. `Document`, `Container`, `Stack`, `WithAside`, `ShowOn`)

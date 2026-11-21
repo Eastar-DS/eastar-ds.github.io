@@ -41,7 +41,7 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
             <PostBody slug={post.slug} />
           </Stack>
           <PostNav slug={post.slug} />
-          <Comments />
+          <Comments slug={post.slug} />
         </Stack>
         <ShowOn screen="wide" slot="aside">
           <TableOfContents slug={post.slug} variant="list" />

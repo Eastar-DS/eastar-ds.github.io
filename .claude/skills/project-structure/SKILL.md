@@ -36,10 +36,12 @@ user-invocable: true
 ## 전체 폴더 구조
 
 ```plaintext
-astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마와 transformer
+astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마와 transformer, 설정이 빈 기능 부품을 빈 부품으로 바꾸는 별칭
 scripts/buildFonts.ts                # 사이트 글자만 담은 글꼴 만들기 · 빠진 글자 검사 (pnpm build가 돌림)
 scripts/fonts/                       # 글자 모으기 · 글꼴 이름 바꾸기 (단위 테스트 포함)
+scripts/EmptyPart.astro              # 아무것도 그리지 않는 빈 부품 (댓글 · 방문 통계 설정이 비면 astro.config.ts가 대신 넣음)
 .github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · GitHub Pages 배포
+worker/                              # Cloudflare Worker: 노션 댓글(/comments)과 PostHog 중계(/bridge). 블로그와 따로 설치 · 시험 · 배포 (docs/worker.md)
 src/
 ├── content.config.ts                # 글 모음 스키마 (Astro가 요구하는 위치)
 ├── content/
@@ -62,6 +64,8 @@ src/
 │   │   ├── index.astro
 │   │   ├── ui/
 │   │   │   └── CodeBlock.astro
+│   │   ├── model/
+│   │   │   └── mountComments.ts     # .astro 스크립트를 동적 import로 나눈 상태 · DOM 코드 (예: Comments)
 │   │   ├── utils/
 │   │   │   ├── toTocItems.ts
 │   │   │   └── toTocItems.test.ts   # 단위 테스트
@@ -110,10 +114,11 @@ src/
 │   │   ├── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS · getNavItems, MAIN_CONTENT_ID
 │   │   └── getSwitchPagePaths/      # 스위치로 켜고 끄는 고정 주소 페이지의 getStaticPaths 값
 │   ├── utils/
-│   │   └── formatDate/
-│   │       ├── index.ts
-│   │       └── test.ts
-│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기), career(이력서 · 포트폴리오의 프로젝트 정보)
+│   │   ├── formatDate/
+│   │   │   ├── index.ts
+│   │   │   └── test.ts
+│   │   └── isCommentsReady/         # astro.config.ts도 부르므로 import 없는 순수 함수 (shouldLoadAnalytics도 같음)
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기), career(이력서 · 포트폴리오의 프로젝트 정보), services(Worker · Turnstile · PostHog 설정)
 │   ├── types/                       # post.ts, seo.ts, theme.ts, career.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
 │       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문

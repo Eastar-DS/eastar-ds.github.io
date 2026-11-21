@@ -54,5 +54,10 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 
 - **글별 og:image**: `createPageMeta`에 `imagePath`를 더하고 `Document`에 `og:image`, `twitter:image`를 그림. 이미지가 생기면 `twitter:card`를 `summary_large_image`로 바꿈
 - **llms.txt**: `src/pages/llms.txt.ts` 엔드포인트로 `getPosts` 결과를 목록으로 내보냄
-- **giscus 댓글**은 지금 `modules/widgets/post/Comments`가 자리만 그림. 붙일 때 이 칸 안에서 불러오고, 붙이기 전에 개인정보 처리 안내(`PrivacyNotice`)를 먼저 고침
-- **PostHog**: `Document`의 `head` 슬롯이 아니라 `Document` 안에 한 번만 넣음. 중계 주소(Cloudflare Workers)는 `shared/constants/site`에 둠. 붙이기 전에 개인정보 처리 안내를 먼저 고침
+
+## 댓글과 방문 통계 (2차, `docs/worker.md`)
+
+- **노션 댓글**: `modules/widgets/post/Comments`가 Cloudflare Worker의 `/comments`에서 불러옴. `IS_COMMENTS_ENABLED`(`shared/constants/features`)와 `WORKER_URL` · `TURNSTILE_SITE_KEY`(`shared/constants/services`)가 모두 있을 때만 그림
+- **PostHog**: `Document`의 `head` 슬롯이 아니라 `Document` 안(`ui/AnalyticsScript`)에 한 번만 넣음. Worker 주소와 중계 경로는 `shared/constants/services`에 둠. `WORKER_URL` · `POSTHOG_PROJECT_KEY`가 모두 있을 때만 불러옴
+- 값이 비어 있으면 `astro.config.ts`가 두 부품을 빈 부품으로 바꿔 빌드에 싣지 않음. 새로 붙이는 바깥 서비스 부품도 같은 방식으로 뺌
+- 모으는 정보가 바뀌면 개인정보 처리 안내(`PrivacyNotice`)를 먼저 고침. 댓글 · 방문 통계 문단은 설정 값이 있을 때만 보임

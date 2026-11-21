@@ -29,11 +29,12 @@ description: shared 레이어의 최상위 구성(components / content / seo / h
 | `hooks`      | React 섬에서 쓰는 훅 중 특정 컴포넌트에 강결합되지 않은 것. `domain` / `common`. 필요할 때 만듦                                                                              | `.claude/rules/hook-guide.md`                                                                                                      |
 | `routes`     | 고정 주소(`PATHS`), 글 주소 함수(`getPostPath`), 머리말 메뉴(`getNavItems`, 이력서 · 포트폴리오는 그릴 때만), 페이지 안 자리 id, 스위치로 켜고 끄는 페이지의 `getStaticPaths` 값(`getSwitchPagePaths`) | —                                                                                                                                  |
 | `utils`      | 전역 공용 유틸 함수. 폴더 + `index.ts`, 단위 테스트는 같은 폴더의 `test.ts`                                                                                                   | `.claude/rules/test-strategy.md`                                                                                                   |
-| `constants`  | 전역 공용 상수 (사이트 정보, 테마 저장 키, 기능 스위치 `features`, 이력서와 포트폴리오가 함께 쓰는 프로젝트 정보 `career`)                                                       | —                                                                                                                                  |
+| `constants`  | 전역 공용 상수 (사이트 정보, 테마 저장 키, 기능 스위치 `features`, 이력서와 포트폴리오가 함께 쓰는 프로젝트 정보 `career`, 바깥 서비스 설정 `services`)                                                       | —                                                                                                                                  |
 | `types`      | 전역 공용 타입. `types/post.ts`처럼 내용을 나타내는 이름으로 분리                                                                                                             | —                                                                                                                                  |
 | `styles`     | 디자인 기준값(`tokens.css`), 기본 스타일(`base.css`), 글꼴과 둘을 묶는 `index.css`. `Document`가 `index.css`를 불러옴                                                        | `.claude/rules/general-code-convention.md`의 「스타일」                                                                            |
 
-서버가 없는 정적 블로그이므로 `api`(HTTP 계층), `provider`, `store`는 두지 않음.
+서버가 없는 정적 블로그이므로 `api`(HTTP 계층), `provider`, `store`는 두지 않음. 댓글 · 방문 통계의 서버 쪽은 `worker/`(Cloudflare Worker, `docs/worker.md`)에 있고, 블로그는 `shared/constants/services`의 주소로 부름.
+`astro.config.ts`가 부르는 `shared` 코드(`constants/features` · `constants/services` · `utils/isCommentsReady` · `utils/shouldLoadAnalytics` · `content`의 일부)는 `@/` 별칭을 쓸 수 없으므로 다른 모듈을 import하지 않는 순수 코드로 둠.
 
 ## 네이밍
 

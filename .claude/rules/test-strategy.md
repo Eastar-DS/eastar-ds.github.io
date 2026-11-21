@@ -21,6 +21,8 @@ AI로 기능 개발 시 검증 루프가 필요한데, 검증 루프를 테스�
 | 통합 테스트 | 최종 책임 컴포넌트(대부분 widgets) 폴더 안의 `test.ts(x)`                                                                                                                                        | 콘텐츠를 읽어 화면에 그리기까지 한 구획 전체 | 아직 없음. 필요해지면 Astro Container API로 씀 |
 | E2E 테스트  | 전역 `src/__test__/`에 페이지 이름을 붙인 파일 (예: `postPage.test.ts`)                                                                                                                         | 페이지 단위 수행 권장                       | 아직 없음. 필요해지면 Playwright로 씀 |
 
+Cloudflare Worker(`worker/`)의 시험은 블로그와 따로 `worker/` 안에서 돌림(`pnpm test:worker`, 실제 Workers 실행 환경에서 도는 `@cloudflare/vitest-plugin`). 경로 시험은 `worker/test/`, 순수 함수 단위 시험은 구현 파일 옆 `*.test.ts`. 블로그와 Worker를 한 번에 돌릴 때는 `pnpm test:all`. 자세한 내용은 `docs/worker.md` 10장.
+
 ## 배치 규칙
 
 - E2E 테스트를 페이지 폴더에 두기는 애매하므로 전역 `__test__/` 폴더로 분리. 페이지 폴더에 두지 않음.
