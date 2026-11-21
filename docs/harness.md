@@ -57,3 +57,12 @@
 | `.claude/rules/general-code-convention.md` | 스타일 절을 `design-system.md`로 넘기고, 속성을 펼치는 Astro 컴포넌트는 `data-astro-cid-*`를 거른다는 규칙, `@design` 주석, `no-js` 처리를 더함 | 2단계에서 실제로 부딪친 문제(부모 `.root` 규칙이 `IconButton`에 걸림)를 규칙으로 남김 |
 | `.claude/rules/layout-pattern.md`, `seo-guide.md`, `test-strategy.md`, `component-abstract-pattern.md` | 폭 토큰 이름, `main#main`과 건너뛰기 링크, 이전 · 다음 글 · 댓글 자리, 새 h1 페이지, 비교할 시안 폴더(`design/exports-system/`)를 고침 | 코드가 바뀐 만큼 맞춤 |
 | `CLAUDE.md` | 디자인 · 글쓰기의 정본 문서를 적고, 규칙 표에 `design-system.md`를 더함. 에이전트가 정본 문서를 고치지 않는다는 줄을 더함 | 정본이 생겼음 |
+
+## 3단계에서 더 바꾼 것 (2026-11-21, 코드 칸과 정리된 디자인 값)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `.claude/rules/layout-pattern.md`, `component-abstract-pattern.md` | 글 화면을 `PostHeader`(글 머리) · `PostBody`(본문)로 나누고, 페이지가 `WithAside`의 `top` 슬롯으로 놓는 방식을 적음. `PostArticle`의 `after-header` 슬롯 설명을 뺌 | 목차가 본문 첫 문단 높이에서 시작하려면 글 머리와 본문을 다른 줄에 놓아야 함. widget 안에서 맞추지 않고 페이지 배치로 해결함 |
+| `.claude/rules/design-system.md` | 코드 칸 규칙(테마 · 가독성 값 · 대비 테스트 · D2Coding 부분 글꼴), 페이지 제목 `title` 단계를 더함 | 코드 칸이 확정됨 |
+| `.claude/rules/content-guide.md` | 강조 줄 메타 `{3,5-6}`, 줄 번호 자동, `pnpm fonts:code`, 새 함수(`codeThemes` 등)를 더함 | 글을 쓸 때 알아야 할 코드 쪽 규칙 |
+| `CLAUDE.md`, 스킬 | `pnpm fonts:code`와 `pnpm check`의 글꼴 검사, 폴더 나무의 `scripts/` · `styles/fonts/`를 더함 | 새 도구 |

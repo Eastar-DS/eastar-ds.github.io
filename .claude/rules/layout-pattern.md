@@ -20,7 +20,7 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
 | HTML 문서의 뼈대 | `primitives/layout/Document` | `<html lang="ko">`, `<head>` 메타 · 구조화 데이터 · 테마 초기화, `<body>` 맨 앞의 건너뛰기 링크. **화면 구조는 담지 않음** |
 | 가운데 정렬과 최대 폭 | `primitives/layout/Container` | `size`: `page`(1200px) · `content`(680px) · `withAside`(680 + 72 + 220px). 좌우 여백은 `--page-padding-inline` |
 | 위아래로 쌓기 | `primitives/layout/Stack` | `gap`: 간격 토큰 번호(14 → `--space-14` 56px) |
-| 본문 + 옆 칸 | `primitives/layout/WithAside` | 넓은 화면(1200px 이상)에서만 나란히. `isAsideSticky`로 옆 칸을 위에서 96px에 고정 |
+| 본문 + 옆 칸 | `primitives/layout/WithAside` | 넓은 화면(1200px 이상)에서만 나란히. `top` 슬롯은 첫 줄 본문 칸에만, 기본 슬롯과 `aside`는 둘째 줄에 나란히(옆 칸이 본문 첫 줄 높이에서 시작). `isAsideSticky`로 옆 칸을 `--toc-sticky-top`(24px)에 고정. `as="article"`로 감싸는 요소를 고름 |
 | 화면 폭에 따라 보이기 | `primitives/layout/ShowOn` | `screen`: `wide` · `narrow` |
 | 배치를 고르는 일 | `src/pages/**` | 위 primitives로 widgets를 놓고, 페이지 위아래 여백만 `<style>`로 정함(간격 토큰, 768px부터 넓은 값) |
 
@@ -31,13 +31,15 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
   <SiteHeader />
   <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="withAside">
-      <WithAside isAsideSticky>
+      <WithAside as="article" isAsideSticky>
+        <PostHeader slug={post.slug} slot="top" />
         <Stack gap={14}>
-          <PostArticle slug={post.slug}>
-            <ShowOn screen="narrow" slot="after-header">
+          <Stack gap={5}>
+            <ShowOn screen="narrow">
               <TableOfContents slug={post.slug} variant="collapsible" />
             </ShowOn>
-          </PostArticle>
+            <PostBody slug={post.slug} />
+          </Stack>
           <PostNav slug={post.slug} />
           <Comments />
         </Stack>
@@ -54,13 +56,14 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
 - 페이지마다 `<main id={MAIN_CONTENT_ID} tabindex="-1">`은 하나. 건너뛰기 링크가 이 자리로 옮겨 주고, 꼬리말이 화면 아래에 붙도록 `base.css`가 `body > main`을 늘림
 - 머리말 · 꼬리말을 빼고 싶은 페이지는 그냥 놓지 않으면 됨
 - 목차를 왼쪽으로 옮기거나 없애는 일도 그 페이지 파일만 고침
+- 글 머리를 목차 옆까지 넓히고 싶으면 `PostHeader`를 `top` 슬롯이 아니라 기본 슬롯 맨 앞으로 옮기면 됨. widgets는 고치지 않음
 
 ## widgets가 지킬 것
 
 - **자기가 어떤 틀 안에 놓일지 가정하지 않음.** 바깥 여백, 최대 폭, 고정 위치(sticky), 화면 폭에 따라 숨기기는 widgets가 하지 않고 페이지와 layout primitives가 함
 - 안쪽 배치가 폭에 따라 바뀌어야 하면 container query를 씀 (예: `PostList`의 좁은 칸 배치, `SiteHeader`의 메뉴 접기, 데모의 세로 단계)
 - 머리말처럼 화면 끝까지 닿는 줄(테두리)이 디자인의 일부인 widget은 안쪽에서 `Container`를 써서 내용 폭을 맞춤
-- 다른 widget을 끼워 넣을 자리가 필요하면 이름 있는 슬롯을 열어 둠 (예: `PostArticle`의 `after-header`). 무엇을 넣을지는 페이지가 정함
+- widget 사이의 줄 맞춤(예: 목차가 본문 첫 문단과 같은 높이에서 시작)은 widget 안에서 맞추지 않음. widget을 나누고(`PostHeader` · `PostBody`) 페이지가 layout primitive의 슬롯(`WithAside`의 `top`)으로 놓음
 
 ## layout primitives가 지킬 것
 

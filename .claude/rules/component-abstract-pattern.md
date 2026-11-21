@@ -56,7 +56,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
   - features가 features를 import하면 도메인이 섞이므로 금지.
   - composites끼리도 조합 불가. 공통 UI가 겹치면 primitives로 내려서 재사용.
   - primitives끼리 조합한 결과는 primitives로 둠.
-- **페이지가 슬롯으로 끼워 넣는 것은 조합이 아님.** `PostArticle`의 `after-header` 슬롯에 페이지가 `TableOfContents`를 넣는 것처럼, 두 widgets를 이어 붙이는 쪽은 페이지임. widgets는 서로를 import하지 않음.
+- **페이지가 layout primitive의 슬롯으로 이어 붙이는 것은 조합이 아님.** `WithAside`의 `top` 슬롯에 `PostHeader`를, 둘째 줄에 `PostBody`와 `TableOfContents`를 놓는 것처럼, 두 widgets를 이어 붙이는 쪽은 페이지임. widgets는 서로를 import하지 않음.
 - React 컴포넌트(섬)는 `.astro` 컴포넌트를 쓸 수 없음. React 섬이 쓰는 하위 컴포넌트도 React로 만듦 (e.g. `DemoFrame`, `DemoControls`).
 - 도메인이 겹치는 상황에서는 컴포넌트 재사용 대신, 도메인 로직을 함수로 만들어 `shared/content`(콘텐츠) 또는 `shared/hooks/domain`(React 섬 상태)으로 내려서 재사용.
 
@@ -76,7 +76,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - 콘텐츠를 가져와 하위 요소에 책임을 할당하는 지휘자 역할. 빌드할 때 `shared/content` 함수를 직접 부름 (같은 글을 여러 widgets가 불러도 Astro가 콘텐츠를 한 번만 읽음)
 - **자기가 어떤 틀 안에 놓일지 가정하지 않음.** 바깥 여백·폭·고정 위치는 페이지와 layout primitives가 정함. 안쪽 반응형은 container query로 함
 - 하위에 도메인별 디렉토리로 작성
-  - e.g. `site/SiteHeader`, `post/PostArticle`, `post/TableOfContents`, `series/SeriesChips`
+  - e.g. `site/SiteHeader`, `post/PostHeader`, `post/PostBody`, `post/TableOfContents`, `series/SeriesChips`
 
 #### modules/features
 

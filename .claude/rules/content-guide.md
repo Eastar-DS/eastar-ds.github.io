@@ -18,12 +18,13 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 
 ## 글에서 쓰는 부품
 
-`PostArticle`이 MDX `components`로 넘겨 주므로 import 없이 씁니다.
+`PostBody`가 MDX `components`로 넘겨 주므로 import 없이 씁니다.
 
 | 쓰는 법 | 그려지는 것 |
 | --- | --- |
 | `## 제목`, `### 제목` | 앵커 링크가 붙은 제목 (`AnchorHeading`) |
-| ```` ```ts title="파일.ts" ```` | 파일 이름과 복사 단추가 있는 코드 칸 (`CodeBlock`) |
+| ```` ```ts title="파일.ts" ```` | 파일 이름과 복사 단추가 있는 코드 칸 (`CodeBlock`). 20줄 넘으면 줄 번호가 저절로 붙음 |
+| ```` ```ts title="파일.ts" {3,5-6} ```` | 적은 줄을 강조 줄로 (한 칸에 세 줄 이하) |
 | GFM 표 | 좁은 화면에서 가로로 밀리는 표 (`ContentTable`) |
 | `<Callout>`, `<Callout kind="warn">`, `<Callout kind="note">` | 핵심 · 주의 · 참고 강조 칸 |
 | `<Figure caption="그림 1. …">` + 그림 | 그림과 설명 |
@@ -31,6 +32,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 
 - 마크다운을 JSX 부품 안에 넣을 때는 앞뒤에 빈 줄을 둡니다.
 - 데모는 `src/modules/features/demo/{데모 이름}/index.tsx`로 만들고, 글에서 import해 `client:visible`로 씁니다.
+- **코드 칸 · 본문 속 코드에 새 한글을 쓰면 `pnpm fonts:code`를 돌립니다.** 코드 속 한글은 글에 쓰인 글자만 남긴 D2Coding 부분 글꼴(`src/shared/styles/fonts/blog-code-hangul.woff2`)이 그립니다. `pnpm check`가 빠진 글자를 찾아 알려 줍니다.
 
 ## shared/content 함수
 
@@ -42,8 +44,10 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `getSeriesList` | 시리즈별 글 수와 첫 편 |
 | `getAdjacentPosts(slug)` | 이전 글 · 다음 글 (같은 시리즈면 시리즈 순서, 아니면 발행일 순서) |
 | `calculateReadingMinutes` · `groupPostsByYear` · `toSeriesList` · `findAdjacentPosts` | 위 함수들이 쓰는 순수 계산. 단위 테스트함 |
-| `codeTitleTransformer` | 코드 칸 메타의 `title`을 `<pre data-title>`로 옮기는 Shiki transformer. `astro.config.ts`에서 씀 |
+| `codeTitleTransformer` · `codeLineNumbersTransformer` | 코드 칸 메타의 `title`을 `<pre data-title>`로 옮기고, 20줄 넘는 코드에 `data-line-numbers`를 붙이는 Shiki transformer. `astro.config.ts`에서 씀 |
+| `codeThemes` | VS Code Light+ / Dark+에서 대비가 모자란 색만 고친 Shiki 테마 두 벌(`blog-light-plus` · `blog-dark-plus`). 테스트가 모든 글자색의 대비를 확인함 |
+| `collectCodeHangul` | 글의 코드에 쓰인 한글을 모음. `scripts/buildCodeFont.ts`가 부분 글꼴을 만들 때 씀 |
 
 - 컴포넌트는 `astro:content`를 직접 import하지 않고 이 함수들을 부릅니다.
 - 날짜는 `Date`로 넘기고, 문자열로 바꾸는 일은 `shared/utils/formatDate`(한국 시간 고정)가 합니다.
-- 마크다운 처리기는 Astro 7 기본인 Sätteri입니다. 화면 모양을 바꾸는 일은 플러그인보다 `PostArticle`의 MDX `components` 바꿔 끼우기로 먼저 해결합니다.
+- 마크다운 처리기는 Astro 7 기본인 Sätteri입니다. 화면 모양을 바꾸는 일은 플러그인보다 `PostBody`의 MDX `components` 바꿔 끼우기로 먼저 해결합니다.

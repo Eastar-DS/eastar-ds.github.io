@@ -258,7 +258,7 @@ export const blogDarkPlus = recolor(
 |---|---|---|
 | 글자 크기 | 15px, 휴대폰(767px 이하) 14px | `--font-size-code` |
 | 줄 간격 | 1.65 | `--line-height-code` |
-| 글꼴 | JetBrains Mono. 코드 속 한글(주석 · 문자열)은 D2Coding | `--font-mono: "JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace`. D2Coding(OFL)은 글에 쓰인 한글만 남긴 부분 글꼴로 저장소에 두고 `unicode-range`를 한글 범위로 제한합니다. 불러오지 못하면 Pretendard가 대신합니다. Pencil 시안은 구글 글꼴 Nanum Gothic Coding(변수 `font-mono-hangul`)으로 대신 그렸습니다 |
+| 글꼴 | JetBrains Mono. 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 | `--font-mono: "JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace`. D2Coding(OFL)에서 글에 쓰인 한글만 남긴 부분 글꼴을 `src/shared/styles/fonts/`에 두고 `unicode-range`를 한글 범위로 제한합니다(`pnpm fonts:code`가 만듦). D2Coding의 OFL은 「D2Coding」을 예약 글꼴 이름(Reserved Font Name)으로 정해서, 수정본인 부분 글꼴은 그 이름을 쓸 수 없습니다. 그래서 이름을 「Blog Code Hangul」로 바꿨고, 저작권 표시와 OFL 전문(`fonts/D2Coding-OFL.txt`)을 함께 둡니다. 뒤의 `"D2Coding"`은 컴퓨터에 D2Coding을 깐 사람을 위한 것입니다. 둘 다 없으면 Pretendard가 대신합니다. Pencil 시안은 구글 글꼴 Nanum Gothic Coding(변수 `font-mono-hangul`)으로 대신 그렸습니다 |
 | 글자 이음 | 끔 (`=>`, `!==`가 이어 붙지 않음) | `font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0;`. Pencil 그림에서는 끌 수 없어 이어 보입니다 |
 | 탭 폭 | 2 | `tab-size: 2`. 글 속 코드의 들여쓰기도 스페이스 2칸 |
 | 강조 줄 | 짚어 줄 줄에만, 한 칸에 세 줄 이하 | 바탕 `--color-code-line-highlight` + 왼쪽 3px `--color-code-line-highlight-bar`. 코드 칸 메타에 줄 번호를 적는 방식(` ```ts {3,5-6} `)을 권합니다. 코드를 복사해도 표시가 섞이지 않습니다. `@shikijs/transformers`의 `transformerMetaHighlight`로 줄에 `highlighted` class를 붙입니다 |
@@ -282,9 +282,9 @@ export const blogDarkPlus = recolor(
 | CSS 변수 | 값 |
 |---|---|
 | `--font-sans` | `"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif` |
-| `--font-mono` | `"JetBrains Mono", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace` |
+| `--font-mono` | `"JetBrains Mono", "Blog Code Hangul", "D2Coding", ui-monospace, SFMono-Regular, Menlo, Consolas, "Pretendard Variable", monospace` |
 
-- 제목과 본문은 Pretendard Variable 하나로 씁니다. 코드 속 한글(주석 · 문자열)은 D2Coding이 그립니다(2.3 「코드」의 가독성 값). D2Coding을 불러오지 못하면 뒤쪽 Pretendard가 대신합니다.
+- 제목과 본문은 Pretendard Variable 하나로 씁니다. 코드 속 한글(주석 · 문자열)은 D2Coding 부분 글꼴 「Blog Code Hangul」이 그립니다(2.3 「코드」의 가독성 값, 이름을 바꾼 까닭도 거기에 있습니다). 불러오지 못하면 뒤쪽 Pretendard가 대신합니다.
 - Pencil 시안은 구글 글꼴만 쓸 수 있어서 Pretendard 자리에 Noto Sans KR을 넣었습니다. Pencil 변수 `font-sans`의 값이 `Noto Sans KR`인 까닭입니다. 실제 사이트는 Pretendard입니다.
 - Pretendard는 한글 일부씩 나눈 dynamic subset을 저장소에 두고(self-host) `font-display: swap`으로 씁니다. 가변 글꼴이라 조각 하나에 모든 굵기가 들어 있습니다. 미리 받는(preload) 조각은 `PretendardVariable.subset.91.woff2` 하나입니다(10장).
 - 굵기 토큰은 넷만 씁니다.
@@ -313,7 +313,7 @@ export const blogDarkPlus = recolor(
 | small | `--font-size-small` | 14px | 13px | `--line-height-small` | 1.5 | 400 · 600 | 0 | 글 정보, 목차, 칩, 꼬리말 |
 | caption | `--font-size-caption` | 14px | 13px | `--line-height-caption` | 1.6 | 400 | 0 | 그림 · 데모 · 표 설명 |
 | label | `--font-size-label` | 13px | 12px | `--line-height-label` | 1.4 | 700 | 0 | 목차 제목, 강조 칸 제목, 「복사」 |
-| code | `--font-size-code` | 15px | 14px | `--line-height-code` | 1.65 | 400 | 0 | 코드 칸 (JetBrains Mono, 한글은 D2Coding, 글자 이음 끔) |
+| code | `--font-size-code` | 15px | 14px | `--line-height-code` | 1.65 | 400 | 0 | 코드 칸 (JetBrains Mono, 한글은 D2Coding 부분 글꼴, 글자 이음 끔) |
 | code-sm | `--font-size-code-sm` | 13px | 12px | `--line-height-label` | 1.4 | 400 | 0 | 코드 칸 파일 이름 |
 
 자간은 Pretendard가 권하는 대로 제목만 조금 좁힙니다. 토큰은 `--letter-spacing-display`, `--letter-spacing-h1`, `--letter-spacing-title`, `--letter-spacing-h2`, `--letter-spacing-h3`이고 값은 위 표의 em 값입니다(Pencil은 px로 환산해 넣었습니다).
@@ -452,33 +452,33 @@ CSS로는 `.prose > * + * { margin-top: var(--space-5) }`를 기본으로 두고
 
 ### 7.1 한눈에 보기
 
-Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴포넌트(또는 variants 묶음)의 id이고, 상태별 id는 각 부품 절에 적었습니다. 「코드」는 2026-11-21 1단계 코드 기준 위치이며, 없으면 만들 이름을 제안으로 적었습니다.
+Pencil 위치는 모두 `design/blog.pen` 안입니다. 「Pencil id」는 컴포넌트(또는 variants 묶음)의 id이고, 상태별 id는 각 부품 절에 적었습니다. 「코드」는 2026-11-21 3단계 코드 기준 위치입니다.
 
 | 부품 | Pencil 프레임 이름 | Pencil id | 상태 축 | 코드 |
 |---|---|---|---|---|
-| 링크 | 링크 | `fXlRl` | state: default · hover · focus · visited | 본문 `a` 스타일 (PostArticle) |
-| 아이콘 단추 | 아이콘 단추 | `Bh8HQ` | state: default · hover · focus | 제안 `primitives/ui/IconButton` (지금은 SiteHeader `.iconLink`, ThemeToggle, DemoControls 안에 따로 있음) |
+| 링크 | 링크 | `fXlRl` | state: default · hover · focus · visited | 본문 `a` 스타일 (`widgets/post/PostBody`) |
+| 아이콘 단추 | 아이콘 단추 | `Bh8HQ` | state: default · hover · focus | `primitives/ui/IconButton` (React 데모 안은 `primitives/ui/DemoControls`가 같은 토큰으로 그림) |
 | 칩 | 칩 | `prFrh` | state: default · hover · selected · focus | `primitives/ui/Chip`, `widgets/series/SeriesChips` |
 | 슬라이더 | 슬라이더 | `taHDx` | state: default · focus | `primitives/ui/DemoControls` 안 `input[type=range]` |
-| 건너뛰기 링크 | 건너뛰기 링크 | `Y9Engv` | 없음 | 제안 `primitives/ui/SkipLink` (Document 레이아웃 맨 앞) |
+| 건너뛰기 링크 | 건너뛰기 링크 | `Y9Engv` | 없음 | `primitives/ui/SkipLink` (`primitives/layout/Document`의 `<body>` 맨 앞) |
 | 머리말 | 머리말 | `mg60A` | device: desktop · mobile | `widgets/site/SiteHeader`, `features/site/ThemeToggle` |
 | 꼬리말 | 꼬리말 | `m9iWo` | device: desktop · mobile | `widgets/site/SiteFooter` |
 | 글 목록 항목 | 글 목록 항목 | `A33N0` | state: default · hover | `widgets/post/PostList` |
 | 목차 항목 | 목차 항목 | `azbFv` | state: default · current · hover × level: h2 · h3 | `widgets/post/TableOfContents/ui/TocList` |
 | 목차 (넓은 화면) | 목차 | `d3ZMZg` | 없음 | `TableOfContents` `variant="list"` |
 | 접는 목차 | 접는 목차 | `Hrrbc` | state: closed · open | `TableOfContents` `variant="collapsible"` |
-| 이전 · 다음 칸 | 이전 다음 칸 | `kUT78` | direction: prev · next × state: default · hover | 제안 `widgets/post/PostNav` |
-| 이전 · 다음 글 | 이전 다음 글 | `v740G` | 없음 (칸 두 개 조합) | 제안 `widgets/post/PostNav` |
-| 글 머리 | 글 머리 | `tV22U` | 없음 | `widgets/post/PostArticle` 안 (제안: `ui/PostHeader`로 분리) |
-| 제목 앵커 | 제목 | `bJWiw` | level: h2 · h3 × state: default · hover | `primitives/ui/AnchorHeading`, `PostArticle/ui/ContentHeading2 · 3` |
-| 본문 속 코드 | 본문 속 코드 | `egCcp` | 없음 | 본문 `code` 스타일 (PostArticle) |
-| 코드 칸 | 코드 칸 | `CX4xi` | state: idle · copied | `PostArticle/ui/CodeBlock`, `features/post/CopyCodeButton` |
-| 강조 칸 | 강조 칸 | `eknYZ` | kind: key · warn · note | `primitives/ui/Callout` (지금은 `label`만 있음) |
-| 그림과 설명 | 그림과 설명 | `I437uy` | 없음 | 제안 `primitives/ui/Figure` |
-| 표 | 표 | `J9t3G` | 없음 | 본문 `table` 스타일 (PostArticle) |
-| 인용 | 인용 | `Myj7O` | 없음 | 본문 `blockquote` 스타일 (PostArticle) |
+| 이전 · 다음 칸 | 이전 다음 칸 | `kUT78` | direction: prev · next × state: default · hover | `widgets/post/PostNav/ui/PostNavLink` |
+| 이전 · 다음 글 | 이전 다음 글 | `v740G` | 없음 (칸 두 개 조합) | `widgets/post/PostNav` |
+| 글 머리 | 글 머리 | `tV22U` | 없음 | `widgets/post/PostHeader` |
+| 제목 앵커 | 제목 | `bJWiw` | level: h2 · h3 × state: default · hover | `primitives/ui/AnchorHeading`, `PostBody/ui/ContentHeading2 · 3` |
+| 본문 속 코드 | 본문 속 코드 | `egCcp` | 없음 | 본문 `code` 스타일 (`widgets/post/PostBody`) |
+| 코드 칸 | 코드 칸 | `CX4xi` | state: idle · copied | `PostBody/ui/CodeBlock`, `features/post/CopyCodeButton`, `shared/content/codeThemes` |
+| 강조 칸 | 강조 칸 | `eknYZ` | kind: key · warn · note | `primitives/ui/Callout` |
+| 그림과 설명 | 그림과 설명 | `I437uy` | 없음 | `primitives/ui/Figure` |
+| 표 | 표 | `J9t3G` | 없음 | `PostBody/ui/ContentTable` (표 설명은 `Figure captionSide="top"`) |
+| 인용 | 인용 | `Myj7O` | 없음 | 본문 `blockquote` 스타일 (`widgets/post/PostBody`) |
 | 데모 틀 | 데모 틀 | `M3NVPX` | state: paused · playing · no-js | `primitives/ui/DemoFrame`, `primitives/ui/DemoControls` |
-| 댓글 자리 | 댓글 자리 | `GbsK7` | 없음 | 제안 `widgets/post/Comments` |
+| 댓글 자리 | 댓글 자리 | `GbsK7` | 없음 | `widgets/post/Comments` |
 | 404 본문 | 404 본문 | `W40Po` | 없음 | `widgets/site/NotFoundMessage` |
 
 보드 안 영역 id: 기초 보드의 01 색 `E8coR8`, 02 글자 `IXwNQ`, 03 간격 · 모서리 · 선 `Z5DM2I`, 04 화면 폭과 배치 `e2gfM`, 05 아이콘 · 움직임 · 포커스 `UGtGw`. 부품 보드의 1 기본 조작 `liC3R`, 2 틀과 탐색 `XI5Ey`, 3 본문 `C18uyX`, 4 데모와 페이지 `kzhtc`, 5 어두운 화면과 휴대폰 `PgE4f`.
@@ -745,28 +745,13 @@ Knot에서는 컴포넌트마다 Figma 프레임 링크(`@see`)를 스토리에 
   4. `design/exports-system/`의 PNG를 다시 내보냅니다.
 - Pencil 변수 이름은 CSS 변수에서 `--`만 뺀 것입니다(`color-bg` = `--color-bg`). 다만 Pencil은 너비 · 높이에 변수를 받지 않아서, `--content-width`, `--toc-width`, `--header-height`, `--icon-button-size` 같은 크기 토큰은 Pencil에 숫자로 들어가 있습니다. 이 값들은 이 문서가 정본입니다.
 
-## 12. 부록: 지금 코드와 다른 점 (2026-11-21 기준)
+## 12. 부록: 지금 코드와 다른 점 (2026-11-21 3단계 기준)
 
-1단계에서 만든 `src/shared/styles/tokens.css`와 이 문서가 다른 곳입니다. 다음 단계에서 코드를 이 문서에 맞춥니다.
+1단계 코드와 이 문서의 차이는 2단계(토큰 · 부품 · 상태)와 3단계(코드 칸, 페이지 제목 `title` 단계, 글 페이지 grid와 `--toc-sticky-top`, Pretendard 미리 받기)에서 모두 코드에 반영했습니다. 아래는 남은 차이와, 문서와 다르게 둔 까닭입니다.
 
-| 항목 | 지금 코드 | 이 문서 | 할 일 |
+| 항목 | 이 문서 | 지금 코드 | 까닭 |
 |---|---|---|---|
-| 연도 숫자 색 | `--color-text-faint` `#e5e7eb` · `#2a2f38` (대비 1.24 · 1.41) | `--color-text-subtle` `#8A929C` · `#616A78` | 이름과 값 바꾸기 |
-| 옅은 선 | `--color-border-subtle`, `--color-border-surface` (시안보다 더 옅은 선) | `--color-border` 하나 | 둘을 `--color-border`로 합치기. 더 옅은 선이 꼭 필요하면 이 문서에 먼저 더하기 |
-| 조작 장치 경계 | 없음 | `--color-border-strong` | 더하기 (슬라이더 줄, 표 머리 줄, 참고 칸) |
-| 상태 · 링크 · 코드 · 데이터 색 | 없음 | `--color-surface-hover`, `--color-accent-hover`, `--color-on-accent`, `--color-focus`, `--color-link-visited`, good · bad · warn와 soft, `--color-code-*`, `--color-data-1~4` | 더하기 |
-| 휴대폰 기준 폭 | `max-width: 640px` | 767px 이하 휴대폰, 768px부터 태블릿 | 기준 폭 바꾸기 |
-| 휴대폰 h1 | 28px | 26px (시안 휴대폰 값) | 값 바꾸기 |
-| 글자 단계 | body, h1~h3, small, code | display, lead, body-sm, caption, label, code-sm과 줄 간격 · 자간 · 굵기 토큰 | 더하기 |
-| 폭 이름 | `--width-content`, `--width-page`, `--width-aside` 200px | `--content-width`, `--page-max-width`, `--toc-width` 220px | 이름 바꾸기, 목차 폭 220px |
-| 좌우 여백 | `--space-page-inline` 24px · 20px | `--page-padding-inline` 40px · 20px | 이름과 값 바꾸기 |
-| 간격 단계 | 없음 | `--space-1`~`--space-24` | 더하기 |
-| 작은 모서리 | `--radius-sm` 6px | 4px | 값 바꾸기 |
-| 글 목록 소개 제목 | h2 크기(26px) | `--font-size-title` 28px(휴대폰 24px), 줄 간격 1.4, 700, -0.015em | 토큰 더하기 |
-| 넓은 화면 목차 | (확인 필요) | 본문 첫 문단 높이에서 시작, `--toc-sticky-top` 24px | 맞추기 |
-| Pretendard preload | 없음 | `subset.91` 하나 | 더하기 |
-| 포커스 색 | `outline: 2px solid var(--color-accent)` | `var(--color-focus)` (값은 같음) | 변수 이름 바꾸기 |
-| 강조 칸 | `Callout`에 `label`만 있음 | `kind: key · warn · note`와 아이콘 | prop 더하기 |
-| 코드 칸 | Shiki `github-light-default` · `github-dark-default`, 14px | `blog-light-plus` · `blog-dark-plus` 사용자 테마(2.3 「코드」), 15px · 1.65, 글자 이음 끔, D2Coding, 탭 2, 강조 줄 · 줄 번호(20줄 초과) · 가로 스크롤 | `@shikijs/themes` · `@shikijs/transformers` 더하기, 테마 파일과 대비 테스트 만들기, `astro.config.ts`의 themes 바꾸기, CodeBlock CSS 맞추기 |
-| 움직임 | 움직임 줄이기 규칙만 있음 | `--duration-*`, `--ease-standard` | 더하기 |
-| 없는 부품 | 아이콘 단추, 건너뛰기 링크, 이전 · 다음 글, 그림과 설명, 댓글 자리 | 7장 | 만들기 |
+| 데모 화면 높이 | 200px로 미리 정함 (7.20) | 넓은 칸에서 최소 200px. 렌더링 단계 데모는 고르기 · 미리보기 · 단계가 있어 그보다 높음 | 서버에서 그린 첫 화면이 그대로 있어 JavaScript가 늦게 와도 높이가 변하지 않습니다(10장의 CLS 줄과 같음) |
+| 표 설명 | `<caption>` (7.18) | `<Figure caption="표 1. …" captionSide="top">`의 `<figcaption>` | 마크다운(GFM) 표에는 `<caption>`을 넣을 수 없습니다 |
+| 글 제목 줄바꿈 | 손으로 줄바꿈을 넣지 않음 (3.3) | 제목의 첫 `: ` 앞뒤를 두 덩어리로 그려, 줄을 바꿔야 할 때 콜론 뒤에서 먼저 바꿈 (`widgets/post/PostHeader/utils/splitTitle`) | 손 줄바꿈이 아니라 「무엇: 어떻게」 꼴의 제목을 읽기 좋게 나누는 규칙입니다. 좁은 칸에서는 덩어리 안에서 다시 줄을 바꿉니다 |
+| Pretendard 글꼴 무게 | 첫 화면 조각만 합계 150KB (10장) | 미리 받기는 `subset.91` 하나(37KB). 다만 브라우저는 화면 밖 글자에도 해당 조각을 받아, 시험 글 한 편에서 조각 20여 개(약 550KB)를 받습니다 | dynamic subset의 동작입니다. 「첫 화면」 기준을 어떻게 잴지(첫 화면 안 조각만 셀지, 페이지 전체를 셀지) 정해야 합니다 |

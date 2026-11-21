@@ -16,8 +16,9 @@
 | --- | --- |
 | `pnpm dev` | 개발 서버 (`http://localhost:4321`). 에이전트는 `pnpm astro dev --background`로 띄우고 `pnpm astro dev stop`으로 끕니다 |
 | `pnpm build` | 정적 빌드 (`dist/`) |
-| `pnpm check` | 타입 검사 (`astro check`, TypeScript strict) |
+| `pnpm check` | 타입 검사(`astro check`, TypeScript strict)와 코드용 한글 글꼴이 글과 맞는지 검사 |
 | `pnpm test` | 단위 테스트 (vitest) |
+| `pnpm fonts:code` | 글의 코드에 쓰인 한글로 D2Coding 부분 글꼴(Blog Code Hangul)을 다시 만듦. 코드에 새 한글을 쓰면 돌림 |
 
 ---
 

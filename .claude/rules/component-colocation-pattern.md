@@ -91,7 +91,7 @@ src/
 - 컴포넌트 관련 모든 파일은 반드시 해당 컴포넌트 폴더의 세그먼트 내에 위치. (예외: 통합 테스트와 React 메인 컴포넌트의 `index.module.css`는 컴포넌트 폴더 바로 아래에 둠)
 - 컴포넌트 폴더 내에서만 사용되는 파일들은 외부에서 임포트되지 않도록 주의.
 - `ui/` 내부의 서브 컴포넌트도 **부모 컴포넌트의 추상화 레벨 규칙을 그대로 따름**.
-  - 예: `PostArticle/ui/CodeBlock.astro`는 widget 레벨이므로 feature인 `CopyCodeButton`을 쓸 수 있음.
+  - 예: `PostBody/ui/CodeBlock.astro`는 widget 레벨이므로 feature인 `CopyCodeButton`을 쓸 수 있음.
 - **훅의 위치는 사용 횟수("지금은 여기서만 쓴다")로 판단하지 않음.** 컴포넌트와 강결합된 훅만 `model`에 코로케이션하고, 도메인 값만 주고받는 훅은 `shared/hooks/domain/<도메인>`에 둠. 세부 기준은 `project-structure` 스킬의 「코드를 shared로 내리는 기준」 참고.
 - `.astro`의 `<script>`가 쓰는 판단 로직(예: 지금 읽는 제목 고르기)은 `utils`로 떼어 단위 테스트함. `<script>`에는 DOM을 읽고 쓰는 일만 남김.
 - 하나의 페이지를 렌더링하는 파일은 추상화 규칙의 대상은 아니지만, 폴더/`index.astro` 형태는 동일하게 지킴. (예: `pages/posts/[slug]/index.astro`)

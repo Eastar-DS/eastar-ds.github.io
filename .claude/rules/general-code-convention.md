@@ -132,7 +132,7 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 
   ```astro
   ---
-  // e.g. src/modules/widgets/post/PostArticle/index.astro
+  // e.g. src/modules/widgets/post/PostBody/index.astro
   import Callout from "@/shared/components/primitives/ui/Callout/index.astro"; // ✅
 
   import CodeBlock from "./ui/CodeBlock.astro"; // ✅ 같은 디렉토리(하위) 내에서만 상대경로 허용

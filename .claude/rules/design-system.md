@@ -26,6 +26,7 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 | 뜻이 있는 선(슬라이더 남은 줄, 표 머리 줄, 참고 칸 선, 칩 올림 테두리) | `--color-border-strong` (3:1 이상) |
 | 24px 넘는 큰 글자만(연도, 404 숫자) | `--color-text-subtle` |
 | 「고른 것」 · 「지금 바뀐 것」 | `--color-accent`, `--color-accent-soft` |
+| 코드 칸의 틀(바탕 · 선 · 파일 이름 · 「복사됨」 · 줄 번호 · 강조 줄) | `--color-code-*`. 낱말 색은 CSS가 아니라 Shiki 테마(`shared/content/codeThemes`)가 칠함 |
 | 데모 범주 | `--color-data-1`~`4`. 데모와 그 데모를 가리키는 본문 낱말에만. 이름표나 모양을 함께 씀 |
 
 - 색만으로 뜻을 알리지 않습니다. 고른 칩은 체크 아이콘, 강조 칸은 아이콘과 제목, 링크는 밑줄을 함께 씁니다.
@@ -41,6 +42,11 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 ## 부품
 
 - 이미 있는 부품을 먼저 씁니다: `Icon`, `IconButton`, `Chip`, `Callout`(kind: key · warn · note), `Figure`, `SkipLink`, `AnchorHeading`, `DemoFrame`, `DemoControls`.
+- 페이지 제목(글 목록 · 시리즈 · 소개 같은 페이지의 h1)은 `title` 단계(`--font-size-title` 28px · 휴대폰 24px), 글 제목은 `h1` 단계(36px · 26px)입니다.
+- 코드 칸
+  - 낱말 색은 VS Code Light+ / Dark+를 대비 보정한 `blog-light-plus` · `blog-dark-plus`입니다. 테마를 바꾸거나 Shiki를 올리면 `codeThemes/test.ts`가 모든 글자색의 대비(바탕 · 강조 줄 위 4.5:1)를 확인합니다.
+  - 15px(휴대폰 14px) · 줄 간격 1.65 · 글자 이음 끔 · 탭 2 · 가로 스크롤. 강조 줄은 메타 `{3,5-6}`, 줄 번호는 20줄 넘을 때만.
+  - 코드 속 한글은 D2Coding 부분 글꼴을 씁니다. OFL의 예약 글꼴 이름 때문에 부분 글꼴의 이름은 「Blog Code Hangul」입니다. 글의 코드에 새 한글을 쓰면 `pnpm fonts:code`를 돌립니다.
 - 아이콘은 Lucide 하나만, 선 굵기 2, `currentColor`. 크기는 `size="sm|md|lg|xl"`(14 · 16 · 18 · 20px)입니다. 아이콘만 있는 단추에는 `aria-label`을 꼭 붙입니다.
 - 포커스는 `base.css`의 `:focus-visible`(2px `--color-focus`, 간격 2px)을 씁니다. `outline: none`으로 지우거나 `box-shadow`로 대신하지 않습니다. 모서리만 부품 모서리를 따르게 고칩니다.
 - 움직임은 `--duration-*`과 `--ease-standard`를 씁니다. 움직임 줄이기 설정이면 `base.css`가 시간을 0으로 줄입니다. 데모는 자동 재생하지 않습니다.

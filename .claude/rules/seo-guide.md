@@ -11,7 +11,7 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 ## 페이지마다 지킬 것
 
 - `<html lang="ko">`는 `Document`가 넣음
-- **h1은 페이지마다 하나.** 글 화면은 `PostArticle`(글 머리), 글 목록은 `SiteIntro`, 소개는 `AboutProfile`, 개인정보 처리 안내는 `PrivacyNotice`, 404는 `NotFoundMessage`(「찾는 글이 없습니다」)가 가짐. 머리말의 사이트 이름은 h1이 아님
+- **h1은 페이지마다 하나.** 글 화면은 `PostHeader`(글 머리), 글 목록은 `SiteIntro`, 소개는 `AboutProfile`, 개인정보 처리 안내는 `PrivacyNotice`, 404는 `NotFoundMessage`(「찾는 글이 없습니다」)가 가짐. 머리말의 사이트 이름은 h1이 아님
 - 본문 제목(h2, h3)에는 앵커를 붙임. `AnchorHeading`이 제목 뒤에 「제목」 링크 아이콘을 둠(올리거나 포커스할 때만 보임)
 - 모든 페이지는 `shared/seo/createPageMeta`로 메타를 만들어 `Document`에 넘김. `Document`가 title, description, canonical, og, twitter 메타를 그림
 

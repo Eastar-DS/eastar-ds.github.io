@@ -36,7 +36,8 @@ user-invocable: true
 ## 전체 폴더 구조
 
 ```plaintext
-astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마
+astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마와 transformer
+scripts/buildCodeFont.ts             # 코드용 한글 부분 글꼴 만들기 (pnpm fonts:code)
 src/
 ├── content.config.ts                # 글 모음 스키마 (Astro가 요구하는 위치)
 ├── content/
@@ -89,7 +90,7 @@ src/
 │   │   │   ├── layout/              # Document, Container, Stack, WithAside, ShowOn
 │   │   │   └── animation/
 │   │   └── composites/
-│   ├── content/                     # 콘텐츠 모음을 읽어 화면용 값으로 바꾸는 함수
+│   ├── content/                     # 콘텐츠 모음을 읽어 화면용 값으로 바꾸는 함수, 코드 칸 테마 · transformer
 │   │   ├── getPosts/index.ts
 │   │   └── groupPostsByYear/
 │   │       ├── index.ts
@@ -109,7 +110,8 @@ src/
 │   │       └── test.ts
 │   ├── constants/                   # site, theme
 │   ├── types/                       # post.ts, seo.ts, theme.ts
-│   └── styles/                      # tokens.css, base.css, index.css
+│   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
+│       └── fonts/                   # 코드용 한글 부분 글꼴과 OFL 전문
 │
 └── __test__/                        # E2E 테스트 (필요할 때)
 ```
