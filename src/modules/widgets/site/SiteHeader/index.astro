@@ -5,18 +5,25 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 import IconButton from "@/shared/components/primitives/ui/IconButton/index.astro";
 import { IS_RESUME_SHOWN } from "@/shared/constants/features";
 import { SITE } from "@/shared/constants/site";
+import getSeriesList from "@/shared/content/getSeriesList";
 import { getNavItems, PATHS } from "@/shared/routes/paths";
 
+import filterNavItems from "./utils/filterNavItems";
 import isCurrentPath from "./utils/isCurrentPath";
 
 /**
  * 사이트 머리말입니다. 사이트 이름, 주 메뉴, RSS, 밝기 단추를 둡니다. 화면에 붙어 따라오지 않고, 인쇄할 때는 그리지 않습니다.
  * 주 메뉴의 이력서 · 포트폴리오는 두 페이지를 그릴 때(`IS_RESUME_SHOWN`)만 넣습니다.
  * 머리말 칸이 767px 이하면 주 메뉴를 메뉴 단추 안으로 접습니다. 메뉴는 JavaScript 없이 열리고, Esc로 닫으면 메뉴 단추로 포커스가 돌아갑니다.
+ * 시리즈가 하나도 없으면 「시리즈」 메뉴가 갈 구획이 없어서 메뉴에서 뺍니다.
  * @design design/blog.pen 「머리말」 mg60A (넓은 화면 r6OXd · 휴대폰 W5ZR4d)
  */
 const { pathname } = Astro.url;
-const navItems = getNavItems({ isResumeShown: IS_RESUME_SHOWN }).map((item) => ({
+const seriesList = await getSeriesList();
+const navItems = filterNavItems({
+  items: getNavItems({ isResumeShown: IS_RESUME_SHOWN }),
+  hasSeries: seriesList.length > 0,
+}).map((item) => ({
   ...item,
   isCurrent: isCurrentPath({ pathname, href: item.href }),
 }));
