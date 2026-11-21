@@ -47,3 +47,13 @@
 | (없음) | `primitives/layout`에 `Stack`(위아래 간격)과 `ShowOn`(화면 폭에 따라 보이기)을 더함 | 페이지가 widgets 사이 간격과 「넓은 화면에서만 옆 목차, 좁은 화면에서만 접는 목차」를 widgets를 고치지 않고 정할 수 있게 함 |
 | (없음) | `shared/seo`를 더함 | 메타 · 구조화 데이터 · RSS 값을 만드는 함수가 여러 페이지에서 쓰여서, 페이지에 계산을 두지 않으려고 따로 둠 |
 | (없음) | 소개 페이지(`/about/`)를 짧게 만듦 | A안 머리말에 「소개」 메뉴가 있어서, 링크가 404로 가지 않게 함. 내용은 시안의 소개 문장만 씀 |
+
+## 2단계에서 더 바꾼 것 (2026-11-21, 디자인 시스템에 맞추기)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `.claude/rules/design-system.md` | 새로 씀. `.astro` · `.tsx` · `.css`에 주입. 토큰만 쓰기, 색의 쓰임, 화면 폭 구간(767 · 768 · 1200px), 부품 목록, 포커스, `no-js`, `@design` 주석 형식 | 디자인 시스템 정본(`docs/design-system.md`)이 생겨서, 코드를 쓸 때 꼭 지킬 것만 요약해 주입함 |
+| `.claude/rules/content-guide.md` | 글쓰기 정책을 빼고 정본(`docs/content-guide.md`)을 가리키는 요약으로 줄임. 스키마, 글에서 쓰는 부품 표, `shared/content` 함수 표만 남김 | 같은 내용이 두 곳에 있으면 어긋나므로 정본을 하나로 둠 |
+| `.claude/rules/general-code-convention.md` | 스타일 절을 `design-system.md`로 넘기고, 속성을 펼치는 Astro 컴포넌트는 `data-astro-cid-*`를 거른다는 규칙, `@design` 주석, `no-js` 처리를 더함 | 2단계에서 실제로 부딪친 문제(부모 `.root` 규칙이 `IconButton`에 걸림)를 규칙으로 남김 |
+| `.claude/rules/layout-pattern.md`, `seo-guide.md`, `test-strategy.md`, `component-abstract-pattern.md` | 폭 토큰 이름, `main#main`과 건너뛰기 링크, 이전 · 다음 글 · 댓글 자리, 새 h1 페이지, 비교할 시안 폴더(`design/exports-system/`)를 고침 | 코드가 바뀐 만큼 맞춤 |
+| `CLAUDE.md` | 디자인 · 글쓰기의 정본 문서를 적고, 규칙 표에 `design-system.md`를 더함. 에이전트가 정본 문서를 고치지 않는다는 줄을 더함 | 정본이 생겼음 |

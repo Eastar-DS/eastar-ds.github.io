@@ -17,26 +17,30 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
 
 | 하는 일 | 위치 | 담는 것 |
 | --- | --- | --- |
-| HTML 문서의 뼈대 | `primitives/layout/Document` | `<html lang="ko">`, `<head>` 메타 · 구조화 데이터 · 테마 초기화, `<body>`. **화면 구조는 담지 않음** |
-| 가운데 정렬과 최대 폭 | `primitives/layout/Container` | `size`: `page`(1200px) · `content`(680px) · `withAside`(본문 + 옆 칸) |
-| 위아래로 쌓기 | `primitives/layout/Stack` | `gap`(px) |
-| 본문 + 옆 칸 | `primitives/layout/WithAside` | 넓은 화면(1200px 이상)에서만 나란히. `isAsideSticky`로 옆 칸 고정 |
+| HTML 문서의 뼈대 | `primitives/layout/Document` | `<html lang="ko">`, `<head>` 메타 · 구조화 데이터 · 테마 초기화, `<body>` 맨 앞의 건너뛰기 링크. **화면 구조는 담지 않음** |
+| 가운데 정렬과 최대 폭 | `primitives/layout/Container` | `size`: `page`(1200px) · `content`(680px) · `withAside`(680 + 72 + 220px). 좌우 여백은 `--page-padding-inline` |
+| 위아래로 쌓기 | `primitives/layout/Stack` | `gap`: 간격 토큰 번호(14 → `--space-14` 56px) |
+| 본문 + 옆 칸 | `primitives/layout/WithAside` | 넓은 화면(1200px 이상)에서만 나란히. `isAsideSticky`로 옆 칸을 위에서 96px에 고정 |
 | 화면 폭에 따라 보이기 | `primitives/layout/ShowOn` | `screen`: `wide` · `narrow` |
-| 배치를 고르는 일 | `src/pages/**` | 위 primitives로 widgets를 놓고, 페이지 위아래 여백만 `<style>`로 정함 |
+| 배치를 고르는 일 | `src/pages/**` | 위 primitives로 widgets를 놓고, 페이지 위아래 여백만 `<style>`로 정함(간격 토큰, 768px부터 넓은 값) |
 
 ## 페이지를 쓰는 법
 
 ```astro
 <Document meta={meta} jsonLds={jsonLds}>
   <SiteHeader />
-  <main class="main">
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="withAside">
       <WithAside isAsideSticky>
-        <PostArticle slug={post.slug}>
-          <ShowOn screen="narrow" slot="after-header">
-            <TableOfContents slug={post.slug} variant="collapsible" />
-          </ShowOn>
-        </PostArticle>
+        <Stack gap={14}>
+          <PostArticle slug={post.slug}>
+            <ShowOn screen="narrow" slot="after-header">
+              <TableOfContents slug={post.slug} variant="collapsible" />
+            </ShowOn>
+          </PostArticle>
+          <PostNav slug={post.slug} />
+          <Comments />
+        </Stack>
         <ShowOn screen="wide" slot="aside">
           <TableOfContents slug={post.slug} variant="list" />
         </ShowOn>
@@ -47,7 +51,7 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
 </Document>
 ```
 
-- 페이지마다 `<main>`은 하나. 꼬리말이 화면 아래에 붙도록 `base.css`가 `body > main`을 늘림
+- 페이지마다 `<main id={MAIN_CONTENT_ID} tabindex="-1">`은 하나. 건너뛰기 링크가 이 자리로 옮겨 주고, 꼬리말이 화면 아래에 붙도록 `base.css`가 `body > main`을 늘림
 - 머리말 · 꼬리말을 빼고 싶은 페이지는 그냥 놓지 않으면 됨
 - 목차를 왼쪽으로 옮기거나 없애는 일도 그 페이지 파일만 고침
 
@@ -61,5 +65,5 @@ description: 공통 레이아웃(outlet) 없이 페이지마다 화면 배치를
 ## layout primitives가 지킬 것
 
 - 화면 구조만 다루고 내용은 모름. 도메인 이름(글, 목차)을 props나 클래스에 쓰지 않음
-- 화면 폭 구간은 넓은 화면 1200px 하나로 맞춤 (`tokens.css` 머리 주석). 새 구간이 필요하면 `tokens.css` 주석에 먼저 적음
+- 화면 폭 구간은 휴대폰 0–767px, 태블릿 768px부터, 넓은 화면 1200px부터 (`docs/design-system.md` 5장, `tokens.css` 머리 주석). 휴대폰부터 짜고 `min-width`로 넓힘
 - 숨긴 내용은 `display: none`으로 숨겨 스크린 리더에도 읽히지 않게 함. 같은 내용을 두 번 그려도 한 번만 읽힘

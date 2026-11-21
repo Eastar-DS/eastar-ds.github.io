@@ -84,6 +84,7 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 - React 컴포넌트는 `export default function` 형식으로 구현
 - Astro 컴포넌트는 frontmatter(`---` 사이)의 JSDoc으로 **무엇을 하는 컴포넌트인지 한두 줄**을 둠. 템플릿의 HTML 주석(`<!-- -->`)은 빌드 결과물에 그대로 나가므로 쓰지 않음
 - 슬롯이 있으면 JSDoc에 슬롯 이름과 쓰임을 적음
+- Pencil 시안에 대응하는 부품이면 JSDoc에 `@design design/blog.pen 「프레임 이름」 id`를 적음 (`.claude/rules/design-system.md`의 「디자인과 코드 잇기」)
 - 함수는 화살표 함수로 만들고 `export default`로 내보냄. 한 파일에서 테스트용으로 더 내보낼 것이 있으면 이름 붙인 내보내기를 더함
 - 커스텀 훅은 `use*`로 시작하고 **객체 반환** (배열 X — 확장성)
 - 파라미터가 **2개 이상**일 때는 객체 구조 분해로 받기
@@ -100,11 +101,10 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 ## 스타일
 
 - Astro 컴포넌트는 같은 파일의 범위 `<style>`로, React 컴포넌트는 옆의 `.module.css`로 작성
-- 디자인 기준값(색·글꼴·간격·폭)은 `src/shared/styles/tokens.css`의 CSS 변수로 쓰고, 값을 컴포넌트에 하드코딩하지 않음
-  - 색은 `light-dark()`로 밝은 값과 어두운 값을 한 줄에 둠. 어두운 화면 전용 규칙을 따로 만들지 않음
-  - 미디어 쿼리에는 변수를 쓸 수 없으므로 화면 폭 구간은 숫자로 씀 (넓은 화면 1200px, 휴대폰 640px. `tokens.css` 머리 주석이 원본)
-- **Tailwind CSS와 CSS-in-JS는 사용하지 않음.** 전역 클래스는 `shared/styles/base.css`의 `.visually-hidden`만 둠
+- 값(색·글자·간격·모서리·움직임)과 화면 폭 구간은 `.claude/rules/design-system.md`(정본 `docs/design-system.md`)를 따름. 토큰만 쓰고 하드코딩하지 않음
+- **Tailwind CSS와 CSS-in-JS는 사용하지 않음.** 전역 클래스는 `shared/styles/base.css`의 `.visually-hidden`과 Document가 붙이는 `no-js`만 둠
 - 자식 컴포넌트가 그리는 요소(예: `Icon`)에는 부모의 범위 속성이 붙지 않으므로 `.부모클래스 :global(.자식클래스)`로 고름
+- 남은 속성을 펼치는(`{...rest}`) Astro 컴포넌트는 `data-astro-cid-*`를 걸러서 펼침. Astro가 부모의 범위 속성도 넘겨서, 그대로 펼치면 부모의 같은 이름 클래스(`.root`) 규칙이 자식에 걸림 (`IconButton` 참고)
 - 본문(MDX)처럼 다른 곳이 그린 요소를 꾸밀 때는 `.body > :global(p)`처럼 바로 아래 요소만 골라, 끼워 넣은 컴포넌트로 규칙이 새지 않게 함
 - 반응형
   - widgets·features·composites 안에서는 **container query를 먼저 씀**. 컴포넌트는 자기가 어떤 폭의 틀에 놓일지 가정하지 않음
@@ -120,7 +120,8 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 | 상태가 여럿이고 화면을 다시 그리는 데모 | React 컴포넌트(`index.tsx`) + `client:visible` | `RenderingPipelineDemo` |
 
 - React 섬은 처음 그림을 서버에서 만들어 두므로, 서버 HTML과 첫 클라이언트 그림이 같아야 함. 인라인 `style`에 CSS 변수(`--x`)를 넣으면 하이드레이션 경고가 나므로 일반 속성(`width` 등)을 씀
-- 첫 그림 전에 꼭 돌아야 하는 코드(테마)는 `Document`의 `is:inline` 스크립트만 씀
+- 첫 그림 전에 꼭 돌아야 하는 코드(테마, `no-js` 클래스 지우기)는 `Document`의 `is:inline` 스크립트만 씀
+- JavaScript가 꺼지면 누를 수 없는 단추는 `:global(.no-js)`로 숨기고, 필요하면 안내를 보임 (`ThemeToggle`, `DemoFrame`)
 
 ## 임포트 경로
 

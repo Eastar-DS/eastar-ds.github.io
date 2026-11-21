@@ -40,5 +40,5 @@ AI로 기능 개발 시 검증 루프가 필요한데, 검증 루프를 테스�
 자동화 테스트와 별개로, 화면을 바꾸면 개발 서버(`pnpm dev`)로 아래를 직접 봄.
 
 - 넓은 화면(1440px), 휴대폰(390px), 어두운 화면
-- `design/exports-a/`의 시안 PNG와 나란히 비교
+- `design/exports-system/`의 Pencil PNG와 나란히 비교 (예전 시안 `design/exports-a/`가 아니라)
 - 확인 캡처는 저장소에 넣지 않음

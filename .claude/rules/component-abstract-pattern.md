@@ -100,7 +100,7 @@ description: 컴포넌트(Astro·React)가 지켜야 하는 추상화 레벨을 
 - 파생값 계산이 허용되는 경우는 어떤 디자인 변형을 그릴지 고르는 계산뿐
 - `shared/utils`와 도메인 상수를 import하지 않음. `Document`가 테마 저장 키(`shared/constants/theme`)와 RSS 주소를 쓰는 것은 문서 뼈대의 일이라 예외
 - 종류에 따라 `ui`, `layout`, `animation`으로 나뉨
-  - `ui` : 색상이나 모형 등 실체가 있는 컴포넌트 (e.g. `Icon`, `Chip`, `Callout`, `AnchorHeading`, `DemoFrame`)
+  - `ui` : 색상이나 모형 등 실체가 있는 컴포넌트 (e.g. `Icon`, `IconButton`, `Chip`, `Callout`, `Figure`, `SkipLink`, `AnchorHeading`, `DemoFrame`)
   - `layout` : 특정 요소를 위치시키는 컴포넌트 (e.g. `Document`, `Container`, `Stack`, `WithAside`, `ShowOn`)
   - `animation` : 특정 요소의 애니메이션을 다루는 컴포넌트
 

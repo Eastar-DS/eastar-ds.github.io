@@ -20,12 +20,13 @@ user-invocable: true
 ## 세부 규칙 문서
 
 - 폴더·파일 네이밍, 스타일, JavaScript 보내기: `.claude/rules/general-code-convention.md`
+- 디자인 토큰 · 부품 · 화면 폭: `.claude/rules/design-system.md` (정본 `docs/design-system.md`)
 - 컴포넌트 위치(추상화 레벨): `.claude/rules/component-abstract-pattern.md`
 - 컴포넌트 폴더 구성(콜로케이션): `.claude/rules/component-colocation-pattern.md`
 - 세그먼트 정의·배치·의존 규칙: `.claude/rules/segment-pattern.md`
 - 페이지 배치(공통 레이아웃 없음): `.claude/rules/layout-pattern.md`
 - shared 레이어 구성·폴더별 역할: `.claude/rules/shared-layer.md`
-- 글 쓰기와 콘텐츠 함수: `.claude/rules/content-guide.md`
+- 글 쓰기와 콘텐츠 함수: `.claude/rules/content-guide.md` (정본 `docs/content-guide.md`)
 - 메타·구조화 데이터·사이트맵·RSS: `.claude/rules/seo-guide.md`
 - React 섬의 훅: `.claude/rules/hook-guide.md`
 - 테스트: `.claude/rules/test-strategy.md`
@@ -46,6 +47,7 @@ src/
 ├── pages/                           # 라우트. widgets를 배치·조립만 함
 │   ├── index.astro                  # 글 목록 (/)
 │   ├── about/index.astro            # 소개 (/about/)
+│   ├── privacy/index.astro          # 개인정보 처리 안내 (/privacy/)
 │   ├── posts/[slug]/index.astro     # 글 화면 (/posts/{slug}/)
 │   ├── 404.astro
 │   └── rss.xml.ts                   # RSS (/rss.xml)
@@ -83,7 +85,7 @@ src/
 ├── shared/
 │   ├── components/
 │   │   ├── primitives/
-│   │   │   ├── ui/                  # Icon, Chip, Callout, AnchorHeading, DemoFrame, DemoControls
+│   │   │   ├── ui/                  # Icon, IconButton, Chip, Callout, Figure, SkipLink, AnchorHeading, DemoFrame, DemoControls
 │   │   │   ├── layout/              # Document, Container, Stack, WithAside, ShowOn
 │   │   │   └── animation/
 │   │   └── composites/
@@ -100,7 +102,7 @@ src/
 │   │   ├── domain/
 │   │   └── common/
 │   ├── routes/
-│   │   └── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS
+│   │   └── paths/index.ts           # PATHS, getPostPath, NAV_ITEMS, MAIN_CONTENT_ID
 │   ├── utils/
 │   │   └── formatDate/
 │   │       ├── index.ts
