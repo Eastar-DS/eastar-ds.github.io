@@ -1,0 +1,41 @@
+---
+interface Props {
+  /** 칸 맨 위에 굵게 보이는 이름 */
+  label?: string;
+}
+
+/** 본문에서 꼭 기억할 문장을 강조하는 칸입니다. 글에서는 `<Callout>핵심 문장</Callout>`으로 씁니다 */
+const { label = "핵심" } = Astro.props;
+---
+
+<div class="container" role="note">
+  <p class="label">{label}</p>
+  <div class="content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .container {
+    padding: 16px 20px;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: var(--color-accent-soft);
+  }
+
+  .label {
+    margin-bottom: 4px;
+    color: var(--color-accent);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  .content {
+    line-height: 1.7;
+  }
+
+  .content :global(p + p) {
+    margin-top: 8px;
+  }
+</style>

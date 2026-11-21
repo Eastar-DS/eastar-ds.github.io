@@ -1,0 +1,90 @@
+---
+import "@/shared/styles/index.css";
+
+import { PATHS } from "@/shared/routes/paths";
+import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
+import type { JsonLd, PageMeta } from "@/shared/types/seo";
+
+interface Props {
+  /** `shared/seo/createPageMeta`로 만든 메타 정보 */
+  meta: PageMeta;
+  /** 페이지에 넣을 구조화 데이터 */
+  jsonLds?: JsonLd[];
+}
+
+/**
+ * HTML 문서의 뼈대(`<html lang="ko">`, `<head>` 메타, `<body>`)만 그립니다.
+ * 머리말 · 꼬리말 같은 화면 구조는 담지 않습니다. 화면 배치는 페이지가 직접 정합니다.
+ *
+ * - 기본 슬롯: `<body>` 안의 내용
+ * - `head` 슬롯: 페이지마다 더할 `<head>` 요소
+ */
+const { meta, jsonLds = [] } = Astro.props;
+
+// 테마 인라인 스크립트: 사용자가 고른 테마를 첫 그림 전에 적용해서 깜빡이지 않게 합니다.
+// 고르지 않았으면 아무것도 하지 않고, CSS(color-scheme: light dark)가 시스템 설정을 따릅니다.
+
+// JSON 안의 </script>가 스크립트를 끝내지 않게 < 를 바꿔 둡니다
+const serializeJsonLd = (jsonLd: JsonLd) =>
+  JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={meta.canonicalUrl} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={meta.siteName}
+      href={PATHS.rss}
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={meta.ogType} />
+    <meta property="og:site_name" content={meta.siteName} />
+    <meta property="og:locale" content={meta.locale} />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={meta.canonicalUrl} />
+    {
+      meta.publishedTime && (
+        <meta property="article:published_time" content={meta.publishedTime} />
+      )
+    }
+    {
+      meta.modifiedTime && (
+        <meta property="article:modified_time" content={meta.modifiedTime} />
+      )
+    }
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={meta.title} />
+    <meta name="twitter:description" content={meta.description} />
+
+    {
+      jsonLds.map((jsonLd) => (
+        <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
+      ))
+    }
+
+    <script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
+      try {
+        const storedTheme = localStorage.getItem(storageKey);
+        if (storedTheme === "light" || storedTheme === "dark") {
+          document.documentElement.dataset.theme = storedTheme;
+        }
+      } catch {}
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

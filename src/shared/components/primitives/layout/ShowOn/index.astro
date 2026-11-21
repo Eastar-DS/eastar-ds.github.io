@@ -1,0 +1,30 @@
+---
+interface Props {
+  /**
+   * - `wide`: 넓은 화면(1200px 이상)에서만 보입니다
+   * - `narrow`: 그보다 좁은 화면에서만 보입니다
+   */
+  screen: "wide" | "narrow";
+}
+
+/** 화면 폭에 따라 내용을 보이거나 숨깁니다. 숨긴 내용은 스크린 리더에도 읽히지 않습니다 */
+const { screen } = Astro.props;
+---
+
+<div class={screen}>
+  <slot />
+</div>
+
+<style>
+  @media (min-width: 1200px) {
+    .narrow {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1199.98px) {
+    .wide {
+      display: none;
+    }
+  }
+</style>

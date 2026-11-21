@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** 요소 사이 간격(px) */
+  gap: number;
+}
+
+/** 요소를 위에서 아래로 쌓고 사이 간격을 고르게 둡니다 */
+const { gap } = Astro.props;
+---
+
+<div class="root" style={`--stack-gap: ${gap}px`}>
+  <slot />
+</div>
+
+<style>
+  .root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-gap);
+  }
+</style>

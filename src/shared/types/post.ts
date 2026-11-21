@@ -1,0 +1,31 @@
+/** 화면에 쓰는 글 정보. 콘텐츠 모음의 항목을 `shared/content`에서 이 모양으로 바꿉니다 */
+export interface Post {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  publishedAt: Date;
+  /** 고친 날이 없으면 발행일과 같습니다 */
+  updatedAt: Date;
+  readingMinutes: number;
+  series?: PostSeries;
+}
+
+export interface PostSeries {
+  name: string;
+  order: number;
+}
+
+/** 연도별로 묶은 글 목록의 한 묶음 */
+export interface PostYearGroup {
+  year: string;
+  posts: Post[];
+}
+
+/** 시리즈 하나의 요약 */
+export interface SeriesSummary {
+  name: string;
+  count: number;
+  /** 시리즈의 첫 글. 시리즈 칩을 누르면 이 글로 갑니다 */
+  firstPostSlug: string;
+}

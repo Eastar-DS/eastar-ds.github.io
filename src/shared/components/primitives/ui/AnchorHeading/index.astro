@@ -1,0 +1,55 @@
+---
+interface Props {
+  level: 2 | 3;
+  /** 제목의 id. 주소 끝의 #id로 이 제목에 바로 올 수 있습니다 */
+  id?: string;
+}
+
+/**
+ * 스스로를 가리키는 링크가 걸린 제목입니다. 제목을 누르면 주소가 이 제목을 가리키도록 바뀝니다.
+ * 넓은 화면에서는 마우스를 올리면 왼쪽에 # 표시가 보입니다.
+ */
+const { level, id } = Astro.props;
+const Tag = `h${level}` as const;
+---
+
+<Tag id={id} class="root">
+  {id ? (
+    <a class="link" href={`#${id}`}>
+      <slot />
+    </a>
+  ) : (
+    <slot />
+  )}
+</Tag>
+
+<style>
+  .root {
+    position: relative;
+  }
+
+  .link {
+    color: inherit;
+  }
+
+  .link::before {
+    content: "#";
+    position: absolute;
+    left: -1em;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .link:hover::before,
+  .link:focus-visible::before {
+    opacity: 1;
+  }
+
+  @media (max-width: 1199.98px) {
+    .link::before {
+      display: none;
+    }
+  }
+</style>

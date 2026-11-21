@@ -1,0 +1,54 @@
+---
+interface Props {
+  /** 옆 칸을 스크롤해도 화면 위에 붙여 둡니다 */
+  isAsideSticky?: boolean;
+}
+
+/**
+ * 본문 칸 옆에 좁은 옆 칸을 둡니다. 넓은 화면(1200px 이상)에서만 나란히 놓고,
+ * 그보다 좁으면 옆 칸을 본문 아래로 내립니다. 좁은 화면에서 옆 칸을 숨길지는 `ShowOn`으로 정합니다.
+ *
+ * - 기본 슬롯: 본문 칸
+ * - `aside` 슬롯: 옆 칸
+ */
+const { isAsideSticky = false } = Astro.props;
+---
+
+<div class="container">
+  <div class="main">
+    <slot />
+  </div>
+  <div class:list={["aside", { isAsideSticky }]}>
+    <slot name="aside" />
+  </div>
+</div>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: minmax(0, var(--width-content));
+    justify-content: center;
+  }
+
+  .main {
+    min-width: 0;
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+      grid-template-columns:
+        minmax(0, var(--width-content))
+        var(--width-aside);
+      column-gap: 72px;
+      justify-content: center;
+    }
+
+    .isAsideSticky {
+      position: sticky;
+      top: 32px;
+      align-self: start;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+  }
+</style>

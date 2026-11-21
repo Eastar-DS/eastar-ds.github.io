@@ -1,0 +1,74 @@
+/*
+ * 디자인 기준값 (A안: 차분한 문서형)
+ * 색은 light-dark()로 밝은 · 어두운 값을 한 줄에 둡니다.
+ * - 시스템 설정을 따를 때: :root의 color-scheme이 light dark라서 브라우저가 고릅니다
+ * - 사용자가 고르면: <html data-theme="light|dark">가 color-scheme을 하나로 고정합니다
+ *
+ * 화면 폭 구간 (미디어 쿼리에는 변수를 못 쓰므로 숫자를 그대로 씁니다)
+ * - 넓은 화면: 1200px 이상 (ShowOn, WithAside의 옆 칸)
+ * - 휴대폰: 640px 이하 (본문 16px)
+ */
+:root {
+  color-scheme: light dark;
+
+  --color-bg: light-dark(#ffffff, #0f1115);
+  /* 코드 칸, 데모 칸의 바탕 */
+  --color-surface: light-dark(#f6f8fa, #171a21);
+  --color-text: light-dark(#1f2328, #e6e8eb);
+  --color-text-muted: light-dark(#59636e, #9aa4b2);
+  --color-border: light-dark(#e5e7eb, #2a2f38);
+  /* 머리말 · 꼬리말 · 목록 줄 · 목차의 옅은 선 */
+  --color-border-subtle: light-dark(#f2f3f5, #1d2027);
+  /* 코드 칸 · 데모 칸의 테두리 */
+  --color-border-surface: light-dark(#edeff2, #21252d);
+  --color-accent: light-dark(#2457d6, #7aa2ff);
+  /* 「핵심」 칸, 데모에서 다시 하는 단계의 바탕 */
+  --color-accent-soft: light-dark(#eaf0fd, #1b2540);
+  /* 글 목록의 큰 연도 숫자 */
+  --color-text-faint: light-dark(#e5e7eb, #2a2f38);
+
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Pretendard Variable", monospace;
+
+  --font-size-body: 17px;
+  --line-height-body: 1.75;
+  --font-size-h1: 36px;
+  --font-size-h2: 26px;
+  --font-size-h3: 20px;
+  --font-size-small: 14px;
+  --font-size-code: 14px;
+
+  /* 본문 폭 680px는 한글 약 40자입니다 */
+  --width-content: 680px;
+  --width-page: 1200px;
+  --width-aside: 200px;
+  --space-page-inline: 24px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --font-size-body: 16px;
+    --font-size-h1: 28px;
+    --font-size-h2: 22px;
+    --font-size-h3: 18px;
+    --font-size-code: 13px;
+    --space-page-inline: 20px;
+  }
+}
