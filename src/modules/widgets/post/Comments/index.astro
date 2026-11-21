@@ -1,64 +1,37 @@
 ---
 import { IS_COMMENTS_ENABLED } from "@/shared/constants/features";
+import { TURNSTILE_SITE_KEY, WORKER_URL } from "@/shared/constants/services";
+import { getPostPath } from "@/shared/routes/paths";
+import isCommentsReady from "@/shared/utils/isCommentsReady";
+
+import CommentSection from "./ui/CommentSection.astro";
+
+interface Props {
+  /** 댓글을 보일 글의 slug */
+  slug: string;
+}
 
 /**
- * 글 맨 끝의 댓글 자리입니다. 댓글은 로그인 없는 익명 댓글로, Cloudflare Worker를 거쳐 노션 DB에 저장합니다(docs/plan.md).
- * Worker가 생기기 전에는 `IS_COMMENTS_ENABLED`(shared/constants/features)가 꺼져 있어 아무것도 그리지 않습니다.
- * 켜면 이 칸 안에 댓글 목록과 입력 칸을 불러오고, 이 칸의 높이를 최소 높이로 잡아 아래가 밀리지 않게 합니다.
- * JavaScript가 없을 때도 이 칸의 안내가 보입니다.
+ * 글 맨 끝의 댓글 칸입니다. 로그인 없는 익명 댓글을 Cloudflare Worker를 거쳐 노션 DB에 저장합니다(docs/plan.md 「댓글」).
+ * `IS_COMMENTS_ENABLED`(shared/constants/features)가 켜져 있고 `WORKER_URL` · `TURNSTILE_SITE_KEY`(shared/constants/services)가
+ * 모두 있을 때만 그립니다. 값이 비어 있으면 astro.config.ts가 CommentSection을 빈 부품으로 바꿔, 댓글의 CSS와 스크립트가
+ * 빌드 결과에 아예 실리지 않습니다.
  * @design design/blog.pen 「댓글 자리」 GbsK7
  */
+const { slug } = Astro.props;
+const isReady = isCommentsReady({
+  isEnabled: IS_COMMENTS_ENABLED,
+  workerUrl: WORKER_URL,
+  turnstileSiteKey: TURNSTILE_SITE_KEY,
+});
 ---
 
 {
-  IS_COMMENTS_ENABLED && (
-    <section class="container" aria-labelledby="comments-title">
-      <h2 class="title" id="comments-title">
-        댓글
-      </h2>
-      <div class="placeholder">
-        <p class="description">
-          로그인 없이 닉네임만 적고 댓글을 남길 수 있습니다. 닉네임과 댓글은 이
-          블로그가 관리하는 노션 표에 저장되고, IP 주소는 저장하지 않습니다.
-        </p>
-        <p class="description">
-          댓글은 JavaScript가 켜져 있어야 보입니다.
-        </p>
-      </div>
-    </section>
+  isReady && (
+    <CommentSection
+      postPath={getPostPath(slug)}
+      workerUrl={WORKER_URL}
+      turnstileSiteKey={TURNSTILE_SITE_KEY}
+    />
   )
 }
-
-<style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  /* 태그는 h2이고 크기는 h3입니다 (docs/design-system.md 7.21) */
-  .title {
-    font-size: var(--font-size-h3);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-h3);
-    letter-spacing: var(--letter-spacing-h3);
-  }
-
-  /* 댓글을 불러와도 아래가 밀리지 않도록 최소 높이를 잡습니다. 136px는 입력 칸이 들어올 자리입니다 */
-  .placeholder {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    min-height: 136px;
-    padding: var(--space-6);
-    border: var(--border-width) dashed var(--color-border);
-    border-radius: var(--radius-md);
-  }
-
-  .description {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-body-sm);
-    line-height: var(--line-height-body-sm);
-    text-wrap: pretty;
-  }
-</style>

@@ -1,0 +1,68 @@
+---
+/**
+ * 방문 통계(PostHog)를 늦게 불러오는 스크립트입니다. Document가 WORKER_URL · POSTHOG_PROJECT_KEY가 모두 있을 때만 그리고,
+ * 값이 비어 있으면 astro.config.ts가 이 부품을 빈 부품으로 바꿔 빌드에도 싣지 않습니다.
+ * - 페이지를 다 받은(load) 뒤 브라우저가 한가할 때 SDK를 Worker 중계 주소에서 받습니다. 첫 화면 그리기를 막지 않습니다.
+ * - SDK는 npm 패키지로 묶지 않고 중계 주소의 /static/array.js를 받습니다(PostHog 문서의 스니펫과 같은 파일).
+ * - 세션 리플레이는 세션 id로 뽑힌 일부 방문(SESSION_REPLAY_SAMPLE_RATE)만 켭니다.
+ */
+---
+
+<script>
+  import {
+    POSTHOG_PROJECT_KEY,
+    POSTHOG_RELAY_PATH,
+    POSTHOG_UI_HOST,
+    SESSION_REPLAY_SAMPLE_RATE,
+    WORKER_URL,
+  } from "@/shared/constants/services";
+
+  import createPosthogConfig from "@/shared/components/primitives/layout/Document/utils/createPosthogConfig";
+  import isSessionSampled from "@/shared/components/primitives/layout/Document/utils/isSessionSampled";
+
+  interface PostHogInstance {
+    init: (projectKey: string, config: Record<string, unknown>) => void;
+    get_session_id: () => string;
+    startSessionRecording: () => void;
+  }
+
+  // load 뒤에도 브라우저가 바쁘면 이 시간 안에는 불러옵니다
+  const IDLE_TIMEOUT_MS = 3000;
+
+  const loadPosthog = () => {
+    const config = createPosthogConfig({ workerUrl: WORKER_URL, relayPath: POSTHOG_RELAY_PATH, uiHost: POSTHOG_UI_HOST });
+    const script = document.createElement("script");
+
+    script.src = `${config.api_host}/static/array.js`;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.addEventListener("load", () => {
+      const posthog = (window as Window & { posthog?: PostHogInstance }).posthog;
+
+      posthog?.init(POSTHOG_PROJECT_KEY, {
+        ...config,
+        loaded: (instance: PostHogInstance) => {
+          if (isSessionSampled({ sessionId: instance.get_session_id(), sampleRate: SESSION_REPLAY_SAMPLE_RATE })) {
+            instance.startSessionRecording();
+          }
+        },
+      });
+    });
+    document.head.append(script);
+  };
+
+  // Safari는 requestIdleCallback이 없어서 그때는 정해 둔 시간 뒤에 불러옵니다
+  const scheduleLoad = () => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(loadPosthog, { timeout: IDLE_TIMEOUT_MS });
+    } else {
+      setTimeout(loadPosthog, IDLE_TIMEOUT_MS);
+    }
+  };
+
+  if (document.readyState === "complete") {
+    scheduleLoad();
+  } else {
+    window.addEventListener("load", scheduleLoad, { once: true });
+  }
+</script>

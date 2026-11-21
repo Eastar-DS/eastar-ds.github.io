@@ -1,0 +1,264 @@
+---
+import CommentForm from "./CommentForm.astro";
+
+interface Props {
+  /** 댓글을 보일 글 주소 (/posts/{slug}/) */
+  postPath: string;
+  /** Cloudflare Worker 주소 */
+  workerUrl: string;
+  /** Turnstile 사이트 키 */
+  turnstileSiteKey: string;
+}
+
+/**
+ * 댓글 목록과 쓰기 칸입니다.
+ * - 칸이 화면 가까이 오면 댓글 코드(model/mountComments)를 받아 Worker에서 목록을 불러옵니다. 불러오기 전과 JavaScript가 없을 때는 점선 칸의 안내가 보입니다.
+ * - 댓글은 HTML이 아닌 글(textContent)로만 그려서, 링크도 누를 수 없는 글로 보입니다. 답글은 한 단계이고, 이스타의 답글에는 「글쓴이」 표시를 합니다.
+ * - Turnstile 스크립트는 목록을 그린 뒤 쓰기 칸이 화면에 들어오거나 쓰기 칸에 포커스가 갈 때만 불러옵니다.
+ * @design design/blog.pen 「댓글 자리」 GbsK7
+ */
+const { postPath, workerUrl, turnstileSiteKey } = Astro.props;
+---
+
+<section
+  class="container"
+  aria-labelledby="comments-title"
+  data-comments
+  data-worker-url={workerUrl}
+  data-post-path={postPath}
+  data-turnstile-site-key={turnstileSiteKey}
+>
+  <h2 class="title" id="comments-title">
+    댓글<span class="count" data-comments-count></span>
+  </h2>
+  <div class="placeholder" data-comments-placeholder>
+    <p class="description">
+      로그인 없이 닉네임만 적고 댓글을 남길 수 있습니다. 닉네임과 댓글은 이 블로그가 관리하는 노션 표에
+      저장되고, IP 주소는 저장하지 않습니다.
+    </p>
+    <p class="description noScript">댓글은 JavaScript가 켜져 있어야 보입니다.</p>
+    <p class="description withScript" role="status" data-comments-load-status>댓글을 불러오는 중입니다.</p>
+    <button type="button" class="textButton retry withScript" data-comments-retry hidden>다시 불러오기</button>
+  </div>
+  <ol class="list" data-comments-list hidden></ol>
+  <p class="empty" data-comments-empty hidden>아직 댓글이 없습니다. 첫 댓글을 남겨 주세요.</p>
+  <p class="approval" data-comments-approval hidden>댓글은 이스타가 확인한 뒤 보입니다.</p>
+  <CommentForm />
+  <template data-comment-template>
+    <li class="item">
+      <article class="comment">
+        <p class="meta">
+          <span class="nickname" data-field="nickname"></span>
+          <span class="authorBadge" data-field="author" hidden>글쓴이</span>
+          <time class="time" data-field="time"></time>
+        </p>
+        <p class="body" data-field="content"></p>
+        <button type="button" class="textButton reply" data-field="reply">답글</button>
+        <ol class="replies" data-field="replies" hidden></ol>
+      </article>
+    </li>
+  </template>
+</section>
+
+<script>
+  // 댓글 칸이 화면 아래 이 거리 안으로 오면 댓글 코드(model/mountComments)를 받아 목록을 불러옵니다
+  const LIST_ROOT_MARGIN = "0px 0px 200px 0px";
+  const root = document.querySelector<HTMLElement>("[data-comments]");
+
+  const handleCodeLoadError = () => {
+    const status = root?.querySelector("[data-comments-load-status]");
+
+    if (status) status.textContent = "댓글을 불러오지 못했습니다. 페이지를 새로 고쳐 주세요.";
+  };
+
+  if (root) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        import("@/modules/widgets/post/Comments/model/mountComments")
+          .then(({ default: mountComments }) => mountComments(root))
+          .catch(handleCodeLoadError);
+      },
+      { rootMargin: LIST_ROOT_MARGIN },
+    );
+
+    observer.observe(root);
+  }
+</script>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    container: comments / inline-size;
+  }
+
+  /* 태그는 h2이고 크기는 h3입니다 (docs/design-system.md 7.21) */
+  .title {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-h3);
+    letter-spacing: var(--letter-spacing-h3);
+  }
+
+  .count {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+  }
+
+  /* 불러오기 전 · JavaScript가 없을 때의 안내 칸. 136px는 입력 칸이 들어올 자리입니다 (docs/design-system.md 7.21) */
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    min-height: 136px;
+    padding: var(--space-6);
+    border: var(--border-width) dashed var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .placeholder[hidden] {
+    display: none;
+  }
+
+  .description,
+  .empty,
+  .approval {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    text-wrap: pretty;
+  }
+
+  .noScript {
+    display: none;
+  }
+
+  :global(.no-js) .noScript {
+    display: block;
+  }
+
+  :global(.no-js) .withScript {
+    display: none;
+  }
+
+  .list {
+    list-style: none;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .item {
+    padding-block: var(--space-5);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .comment {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1) var(--space-2);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  .nickname {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    overflow-wrap: anywhere;
+  }
+
+  /* 「글쓴이」 표시: 이스타의 답글. 색만이 아니라 글자로 알립니다 (강조 위 강조 글자 5.39 / 6.09) */
+  .authorBadge {
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .authorBadge[hidden] {
+    display: none;
+  }
+
+  .time {
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 댓글은 글로만 그립니다. 줄바꿈은 살리고, 긴 주소는 칸 안에서 줄을 바꿉니다 */
+  .body {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  /* 글자 단추: 누르는 영역을 24px 넘게 잡습니다 (WCAG 2.5.8, docs/design-system.md 8장) */
+  .textButton {
+    min-height: 24px;
+    padding: var(--space-1) 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    cursor: pointer;
+  }
+
+  .textButton:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .textButton[hidden] {
+    display: none;
+  }
+
+  /* 안내 글 아래 홀로 있는 단추라 밑줄을 늘 두어 누를 수 있음을 알립니다 */
+  .retry {
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .replies {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-self: stretch;
+    margin-top: var(--space-2);
+    padding-left: var(--space-5);
+    border-left: var(--border-width) solid var(--color-border);
+    list-style: none;
+  }
+
+  .replies[hidden] {
+    display: none;
+  }
+
+  .replies .item {
+    padding-block: 0;
+    border-top: 0;
+  }
+
+  /* 방금 남긴 댓글: 바탕을 잠깐 칠하지 않고, 왼쪽에 강조 선만 둡니다 */
+  .item[data-new="true"] > .comment {
+    padding-left: var(--space-3);
+    border-left: var(--border-width-strong) solid var(--color-accent);
+  }
+</style>

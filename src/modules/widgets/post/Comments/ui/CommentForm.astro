@@ -1,0 +1,257 @@
+---
+import { CONTENT_MAX_LENGTH, NICKNAME_MAX_LENGTH } from "@/modules/widgets/post/Comments/constants/commentLimits";
+import { PATHS } from "@/shared/routes/paths";
+
+/**
+ * 댓글 쓰기 칸입니다. 닉네임 · 내용 · 숨은 입력 칸(스팸 막기) · Turnstile 자리 · 남기기 단추를 둡니다.
+ * 동작은 CommentSection의 스크립트가 맡고, JavaScript가 꺼져 있으면 숨깁니다.
+ * 입력 칸 글자는 휴대폰에서 16px(body)입니다. iOS Safari는 16px보다 작은 입력 칸에 포커스하면 화면을 키우기 때문입니다.
+ */
+---
+
+<form class="container" data-comment-form novalidate>
+  <h3 class="visually-hidden">댓글 쓰기</h3>
+  <div class="replyTarget" data-comment-reply hidden>
+    <p class="replyText" data-comment-reply-text></p>
+    <button type="button" class="textButton" data-comment-reply-cancel>답글 그만 쓰기</button>
+  </div>
+  <div class="field">
+    <label class="label" for="comment-nickname">닉네임</label>
+    <input
+      class="input"
+      id="comment-nickname"
+      name="nickname"
+      type="text"
+      maxlength={NICKNAME_MAX_LENGTH}
+      autocomplete="nickname"
+      required
+    />
+  </div>
+  <div class="field">
+    <label class="label" for="comment-content">댓글</label>
+    <textarea
+      class="input textarea"
+      id="comment-content"
+      name="content"
+      rows="4"
+      maxlength={CONTENT_MAX_LENGTH}
+      aria-describedby="comment-counter"
+      required></textarea>
+    <p class="counter" id="comment-counter" data-comment-counter>
+      0 / {CONTENT_MAX_LENGTH}
+    </p>
+  </div>
+  {/* 사람에게는 보이지 않는 칸입니다. 채워져 있으면 Worker가 스팸으로 봅니다 */}
+  <div class="trap" aria-hidden="true">
+    <label for="comment-homepage">홈페이지</label>
+    <input id="comment-homepage" name="homepage" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <div class="turnstile" data-comment-turnstile></div>
+  <div class="actions">
+    <p class="notice">
+      닉네임과 댓글은 누구나 볼 수 있고, 이 블로그가 관리하는 노션 표에 저장됩니다. IP 주소는 저장하지
+      않습니다. 자세한 내용은 <a class="link" href={PATHS.privacy}>개인정보 처리 안내</a>에 있습니다.
+    </p>
+    <button type="submit" class="submit" data-comment-submit>댓글 남기기</button>
+  </div>
+  <p class="status" id="comment-status" role="status" data-comment-status></p>
+</form>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  :global(.no-js) .container {
+    display: none;
+  }
+
+  .replyTarget {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--color-accent-soft);
+  }
+
+  .replyTarget[hidden] {
+    display: none;
+  }
+
+  .replyText {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    overflow-wrap: anywhere;
+  }
+
+  /* 글자 단추: 누르는 영역을 24px 넘게 잡습니다 (WCAG 2.5.8, docs/design-system.md 8장) */
+  .textButton {
+    min-height: 24px;
+    padding: var(--space-1) 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .textButton:hover {
+    color: var(--color-text);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .label {
+    color: var(--color-text);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-small);
+  }
+
+  /* 입력 칸의 테두리는 조작 장치의 경계라 3:1 넘는 --color-border-strong을 씁니다 (docs/design-system.md 2.2) */
+  .input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .input:focus-visible {
+    border-radius: var(--radius-md);
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: var(--color-bad);
+  }
+
+  .textarea {
+    resize: vertical;
+    font-family: inherit;
+    line-height: var(--line-height-body);
+  }
+
+  .counter {
+    align-self: flex-end;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .trap {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .turnstile:empty {
+    display: none;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+  }
+
+  .notice {
+    flex: 1 1 280px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    text-wrap: pretty;
+  }
+
+  /* 문장 속 링크는 늘 밑줄을 둡니다 (docs/design-system.md 7.2) */
+  .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  /* 남기기 단추: 높이는 아이콘 단추와 같은 토큰(36px, 휴대폰 40px)입니다 */
+  .submit {
+    flex: none;
+    min-height: var(--icon-button-size);
+    padding: 0 var(--space-4);
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+    cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .submit:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .submit:focus-visible {
+    border-radius: var(--radius-md);
+  }
+
+  .submit[aria-disabled="true"] {
+    background: var(--color-surface-hover);
+    color: var(--color-text-muted);
+    cursor: progress;
+  }
+
+  .status {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status[data-tone="error"] {
+    color: var(--color-bad);
+  }
+
+  .status[data-tone="success"] {
+    color: var(--color-good);
+  }
+
+  @container comments (max-width: 479px) {
+    .submit {
+      width: 100%;
+    }
+  }
+</style>
