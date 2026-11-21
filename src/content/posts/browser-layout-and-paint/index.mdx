@@ -23,11 +23,15 @@ import RenderingPipelineDemo from "@/modules/features/demo/RenderingPipelineDemo
 
 스타일을 바꾸면 브라우저는 바뀐 값이 영향을 주는 단계부터 그 뒤의 단계를 다시 합니다. 그래서 같은 움직임이라도 어떤 속성으로 만드느냐에 따라 다시 하는 일의 양이 크게 다릅니다.
 
+<Figure caption="표 1. 바꾼 속성에 따라 다시 하는 단계" captionSide="top">
+
 | 바꾼 속성의 예 | 다시 하는 단계 |
 | --- | --- |
 | `width`, `height`, `margin`, `top`, `font-size` | 스타일 → 레이아웃 → 페인트 → 합성 |
 | `color`, `background-color`, `box-shadow` | 스타일 → 페인트 → 합성 |
 | `transform`, `opacity` | 스타일 → 합성 |
+
+</Figure>
 
 ## 레이아웃을 다시 하는 변경
 
@@ -41,6 +45,8 @@ for (const box of boxes) {
   box.style.width = `${width * 2}px`; // 쓰기
 }
 ```
+
+<Callout kind="warn">반복문 안에서 레이아웃 결과 읽기와 스타일 쓰기를 섞으면, 반복할 때마다 레이아웃을 강제로 다시 합니다.</Callout>
 
 ### 읽기와 쓰기를 나누기
 

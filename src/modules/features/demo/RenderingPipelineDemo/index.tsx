@@ -14,6 +14,8 @@ import styles from "./index.module.css";
  * CSS 속성을 바꿀 때 브라우저가 렌더링의 네 단계(스타일 · 레이아웃 · 페인트 · 합성) 중 어디를 다시 하는지 보여 주는 데모입니다.
  * 속성을 고르고 재생하거나 슬라이더를 움직이면, 미리보기 상자의 그 속성이 실제로 바뀌고 단계별로 다시 한 횟수가 쌓입니다.
  * 글에서는 `<RenderingPipelineDemo client:visible />`로 씁니다.
+ * 「다시 함」 단계는 「고른 것」과 같은 강조색으로 표시하고, 글자로도 함께 알립니다.
+ * @design design/blog.pen 「데모 틀」 M3NVPX 안의 단계 그림, 화면 「A · 글 화면 · 휴대폰」 CoBjY의 세로 단계
  */
 export default function RenderingPipelineDemo() {
   const {
@@ -39,9 +41,9 @@ export default function RenderingPipelineDemo() {
           onReset={reset}
           value={roundedProgress}
           onValueChange={changeProgress}
-          sliderLabel={`${propertyId} 값`}
-          sliderValueText={`${roundedProgress}%`}
-          label={`${propertyId} 바꾸기`}
+          sliderLabel={`${propertyId} 바꾸기`}
+          sliderValueText={`진행 ${roundedProgress}%`}
+          status={`${isPlaying ? "재생 중" : "멈춤"} · ${propertyId} ${roundedProgress}%`}
         />
       }
     >

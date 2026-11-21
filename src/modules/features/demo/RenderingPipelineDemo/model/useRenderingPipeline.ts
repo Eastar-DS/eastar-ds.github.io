@@ -29,6 +29,13 @@ const useRenderingPipeline = () => {
   };
 
   const play = () => {
+    // 움직임 줄이기를 켠 사람에게는 이어지는 움직임 대신 끝 상태를 바로 보여 줍니다
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setProgress(100);
+      setFrameCount((count) => count + 1);
+      return;
+    }
+
     const startProgress = progress >= 100 ? 0 : progress;
     const startTime =
       performance.now() - (startProgress / 100) * PLAY_DURATION_MS;

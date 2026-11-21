@@ -1,0 +1,121 @@
+---
+import splitTitle from "@/modules/widgets/post/PostArticle/utils/splitTitle";
+import type { Post } from "@/shared/types/post";
+import formatDate from "@/shared/utils/formatDate";
+
+interface Props {
+  post: Post;
+}
+
+/**
+ * 글 머리입니다. 글 정보 줄(분류 · 쓴 날 · 읽는 시간 · 고친 날) → 제목(h1) → 요약 → 구분선 순서입니다.
+ * 쓴 날은 넓은 칸에서 「2026년 11월 18일」, 좁은 칸에서 「2026.11.18」입니다.
+ * 고친 날은 frontmatter의 updatedAt이 쓴 날과 다를 때만 보입니다.
+ * @design design/blog.pen 「글 머리」 tV22U
+ */
+const { post } = Astro.props;
+const publishedIso = formatDate({ date: post.publishedAt, format: "iso" });
+const updatedIso = formatDate({ date: post.updatedAt, format: "iso" });
+const isUpdated = publishedIso !== updatedIso;
+---
+
+<header class="container">
+  <p class="meta">
+    <span class="category">{post.category}</span>
+    <time datetime={publishedIso}>
+      <span class="dateLong">
+        {formatDate({ date: post.publishedAt, format: "long" })}
+      </span>
+      <span class="dateShort">
+        {formatDate({ date: post.publishedAt, format: "dot" })}
+      </span>
+    </time>
+    <span>{post.readingMinutes}분 읽기</span>
+    {
+      isUpdated && (
+        <span>
+          <time datetime={updatedIso}>
+            {formatDate({ date: post.updatedAt, format: "monthDayLong" })}
+          </time>{" "}
+          고침
+        </span>
+      )
+    }
+  </p>
+  <h1 class="title">
+    {
+      splitTitle(post.title).map((part, index) => (
+        <>
+          {index > 0 && " "}
+          <span class="titlePart">{part}</span>
+        </>
+      ))
+    }
+  </h1>
+  <p class="summary">{post.description}</p>
+</header>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-bottom: var(--space-5);
+    border-bottom: var(--border-width) solid var(--color-border);
+    container-type: inline-size;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  /* 항목 사이의 가운뎃점은 꾸밈이라 CSS로 그립니다 */
+  .meta > * + *::before {
+    content: "·";
+    margin-inline: var(--space-2);
+  }
+
+  .category {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .dateShort {
+    display: none;
+  }
+
+  .title {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-h1);
+  }
+
+  /* 제목 덩어리를 inline-block으로 두어 줄을 바꿔야 할 때 콜론 뒤에서 먼저 바꿉니다 */
+  .titlePart {
+    display: inline-block;
+    text-wrap: balance;
+  }
+
+  .summary {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lead);
+    line-height: var(--line-height-lead);
+    text-wrap: pretty;
+  }
+
+  @container (max-width: 559.98px) {
+    .dateLong {
+      display: none;
+    }
+
+    .dateShort {
+      display: inline;
+    }
+  }
+</style>

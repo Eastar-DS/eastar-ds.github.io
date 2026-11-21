@@ -3,14 +3,16 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 
 /**
  * 코드 칸의 코드를 클립보드에 복사하는 버튼입니다.
+ * 「복사됨」 상태의 색(--color-good)은 코드 칸 정본이 정해지면 맞춥니다.
+ * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
  * 가장 가까운 [data-copy-scope] 요소 안의 <pre>를 복사하므로, 버튼을 넣는 쪽이 그 요소를 표시합니다.
  */
 ---
 
 <span class="container" data-copy-code-root>
   <button type="button" class="button" data-copy-code>
-    <Icon name="copy" size={14} class="copyIcon" />
-    <Icon name="check" size={14} class="checkIcon" />
+    <Icon name="copy" size="sm" class="copyIcon" />
+    <Icon name="check" size="sm" class="checkIcon" />
     <span class="text" data-copy-code-text>복사</span>
   </button>
   <span class="visually-hidden" role="status" data-copy-code-status></span>
@@ -84,7 +86,7 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
     color: var(--color-accent);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767.98px) {
     .text {
       position: absolute;
       width: 1px;

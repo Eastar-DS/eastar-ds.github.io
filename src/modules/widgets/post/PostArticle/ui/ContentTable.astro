@@ -1,0 +1,47 @@
+---
+/**
+ * 본문의 표입니다. MDX의 표(GFM)를 바꿔 끼워, 좁은 화면에서 넘치면 표만 가로로 밀리게 합니다.
+ * 표 설명은 글에서 `<Figure caption="표 1. …" captionSide="top">`으로 감싸 붙입니다.
+ * @design design/blog.pen 「표」 J9t3G
+ */
+---
+
+<div class="root" role="region" aria-label="표" tabindex="0">
+  <table class="table"><slot /></table>
+</div>
+
+<style>
+  .root {
+    overflow-x: auto;
+  }
+
+  .root:focus-visible {
+    border-radius: var(--radius-sm);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  /* 칸 안쪽 10 · 12px는 docs/design-system.md 7.18의 값입니다 */
+  .table :global(:is(th, td)) {
+    padding: 10px var(--space-3);
+    border-bottom: var(--border-width) solid var(--color-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  /* 머리 줄 아래 선은 표의 짜임을 알리는 선이라 --color-border-strong입니다 */
+  .table :global(th) {
+    border-bottom-color: var(--color-border-strong);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+  }
+
+  .table :global(td code) {
+    white-space: nowrap;
+  }
+</style>

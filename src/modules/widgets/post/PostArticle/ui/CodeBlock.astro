@@ -16,6 +16,8 @@ interface Props {
 /**
  * 본문의 코드 칸입니다. MDX의 코드 펜스(```)를 파일 이름 줄과 복사 버튼이 있는 칸으로 바꿉니다.
  * 파일 이름이 없으면 언어 이름을 보입니다.
+ * 코드 색 · 글자 크기는 docs/design-system.md 2.3 「코드」가 정해지면 맞춥니다(지금은 1단계 모양 그대로).
+ * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
  */
 const {
   class: shikiClass,
@@ -41,7 +43,7 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
 <style>
   .container {
     overflow: hidden;
-    border: 1px solid var(--color-border-surface);
+    border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-surface);
   }
@@ -53,7 +55,7 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
     gap: 12px;
     min-height: 40px;
     padding: 4px 10px 4px 16px;
-    border-bottom: 1px solid var(--color-border-surface);
+    border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .label {
@@ -80,7 +82,7 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
     font-family: inherit;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767.98px) {
     .code {
       padding: 14px 16px;
     }

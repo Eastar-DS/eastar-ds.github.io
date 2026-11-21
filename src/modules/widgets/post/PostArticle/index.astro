@@ -1,64 +1,36 @@
 ---
 import Callout from "@/shared/components/primitives/ui/Callout/index.astro";
+import Figure from "@/shared/components/primitives/ui/Figure/index.astro";
 import getPost from "@/shared/content/getPost";
 import renderPost from "@/shared/content/renderPost";
-import formatDate from "@/shared/utils/formatDate";
 
 import CodeBlock from "./ui/CodeBlock.astro";
 import ContentHeading2 from "./ui/ContentHeading2.astro";
 import ContentHeading3 from "./ui/ContentHeading3.astro";
-import splitTitle from "./utils/splitTitle";
+import ContentTable from "./ui/ContentTable.astro";
+import PostHeader from "./ui/PostHeader.astro";
 
 interface Props {
   slug: string;
 }
 
 /**
- * 글 한 편입니다. 글 정보 줄, 제목(h1), 요약, 본문을 그립니다.
- * 본문의 코드 칸 · 제목 · 「핵심」 칸은 이 컴포넌트가 정한 모양으로 바뀌므로, 글에서는 `<Callout>`을 import 없이 씁니다.
+ * 글 한 편입니다. 글 머리와 본문을 그립니다.
+ * 본문의 코드 칸 · 제목 · 표는 이 컴포넌트가 정한 모양으로 바뀌고, 글에서는 `<Callout>`과 `<Figure>`를 import 없이 씁니다.
+ * 본문 속 링크 · 코드 · 인용의 모양도 여기서 정합니다.
  *
- * - `after-header` 슬롯: 요약과 본문 사이에 넣을 내용. 예: 좁은 화면의 접는 목차
+ * - `after-header` 슬롯: 글 머리와 본문 사이에 넣을 내용. 예: 좁은 화면의 접는 목차
+ *
+ * @design design/blog.pen 「링크」 fXlRl (기본 SdtPK · 올림 RTZf1 · 포커스 QGa2Z · 방문 IQdpC),
+ * 「본문 속 코드」 egCcp, 「인용」 Myj7O
  */
 const { slug } = Astro.props;
 const post = await getPost(slug);
 const { Content } = await renderPost(slug);
-
-const publishedIso = formatDate({ date: post.publishedAt, format: "iso" });
-const updatedIso = formatDate({ date: post.updatedAt, format: "iso" });
-const isUpdated = publishedIso !== updatedIso;
 ---
 
 <article class="container">
-  <header class="header">
-    <p class="meta">
-      <span class="category">{post.category}</span>
-      <time datetime={publishedIso}>
-        {formatDate({ date: post.publishedAt, format: "long" })}
-      </time>
-      {
-        isUpdated && (
-          <span>
-            <time datetime={updatedIso}>
-              {formatDate({ date: post.updatedAt, format: "long" })}
-            </time>{" "}
-            고침
-          </span>
-        )
-      }
-      <span>{post.readingMinutes}분 읽기</span>
-    </p>
-    <h1 class="title">
-      {
-        splitTitle(post.title).map((part, index) => (
-          <>
-            {index > 0 && " "}
-            <span class="titlePart">{part}</span>
-          </>
-        ))
-      }
-    </h1>
-    <p class="summary">{post.description}</p>
-  </header>
+  <PostHeader post={post} />
   <slot name="after-header" />
   <div class="body">
     <Content
@@ -66,7 +38,9 @@ const isUpdated = publishedIso !== updatedIso;
         pre: CodeBlock,
         h2: ContentHeading2,
         h3: ContentHeading3,
+        table: ContentTable,
         Callout,
+        Figure,
       }}
     />
   </div>
@@ -76,62 +50,26 @@ const isUpdated = publishedIso !== updatedIso;
   .container {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-  }
-
-  .header {
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-small);
-    line-height: 1.6;
-  }
-
-  /* 항목 사이의 가운뎃점은 꾸밈이라 CSS로 그립니다 */
-  .meta > * + *::before {
-    content: "·";
-    margin-inline: 10px;
-    color: var(--color-text-muted);
-  }
-
-  .category {
-    color: var(--color-accent);
-    font-weight: 600;
-  }
-
-  .title {
-    margin-top: 20px;
-    font-size: var(--font-size-h1);
-    font-weight: 700;
-    line-height: 1.36;
-    letter-spacing: -0.02em;
-  }
-
-  .titlePart {
-    display: inline-block;
-    text-wrap: balance;
-  }
-
-  .summary {
-    margin-top: 20px;
-    color: var(--color-text-muted);
-    font-size: 18px;
-    line-height: 1.65;
-    text-wrap: pretty;
+    gap: var(--space-5);
+    container: article / inline-size;
   }
 
   /*
    * 본문(MDX)의 모양. 본문 요소는 MDX가 그리므로 :global로 고릅니다.
    * 데모처럼 본문에 끼워 넣은 컴포넌트에 규칙이 새지 않게, 마크다운이 만드는 .body의 바로 아래 요소만 고릅니다.
+   * 간격은 docs/design-system.md 3.4 「본문 흐름 간격」을 따릅니다.
    */
   .body > :global(* + *) {
-    margin-top: 20px;
+    margin-top: var(--space-5);
+  }
+
+  /* 데모를 감싼 astro-island는 display: contents라서 여백을 안쪽 요소에 줍니다 */
+  .body > :global(astro-island > *) {
+    margin-top: var(--space-5);
+  }
+
+  .body > :global(p) {
+    text-wrap: pretty;
   }
 
   .body > :global(:is(h2, h3)) {
@@ -139,33 +77,41 @@ const isUpdated = publishedIso !== updatedIso;
   }
 
   .body > :global(h2) {
-    margin-top: 56px;
+    margin-top: var(--space-10);
     font-size: var(--font-size-h2);
-    font-weight: 700;
-    line-height: 1.4;
-    letter-spacing: -0.01em;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h2);
+    letter-spacing: var(--letter-spacing-h2);
+  }
+
+  .body > :global(h2 + *) {
+    margin-top: var(--space-5);
   }
 
   .body > :global(h3) {
-    margin-top: 40px;
+    margin-top: var(--space-8);
     font-size: var(--font-size-h3);
-    font-weight: 600;
-    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-h3);
+    letter-spacing: var(--letter-spacing-h3);
   }
 
-  .body > :global(:is(h2, h3) + *) {
-    margin-top: 16px;
+  .body > :global(h3 + *) {
+    margin-top: var(--space-3);
   }
 
-  /* 코드 칸 · 「핵심」 칸 · 표 · 데모는 앞뒤를 조금 더 띄웁니다.
-     데모를 감싼 astro-island는 display: contents라서 여백을 안쪽 요소에 줍니다 */
-  .body > :global(:is(figure, [role="note"], table)),
-  .body > :global(astro-island > *),
-  .body
-    > :global(
-      :is(figure, [role="note"], table, astro-island) + :not(h2, h3)
-    ) {
-    margin-top: 24px;
+  @container article (min-width: 560px) {
+    .body > :global(h2) {
+      margin-top: var(--space-14);
+    }
+
+    .body > :global(h2 + *) {
+      margin-top: var(--space-6);
+    }
+
+    .body > :global(h3) {
+      margin-top: var(--space-10);
+    }
   }
 
   .body > :global(:is(ul, ol)) {
@@ -173,86 +119,63 @@ const isUpdated = publishedIso !== updatedIso;
   }
 
   .body > :global(:is(ul, ol) li + li) {
-    margin-top: 6px;
+    margin-top: var(--space-2);
   }
 
   .body > :global(:is(ul, ol) li::marker) {
     color: var(--color-text-muted);
   }
 
-  .body > :global(:is(p, ul, ol, table, blockquote) strong) {
-    font-weight: 700;
+  .body > :global(:is(p, ul, ol, blockquote, div) strong) {
+    font-weight: var(--font-weight-bold);
   }
 
-  .body > :global(:is(p, ul, ol, table, blockquote) a) {
+  /* 링크: 늘 밑줄. 방문한 링크는 본문에서만 색을 바꿉니다 */
+  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a) {
     color: var(--color-accent);
     text-decoration: underline;
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: var(--border-width);
     text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
-  .body > :global(:is(p, ul, ol, table, blockquote, h2, h3, [role="note"]) code) {
-    padding: 2px 5px;
-    border-radius: 4px;
+  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:visited) {
+    color: var(--color-link-visited);
+  }
+
+  .body > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:hover) {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  /* 본문 속 코드: 0.9em, 안쪽 1 · 6px (docs/design-system.md 7.14) */
+  .body
+    > :global(:is(p, ul, ol, blockquote, h2, h3, div, figure, [role="note"]) code:not(pre code)) {
+    padding: 1px 6px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
     background: var(--color-surface);
-    font-size: 0.86em;
-  }
-
-  .body > :global([role="note"] code) {
-    background: var(--color-bg);
-  }
-
-  .body > :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .body > :global(table :is(th, td)) {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--color-border);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .body > :global(table th) {
-    color: var(--color-text-muted);
-    font-weight: 600;
-    white-space: nowrap;
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
   }
 
   .body > :global(blockquote) {
-    padding-left: 16px;
-    border-left: 3px solid var(--color-border);
+    padding-left: var(--space-5);
+    border-left: var(--border-width-callout) solid var(--color-border-strong);
     color: var(--color-text-muted);
   }
 
-  .body > :global(hr) {
-    margin-block: 40px;
-    border: 0;
-    border-top: 1px solid var(--color-border);
+  .body > :global(blockquote cite) {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: var(--font-size-small);
+    font-style: normal;
+    line-height: var(--line-height-small);
   }
 
-  @media (max-width: 640px) {
-    /* 좁은 화면에서 표가 넘치면 표만 옆으로 밀어 봅니다 */
-    .body > :global(table) {
-      display: block;
-      overflow-x: auto;
-    }
-
-    .title {
-      margin-top: 16px;
-      line-height: 1.4;
-    }
-
-    .summary {
-      margin-top: 16px;
-      font-size: 16px;
-    }
-
-    .body > :global(h2) {
-      margin-top: 44px;
-    }
+  .body > :global(hr) {
+    margin-block: var(--space-10);
+    border: 0;
+    border-top: var(--border-width) solid var(--color-border);
   }
 </style>

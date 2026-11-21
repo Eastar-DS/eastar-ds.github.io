@@ -1,0 +1,76 @@
+---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+import { getPostPath } from "@/shared/routes/paths";
+import type { Post } from "@/shared/types/post";
+
+interface Props {
+  post: Post;
+  direction: "prev" | "next";
+}
+
+/**
+ * 이전 글 또는 다음 글로 가는 칸 하나입니다. 위에 「← 이전 글」 / 「다음 글 →」, 아래에 제목을 둡니다. 다음 글은 오른쪽 정렬입니다.
+ * @design design/blog.pen 「이전 다음 칸」 kUT78 (이전 · 기본 J0WK8 · 다음 · 기본 dhP7E · 이전 · 올림 VtB9E)
+ */
+const { post, direction } = Astro.props;
+const isNext = direction === "next";
+---
+
+<a class:list={["container", direction]} href={getPostPath(post.slug)}>
+  <span class="label">
+    {!isNext && <Icon name="arrowLeft" size="md" />}
+    {isNext ? "다음 글" : "이전 글"}
+    {isNext && <Icon name="arrowRight" size="md" />}
+  </span>
+  <span class="title">{post.title}</span>
+</a>
+
+<style>
+  .container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+    padding: var(--space-4) var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .next {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .container:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .container:focus-visible {
+    border-radius: var(--radius-md);
+  }
+
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  .title {
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
+    text-wrap: pretty;
+  }
+
+  .container:hover .title {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+</style>

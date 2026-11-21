@@ -1,0 +1,46 @@
+---
+import getAdjacentPosts from "@/shared/content/getAdjacentPosts";
+
+import PostNavLink from "./ui/PostNavLink.astro";
+
+interface Props {
+  slug: string;
+}
+
+/**
+ * 글 끝에서 이전 글과 다음 글로 잇습니다. 같은 시리즈면 시리즈 순서, 아니면 발행일 순서입니다.
+ * 한쪽이 없으면 빈 칸을 두지 않고 하나만, 둘 다 없으면 아무것도 그리지 않습니다. 좁은 칸에서는 위아래로 쌓습니다.
+ * @design design/blog.pen 「이전 다음 글」 v740G
+ */
+const { slug } = Astro.props;
+const { prev, next } = await getAdjacentPosts(slug);
+---
+
+{
+  (prev || next) && (
+    <nav class="root" aria-label="이전 글과 다음 글">
+      <div class="links">
+        {prev && <PostNavLink post={prev} direction="prev" />}
+        {next && <PostNavLink post={next} direction="next" />}
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .root {
+    container-type: inline-size;
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @container (min-width: 560px) {
+    .links {
+      flex-direction: row;
+    }
+  }
+</style>
