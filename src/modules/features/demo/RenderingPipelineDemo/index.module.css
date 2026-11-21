@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  container: pipeline / inline-size;
+}
+
+.container > * {
+  width: 100%;
+}
+
+.container > fieldset {
+  width: auto;
+}
+
+.pipeline {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.summary {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  line-height: 1.6;
+  text-align: center;
+}
+
+@container pipeline (max-width: 559.98px) {
+  .pipeline {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
