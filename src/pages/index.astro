@@ -7,7 +7,7 @@ import SiteIntro from "@/modules/widgets/site/SiteIntro/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Document from "@/shared/components/primitives/layout/Document/index.astro";
 import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
-import { PATHS } from "@/shared/routes/paths";
+import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
 
 /** 글 목록 페이지: 소개, 시리즈 칩, 연도별 글 목록을 본문 폭 한 줄로 쌓습니다 */
@@ -16,9 +16,9 @@ const meta = createPageMeta({ path: PATHS.home });
 
 <Document meta={meta}>
   <SiteHeader />
-  <main class="main">
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="content">
-      <Stack gap={56}>
+      <Stack gap={14}>
         <SiteIntro />
         <SeriesChips />
         <PostList />
@@ -30,12 +30,12 @@ const meta = createPageMeta({ path: PATHS.home });
 
 <style>
   .main {
-    padding-block: 72px 112px;
+    padding-block: var(--space-10) var(--space-12);
   }
 
-  @media (max-width: 640px) {
+  @media (min-width: 768px) {
     .main {
-      padding-block: 40px 72px;
+      padding-block: var(--space-18) var(--space-24);
     }
   }
 </style>

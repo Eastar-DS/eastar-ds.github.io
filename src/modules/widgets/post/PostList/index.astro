@@ -1,50 +1,63 @@
 ---
 import getPosts from "@/shared/content/getPosts";
 import groupPostsByYear from "@/shared/content/groupPostsByYear";
-import { getPostPath } from "@/shared/routes/paths";
-import formatDate from "@/shared/utils/formatDate";
 
-/** 모든 글을 연도별로 묶은 목록입니다. 한 줄에 날짜 · 제목 · 한 줄 요약 · 읽는 시간을 둡니다 */
-const yearGroups = groupPostsByYear(await getPosts());
+import PostListItem from "./ui/PostListItem.astro";
+
+interface Props {
+  /**
+   * - `byYear`: 모든 글을 연도별로 묶어 보입니다 (기본)
+   * - `recent`: 「최근 글」 제목 아래 최신 글 몇 편만 보입니다
+   */
+  variant?: "byYear" | "recent";
+  /** `recent`에서 보일 글 수 */
+  limit?: number;
+}
+
+/**
+ * 글 목록입니다. 한 줄에 날짜 · 제목 · 한 줄 요약 · 읽는 시간을 둡니다.
+ * 연도별 목록은 묶음 위에 큰 연도 숫자를 둡니다.
+ * @design design/blog.pen 「글 목록 항목」 A33N0, 화면 「A · 글 목록 · 넓은 화면」 Yknaw, 「404 본문」 W40Po의 최근 글
+ */
+const { variant = "byYear", limit = 2 } = Astro.props;
+const posts = await getPosts();
+const yearGroups = groupPostsByYear(posts);
+const recentPosts = posts.slice(0, limit);
 ---
 
-<section class="container" aria-label="글 목록">
-  {
-    yearGroups.length === 0 ? (
-      <p class="empty">아직 글이 없습니다.</p>
-    ) : (
-      yearGroups.map((group) => (
-        <div class="yearGroup">
-          <h2 class="year">{group.year}</h2>
-          <ol class="list">
-            {group.posts.map((post) => (
-              <li class="item">
-                <time
-                  class="date"
-                  datetime={formatDate({ date: post.publishedAt, format: "iso" })}
-                >
-                  {formatDate({ date: post.publishedAt, format: "monthDay" })}
-                </time>
-                <div class="text">
-                  <h3 class="postTitle">
-                    <a class="link" href={getPostPath(post.slug)}>
-                      {post.title}
-                    </a>
-                  </h3>
-                  <p class="description">{post.description}</p>
-                </div>
-                <span class="reading">
-                  <span class="visually-hidden">읽는 시간 </span>
-                  {post.readingMinutes}분
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      ))
+{
+  variant === "recent" ? (
+    recentPosts.length > 0 && (
+      <section class="container" aria-labelledby="recent-posts-title">
+        <h2 class="label" id="recent-posts-title">
+          최근 글
+        </h2>
+        <ol class="list">
+          {recentPosts.map((post) => (
+            <PostListItem post={post} />
+          ))}
+        </ol>
+      </section>
     )
-  }
-</section>
+  ) : (
+    <section class="container" aria-label="글 목록">
+      {yearGroups.length === 0 ? (
+        <p class="empty">아직 글이 없습니다.</p>
+      ) : (
+        yearGroups.map((group) => (
+          <div class="yearGroup">
+            <h2 class="year">{group.year}</h2>
+            <ol class="list">
+              {group.posts.map((post) => (
+                <PostListItem post={post} />
+              ))}
+            </ol>
+          </div>
+        ))
+      )}
+    </section>
+  )
+}
 
 <style>
   .container {
@@ -52,86 +65,31 @@ const yearGroups = groupPostsByYear(await getPosts());
   }
 
   .yearGroup + .yearGroup {
-    margin-top: 64px;
+    margin-top: var(--space-14);
   }
 
+  /* 연도도 읽는 글자라 24px 넘는 큰 글자에만 쓰는 --color-text-subtle(3:1 이상)로 둡니다 */
   .year {
-    color: var(--color-text-faint);
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-display);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-display);
+    letter-spacing: var(--letter-spacing-display);
+  }
+
+  .label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
   }
 
   .list {
-    margin-top: 16px;
+    margin-top: var(--space-2);
     list-style: none;
-  }
-
-  /* 줄 전체를 누를 수 있게 제목 링크를 줄 크기로 넓힙니다 */
-  .item {
-    position: relative;
-    display: grid;
-    grid-template-columns: 62px minmax(0, 1fr) auto;
-    column-gap: 0;
-    align-items: baseline;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--color-border-subtle);
-  }
-
-  .date {
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-small);
-  }
-
-  .postTitle {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.5;
-  }
-
-  .link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-
-  .item:hover .postTitle {
-    color: var(--color-accent);
-  }
-
-  .description {
-    margin-top: 4px;
-    color: var(--color-text-muted);
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .reading {
-    padding-left: 16px;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-small);
-    white-space: nowrap;
   }
 
   .empty {
     color: var(--color-text-muted);
-  }
-
-  @container (max-width: 480px) {
-    .item {
-      grid-template-columns: minmax(0, 1fr) auto;
-      row-gap: 4px;
-    }
-
-    .date {
-      grid-column: 1 / -1;
-      font-size: 13px;
-    }
-
-    .year {
-      font-size: 40px;
-    }
   }
 </style>

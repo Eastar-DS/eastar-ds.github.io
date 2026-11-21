@@ -4,7 +4,7 @@ import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
 import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Document from "@/shared/components/primitives/layout/Document/index.astro";
-import { PATHS } from "@/shared/routes/paths";
+import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
 
 /** 소개 페이지 */
@@ -13,7 +13,7 @@ const meta = createPageMeta({ title: "소개", path: PATHS.about });
 
 <Document meta={meta}>
   <SiteHeader />
-  <main class="main">
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="content">
       <AboutProfile />
     </Container>
@@ -23,6 +23,12 @@ const meta = createPageMeta({ title: "소개", path: PATHS.about });
 
 <style>
   .main {
-    padding-block: 72px 112px;
+    padding-block: var(--space-10) var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .main {
+      padding-block: var(--space-18) var(--space-24);
+    }
   }
 </style>

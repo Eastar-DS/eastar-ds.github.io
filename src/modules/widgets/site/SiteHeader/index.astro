@@ -2,14 +2,16 @@
 import ThemeToggle from "@/modules/features/site/ThemeToggle/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+import IconButton from "@/shared/components/primitives/ui/IconButton/index.astro";
 import { SITE } from "@/shared/constants/site";
 import { NAV_ITEMS, PATHS } from "@/shared/routes/paths";
 
 import isCurrentPath from "./utils/isCurrentPath";
 
 /**
- * 사이트 머리말입니다. 사이트 이름, 주 메뉴, RSS, 테마 전환 버튼을 둡니다.
- * 머리말 칸이 좁으면(640px 이하) 주 메뉴를 메뉴 단추 안으로 접습니다. 메뉴 단추는 JavaScript 없이 열립니다.
+ * 사이트 머리말입니다. 사이트 이름, 주 메뉴, RSS, 밝기 단추를 둡니다. 화면에 붙어 따라오지 않습니다.
+ * 머리말 칸이 767px 이하면 주 메뉴를 메뉴 단추 안으로 접습니다. 메뉴는 JavaScript 없이 열리고, Esc로 닫으면 메뉴 단추로 포커스가 돌아갑니다.
+ * @design design/blog.pen 「머리말」 mg60A (넓은 화면 r6OXd · 휴대폰 W5ZR4d)
  */
 const { pathname } = Astro.url;
 const navItems = NAV_ITEMS.map((item) => ({
@@ -40,14 +42,15 @@ const navItems = NAV_ITEMS.map((item) => ({
             }
           </ul>
         </nav>
-        <a class="iconLink wideOnly" href={PATHS.rss} aria-label="RSS 구독">
+        <IconButton as="a" href={PATHS.rss} label="RSS 구독" class="wideOnly">
           <Icon name="rss" />
-        </a>
+        </IconButton>
         <ThemeToggle />
-        <details class="narrowMenu">
-          <summary class="iconLink" aria-label="메뉴">
-            <Icon name="menu" size={20} />
-          </summary>
+        <details class="narrowMenu" data-site-menu>
+          <IconButton as="summary" label="메뉴">
+            <Icon name="menu" class="menuIcon" />
+            <Icon name="x" class="closeIcon" />
+          </IconButton>
           <nav class="menuPanel" aria-label="주 메뉴">
             <ul class="menuList">
               {
@@ -74,10 +77,35 @@ const navItems = NAV_ITEMS.map((item) => ({
   </Container>
 </header>
 
+<script>
+  const menus = document.querySelectorAll<HTMLDetailsElement>(
+    "[data-site-menu]",
+  );
+
+  menus.forEach((menu) => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !menu.open) return;
+
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    };
+
+    // 같은 페이지 안의 자리(/#series)로 가는 링크를 눌러도 메뉴가 열린 채 본문을 가리지 않게 닫습니다
+    const handleLinkClick = () => {
+      menu.open = false;
+    };
+
+    menu.addEventListener("keydown", handleKeydown);
+    menu
+      .querySelectorAll("a")
+      .forEach((link) => link.addEventListener("click", handleLinkClick));
+  });
+</script>
+
 <style>
   .root {
     position: relative;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--border-width) solid var(--color-border);
     container-type: inline-size;
   }
 
@@ -85,38 +113,38 @@ const navItems = NAV_ITEMS.map((item) => ({
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    height: 70px;
+    gap: var(--space-4);
+    height: var(--header-height);
   }
 
   .logo {
     color: var(--color-text);
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-lead);
     white-space: nowrap;
   }
 
   .actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-1);
   }
 
   .navList {
     display: flex;
-    gap: 4px;
-    margin-right: 8px;
+    gap: var(--space-1);
+    margin-right: var(--space-2);
     list-style: none;
   }
 
   .navLink {
     display: block;
-    padding: 6px 10px;
-    border-radius: var(--radius-sm);
+    padding: var(--space-1) var(--space-3);
     color: var(--color-text-muted);
-    font-size: 15px;
-    transition: color 0.15s;
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .navLink:hover,
@@ -125,34 +153,16 @@ const navItems = NAV_ITEMS.map((item) => ({
   }
 
   .navLink[aria-current="page"] {
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
   }
 
-  .iconLink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition:
-      color 0.15s,
-      background-color 0.15s;
-  }
-
-  .iconLink:hover {
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  .narrowMenu summary {
-    list-style: none;
-  }
-
-  .narrowMenu summary::-webkit-details-marker {
+  .narrowMenu :global(.closeIcon),
+  .narrowMenu[open] :global(.menuIcon) {
     display: none;
+  }
+
+  .narrowMenu[open] :global(.closeIcon) {
+    display: block;
   }
 
   .menuPanel {
@@ -161,8 +171,8 @@ const navItems = NAV_ITEMS.map((item) => ({
     right: 0;
     left: 0;
     z-index: 10;
-    padding: 8px var(--space-page-inline) 16px;
-    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-2) var(--page-padding-inline) var(--space-4);
+    border-bottom: var(--border-width) solid var(--color-border);
     background: var(--color-bg);
   }
 
@@ -172,36 +182,31 @@ const navItems = NAV_ITEMS.map((item) => ({
 
   .menuLink {
     display: block;
-    padding: 10px 0;
+    padding: var(--space-2) 0;
     color: var(--color-text-muted);
-    font-size: 16px;
+    font-size: var(--font-size-body);
   }
 
   .menuLink[aria-current="page"] {
     color: var(--color-text);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
   }
 
-  @container (max-width: 640px) {
-    .bar {
-      height: 56px;
-    }
-
-    .logo {
-      font-size: 17px;
-    }
-
-    .wideNav,
-    .wideOnly {
-      display: none;
-    }
-
-    .actions {
-      gap: 4px;
-    }
+  /* 휴대폰(767px 이하)에서는 메뉴를 접고, 768px부터 펼칩니다 */
+  .wideNav,
+  .root :global(.wideOnly) {
+    display: none;
   }
 
-  @container (min-width: 641px) {
+  @container (min-width: 768px) {
+    .wideNav {
+      display: block;
+    }
+
+    .root :global(.wideOnly) {
+      display: inline-flex;
+    }
+
     .narrowMenu {
       display: none;
     }

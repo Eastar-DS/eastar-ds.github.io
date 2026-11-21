@@ -1,0 +1,122 @@
+---
+import { SITE } from "@/shared/constants/site";
+import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
+
+/**
+ * 개인정보 처리 안내 페이지의 본문입니다. 이 페이지의 h1을 가집니다.
+ * 지금은 모으는 정보가 없습니다. 방문 통계(PostHog)나 댓글(giscus)을 붙일 때는 붙이기 전에 이 안내를 먼저 고칩니다.
+ */
+const effectiveDate = "2026년 11월 21일";
+const githubPrivacyUrl =
+  "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement";
+---
+
+<article class="container">
+  <header class="header">
+    <h1 class="title">개인정보 처리 안내</h1>
+    <p class="meta">시행일 {effectiveDate}</p>
+  </header>
+  <div class="body">
+    <h2>지금 모으는 정보</h2>
+    <p>
+      이 블로그는 지금 방문하신 분의 개인정보를 모으지 않습니다. 회원 가입,
+      댓글, 방문 통계, 광고, 쿠키가 없습니다.
+    </p>
+
+    <h2>브라우저에 남기는 값</h2>
+    <p>
+      머리말의 밝기 단추로 화면 밝기를 고르면, 고른 값(<code>light</code>
+      {" 또는 "}<code>dark</code>)을 이 브라우저의 localStorage에{" "}
+      <code>{THEME_STORAGE_KEY}</code>라는 이름으로 남깁니다. 다음에 오셨을 때 같은 밝기로 보여 드리려는
+      것이며, 어디로도 보내지 않습니다. 브라우저의 사이트 데이터를 지우면 함께
+      지워집니다.
+    </p>
+
+    <h2>사이트를 제공하는 곳</h2>
+    <p>
+      이 블로그는 GitHub Pages로 제공됩니다. GitHub는 사이트를 안전하게
+      운영하려고 접속한 IP 주소 같은 기록을 남길 수 있습니다. 자세한 내용은 <a
+        href={githubPrivacyUrl}>GitHub 개인정보처리방침</a
+      >에 있습니다.
+    </p>
+
+    <h2>앞으로 바뀔 것</h2>
+    <p>
+      방문 통계와 댓글을 붙일 계획입니다. 붙이기 전에 무엇을 모으고 어디에
+      두는지 이 안내를 먼저 고치고, 시행일을 새로 적습니다.
+    </p>
+
+    <h2>문의</h2>
+    <p>
+      궁금한 점은 <a href={SITE.author.githubUrl}>이스타의 GitHub</a>로 알려
+      주세요.
+    </p>
+  </div>
+</article>
+
+<style>
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-bottom: var(--space-5);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .title {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-h1);
+  }
+
+  .meta {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+
+  .body {
+    margin-top: var(--space-5);
+  }
+
+  .body > * + * {
+    margin-top: var(--space-5);
+  }
+
+  .body h2 {
+    margin-top: var(--space-10);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-h3);
+    letter-spacing: var(--letter-spacing-h3);
+  }
+
+  .body h2 + p {
+    margin-top: var(--space-3);
+  }
+
+  .body p {
+    text-wrap: pretty;
+  }
+
+  .body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .body a:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
+  .body code {
+    padding: 1px 6px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    font-size: 0.9em;
+  }
+</style>

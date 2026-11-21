@@ -4,8 +4,16 @@ import { SITE } from "@/shared/constants/site";
 import { PATHS } from "@/shared/routes/paths";
 import formatDate from "@/shared/utils/formatDate";
 
-/** 사이트 꼬리말입니다. 저작권 줄과 RSS · GitHub 링크를 둡니다 */
+/**
+ * 사이트 꼬리말입니다. 저작권 줄과 RSS · GitHub · 개인정보 처리 안내 링크를 둡니다. 좁은 칸에서는 두 줄로 쌓습니다.
+ * @design design/blog.pen 「꼬리말」 m9iWo (넓은 화면 qgxES · 휴대폰 oHQDs)
+ */
 const year = formatDate({ date: new Date(), format: "year" });
+const links = [
+  { label: "RSS", href: PATHS.rss },
+  { label: "GitHub", href: SITE.author.githubUrl },
+  { label: "개인정보 처리 안내", href: PATHS.privacy },
+];
 ---
 
 <footer class="root">
@@ -13,8 +21,15 @@ const year = formatDate({ date: new Date(), format: "year" });
     <div class="bar">
       <p class="copyright">© {year} {SITE.author.name}</p>
       <ul class="links">
-        <li><a class="link" href={PATHS.rss}>RSS</a></li>
-        <li><a class="link" href={SITE.author.githubUrl}>GitHub</a></li>
+        {
+          links.map((link) => (
+            <li>
+              <a class="link" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
   </Container>
@@ -22,32 +37,40 @@ const year = formatDate({ date: new Date(), format: "year" });
 
 <style>
   .root {
-    border-top: 1px solid var(--color-border-subtle);
+    border-top: var(--border-width) solid var(--color-border);
+    container-type: inline-size;
   }
 
   .bar {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px 16px;
-    padding-block: 28px;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-6);
     color: var(--color-text-muted);
     font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
   }
 
   .links {
     display: flex;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
     list-style: none;
   }
 
-  .links li + li::before {
-    content: "·";
-    margin-right: 6px;
+  .link {
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .link:hover {
     color: var(--color-text);
+  }
+
+  @container (min-width: 768px) {
+    .bar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 </style>

@@ -1,28 +1,26 @@
 ---
 import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+import IconButton from "@/shared/components/primitives/ui/IconButton/index.astro";
 
 /**
- * 밝은 화면과 어두운 화면을 바꾸는 버튼입니다. 고른 테마는 localStorage에 남고,
+ * 밝은 화면과 어두운 화면을 바꾸는 단추입니다. 고른 테마는 localStorage에 남고,
  * 첫 그림 전 적용은 Document의 인라인 스크립트가 맡습니다.
- * 고르기 전에는 시스템 설정을 따르며, 아이콘은 바뀔 화면을 보여 줍니다(밝을 때 달, 어두울 때 해).
+ * 고르기 전에는 시스템 설정을 따르며, 아이콘과 이름은 누르면 바뀔 화면을 알립니다(밝을 때 달 · 「어두운 화면으로」).
+ * JavaScript가 꺼져 있으면 누를 수 없으므로 숨깁니다.
+ * @design design/blog.pen 「머리말」 mg60A 밝기 단추, 「아이콘 단추」 Bh8HQ
  */
 ---
 
-<button
-  type="button"
-  class="container"
-  data-theme-toggle
-  aria-label="어두운 화면"
-  aria-pressed="false"
->
+<IconButton label="어두운 화면으로" class="themeToggle" data-theme-toggle>
   <Icon name="moon" class="moon" />
   <Icon name="sun" class="sun" />
-</button>
+</IconButton>
 
 <script>
   import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
 
   import getNextTheme from "./utils/getNextTheme";
+  import getThemeToggleLabel from "./utils/getThemeToggleLabel";
   import resolveTheme from "./utils/resolveTheme";
 
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -36,12 +34,10 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
       isSystemDark: darkQuery.matches,
     });
 
-  const syncPressed = () => {
-    const isDark = getCurrentTheme() === "dark";
+  const syncLabel = () => {
+    const label = getThemeToggleLabel(getCurrentTheme());
 
-    buttons.forEach((button) => {
-      button.setAttribute("aria-pressed", String(isDark));
-    });
+    buttons.forEach((button) => button.setAttribute("aria-label", label));
   };
 
   const handleClick = () => {
@@ -53,56 +49,38 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
     } catch {
       // 저장소를 못 쓰는 환경(사생활 보호 모드 등)에서는 이번 방문 동안만 바뀝니다
     }
-    syncPressed();
+    syncLabel();
   };
 
   buttons.forEach((button) => button.addEventListener("click", handleClick));
-  darkQuery.addEventListener("change", syncPressed);
-  syncPressed();
+  darkQuery.addEventListener("change", syncLabel);
+  syncLabel();
 </script>
 
 <style>
-  .container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border: 0;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition:
-      color 0.15s,
-      background-color 0.15s;
-  }
-
-  .container:hover {
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  /* 아이콘은 Icon 컴포넌트가 그려서 이 컴포넌트의 범위 속성이 없으므로 :global로 고릅니다 */
-  .container :global(.sun) {
+  /* 단추와 아이콘은 IconButton · Icon이 그려서 이 컴포넌트의 범위 속성이 없으므로 :global로 고릅니다 */
+  :global(.no-js .themeToggle) {
     display: none;
   }
 
-  :global(:root[data-theme="dark"]) .container :global(.sun) {
+  :global(.themeToggle .sun) {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"] .themeToggle .sun) {
     display: block;
   }
 
-  :global(:root[data-theme="dark"]) .container :global(.moon) {
+  :global(:root[data-theme="dark"] .themeToggle .moon) {
     display: none;
   }
 
   @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .container :global(.sun) {
+    :global(:root:not([data-theme="light"]) .themeToggle .sun) {
       display: block;
     }
 
-    :global(:root:not([data-theme="light"])) .container :global(.moon) {
+    :global(:root:not([data-theme="light"]) .themeToggle .moon) {
       display: none;
     }
   }

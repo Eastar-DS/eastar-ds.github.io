@@ -3,7 +3,10 @@ import Chip from "@/shared/components/primitives/ui/Chip/index.astro";
 import getSeriesList from "@/shared/content/getSeriesList";
 import { getPostPath, SERIES_SECTION_ID } from "@/shared/routes/paths";
 
-/** 시리즈 목록을 칩으로 보입니다. 칩을 누르면 시리즈의 첫 글로 갑니다. 시리즈가 없으면 그리지 않습니다 */
+/**
+ * 시리즈 목록을 칩으로 보입니다. 칩을 누르면 시리즈의 첫 글로 갑니다. 시리즈가 없으면 그리지 않습니다.
+ * @design design/blog.pen 「칩」 prFrh, 화면 「A · 글 목록 · 넓은 화면」 Yknaw
+ */
 const seriesList = await getSeriesList();
 const titleId = `${SERIES_SECTION_ID}-title`;
 ---
@@ -33,16 +36,16 @@ const titleId = `${SERIES_SECTION_ID}-title`;
 <style>
   .title {
     color: var(--color-text-muted);
-    font-size: var(--font-size-small);
-    font-weight: 700;
-    line-height: 1.5;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
   }
 
   .list {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
     list-style: none;
   }
 </style>

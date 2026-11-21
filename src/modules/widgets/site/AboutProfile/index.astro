@@ -25,27 +25,37 @@ import { PATHS } from "@/shared/routes/paths";
 <style>
   .title {
     font-size: var(--font-size-h1);
-    font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-h1);
   }
 
   .body {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 24px;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+  }
+
+  .body p {
+    text-wrap: pretty;
   }
 
   .links {
     display: flex;
-    gap: 16px;
+    gap: var(--space-4);
     list-style: none;
   }
 
   .links a {
     color: var(--color-accent);
     text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
     text-underline-offset: 3px;
+  }
+
+  .links a:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
   }
 </style>

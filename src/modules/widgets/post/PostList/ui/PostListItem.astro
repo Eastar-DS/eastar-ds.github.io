@@ -1,0 +1,96 @@
+---
+import { getPostPath } from "@/shared/routes/paths";
+import type { Post } from "@/shared/types/post";
+import formatDate from "@/shared/utils/formatDate";
+
+interface Props {
+  post: Post;
+}
+
+/**
+ * 글 목록의 한 줄입니다. 날짜(MM.DD) · 제목과 한 줄 요약 · 읽는 시간을 두고, 줄 전체가 글 링크입니다.
+ * 링크 이름은 제목만 읽히고, 날짜와 시간은 `<time>`으로 둡니다.
+ * @design design/blog.pen 「글 목록 항목」 A33N0 (기본 d9vhG · 올림 wn9Tj)
+ */
+const { post } = Astro.props;
+---
+
+<li class="container">
+  <time class="date" datetime={formatDate({ date: post.publishedAt, format: "iso" })}>
+    {formatDate({ date: post.publishedAt, format: "monthDay" })}
+  </time>
+  <div class="text">
+    <h3 class="title">
+      <a class="link" href={getPostPath(post.slug)}>{post.title}</a>
+    </h3>
+    <p class="description">{post.description}</p>
+  </div>
+  <span class="reading">
+    <span class="visually-hidden">읽는 시간 </span>
+    {post.readingMinutes}분
+  </span>
+</li>
+
+<style>
+  .container {
+    position: relative;
+    display: grid;
+    /* 날짜 칸 폭 56px는 시안(「글 목록 항목」)의 값입니다 */
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    align-items: baseline;
+    padding-block: var(--space-4);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .date,
+  .reading {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .title {
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-lead);
+    text-wrap: pretty;
+  }
+
+  /* 줄 전체를 누를 수 있게 제목 링크를 줄 크기로 넓힙니다 */
+  .link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .container:hover .link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+  }
+
+  .description {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .reading {
+    padding-left: var(--space-4);
+    white-space: nowrap;
+  }
+
+  @container (max-width: 479.98px) {
+    .container {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: var(--space-1);
+    }
+
+    .date {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

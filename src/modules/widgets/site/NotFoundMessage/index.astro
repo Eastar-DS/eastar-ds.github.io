@@ -1,14 +1,23 @@
 ---
 import { PATHS } from "@/shared/routes/paths";
 
-/** 없는 주소로 왔을 때의 안내입니다. 이 페이지의 h1을 가집니다 */
+/**
+ * 없는 주소로 왔을 때의 안내입니다. 이 페이지의 h1을 가집니다. 최근 글 목록은 페이지가 따로 배치합니다.
+ * @design design/blog.pen 「404 본문」 W40Po, 화면 「A · 404 · 넓은 화면」 m3K3l
+ */
 ---
 
 <section class="container">
   <p class="code">404</p>
-  <h1 class="title">페이지를 찾을 수 없습니다</h1>
-  <p class="description">주소가 바뀌었거나 없는 글입니다.</p>
-  <a class="link" href={PATHS.home}>글 목록으로 가기</a>
+  <h1 class="title">찾는 글이 없습니다</h1>
+  <p class="description">
+    주소가 바뀌었거나 지운 글입니다. 글 목록에서 찾아보거나 최근 글을 읽어
+    보세요.
+  </p>
+  <ul class="links">
+    <li><a class="link" href={PATHS.home}>글 목록으로</a></li>
+    <li><a class="link" href={PATHS.rss}>RSS로 받아 보기</a></li>
+  </ul>
 </section>
 
 <style>
@@ -19,28 +28,44 @@ import { PATHS } from "@/shared/routes/paths";
   }
 
   .code {
-    color: var(--color-text-faint);
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1.2;
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-display);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-display);
+    letter-spacing: var(--letter-spacing-display);
   }
 
   .title {
-    margin-top: 8px;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.4;
+    margin-top: var(--space-5);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-h1);
   }
 
   .description {
-    margin-top: 8px;
+    margin-top: var(--space-6);
     color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin-top: var(--space-6);
+    list-style: none;
   }
 
   .link {
-    margin-top: 24px;
     color: var(--color-accent);
     text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
     text-underline-offset: 3px;
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
   }
 </style>

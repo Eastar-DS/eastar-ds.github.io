@@ -1,14 +1,17 @@
 ---
+import PostList from "@/modules/widgets/post/PostList/index.astro";
 import NotFoundMessage from "@/modules/widgets/site/NotFoundMessage/index.astro";
 import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
 import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
 import Container from "@/shared/components/primitives/layout/Container/index.astro";
 import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
+import { MAIN_CONTENT_ID } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
 
-/** 없는 주소로 왔을 때의 페이지. GitHub Pages가 404.html로 보여 줍니다 */
+/** 없는 주소로 왔을 때의 페이지. GitHub Pages가 404.html로 보여 줍니다. 안내 아래에 최근 글 두 편을 둡니다 */
 const meta = createPageMeta({
-  title: "페이지를 찾을 수 없습니다",
+  title: "찾는 글이 없습니다",
   path: "/404.html",
 });
 ---
@@ -16,9 +19,12 @@ const meta = createPageMeta({
 <Document meta={meta}>
   <meta slot="head" name="robots" content="noindex" />
   <SiteHeader />
-  <main class="main">
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
     <Container size="content">
-      <NotFoundMessage />
+      <Stack gap={10}>
+        <NotFoundMessage />
+        <PostList variant="recent" limit={2} />
+      </Stack>
     </Container>
   </main>
   <SiteFooter />
@@ -26,6 +32,12 @@ const meta = createPageMeta({
 
 <style>
   .main {
-    padding-block: 96px 128px;
+    padding-block: var(--space-14);
+  }
+
+  @media (min-width: 768px) {
+    .main {
+      padding-block: var(--space-24);
+    }
   }
 </style>

@@ -5,7 +5,10 @@ interface Props {
   items: TocItem[];
 }
 
-/** 목차 링크 목록입니다. 지금 읽는 곳의 링크에는 aria-current가 붙어 강조색으로 보입니다 */
+/**
+ * 목차 링크 목록입니다. 지금 읽는 곳의 링크에는 aria-current="location"이 붙어 강조색 · 굵게 · 왼쪽 2px 선으로 보입니다.
+ * @design design/blog.pen 「목차 항목」 azbFv (기본 · h2 RL8Ny · 지금 · h2 G4Bn9X · 올림 · h2 FDgr2 · 기본 · h3 RFzFI · 지금 · h3 A1O07F)
+ */
 const { items } = Astro.props;
 ---
 
@@ -23,32 +26,44 @@ const { items } = Astro.props;
 
 <style>
   .list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    border-left: 1px solid var(--color-border-subtle);
+    border-left: var(--border-width) solid var(--color-border);
     list-style: none;
   }
 
+  /* 왼쪽 안쪽 15px(h3 27px)는 docs/design-system.md 7.10의 값입니다 */
   .link {
+    position: relative;
     display: block;
-    padding: 4px 0 4px 14px;
+    padding: var(--space-1) 0 var(--space-1) 15px;
     color: var(--color-text-muted);
     font-size: var(--font-size-small);
-    line-height: 1.6;
-    transition: color 0.15s;
+    line-height: var(--line-height-small);
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .isNested .link {
-    padding-left: 26px;
+    padding-left: 27px;
   }
 
   .link:hover {
     color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
   }
 
   .link[aria-current] {
     color: var(--color-accent);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* 왼쪽 1px 선 위에 겹쳐 그리는 2px 강조선. 그림자 대신 선으로 그려 고대비 모드에서도 남게 합니다 */
+  .link[aria-current]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--border-width) * -1);
+    border-left: var(--border-width-strong) solid var(--color-accent);
   }
 </style>

@@ -3,6 +3,7 @@ import renderPost from "@/shared/content/renderPost";
 import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 
 import TocList from "./ui/TocList.astro";
+import shouldShowToc from "./utils/shouldShowToc";
 import toTocItems from "./utils/toTocItems";
 
 interface Props {
@@ -15,8 +16,10 @@ interface Props {
 }
 
 /**
- * 글의 h2, h3로 만든 목차입니다. 스크롤에 맞춰 지금 읽는 곳의 링크를 강조합니다.
+ * 글의 h2, h3로 만든 목차입니다. 스크롤에 맞춰 지금 읽는 곳의 링크를 강조합니다. h2가 셋 미만인 짧은 글에는 그리지 않습니다.
  * 어디에 놓일지(옆 칸, 본문 위)는 페이지가 정하고, 이 컴포넌트는 모양만 고릅니다.
+ * 접는 목차는 `<details>`라서 JavaScript 없이도 열립니다.
+ * @design design/blog.pen 「목차」 d3ZMZg, 「접는 목차」 Hrrbc (닫힘 Q2AGEp · 열림 vEVVR)
  */
 const { slug, variant = "list" } = Astro.props;
 const { headings } = await renderPost(slug);
@@ -25,7 +28,7 @@ const titleId = `toc-title-${variant}`;
 ---
 
 {
-  items.length > 0 && (
+  shouldShowToc(items) && (
     <nav class:list={["root", variant]} aria-labelledby={titleId} data-toc>
       {variant === "collapsible" ? (
         <details class="details">
@@ -99,26 +102,27 @@ const titleId = `toc-title-${variant}`;
 
 <style>
   .title {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
     color: var(--color-text-muted);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1.5;
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
   }
 
   .details {
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-md);
   }
 
   .summary {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 12px 16px;
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.5;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-small);
     list-style: none;
     cursor: pointer;
   }
@@ -130,7 +134,7 @@ const titleId = `toc-title-${variant}`;
   .summary :global(.chevron) {
     margin-left: auto;
     color: var(--color-text-muted);
-    transition: transform 0.2s;
+    transition: transform var(--duration-base) var(--ease-standard);
   }
 
   .details[open] :global(.chevron) {
@@ -138,6 +142,7 @@ const titleId = `toc-title-${variant}`;
   }
 
   .panel {
-    padding: 0 16px 12px;
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--border-width) solid var(--color-border);
   }
 </style>
