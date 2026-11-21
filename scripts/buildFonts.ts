@@ -30,6 +30,7 @@ import {
   collectSiteCharacters,
 } from "./fonts/collectFontText.ts";
 import renameFont from "./fonts/renameFont.ts";
+import toSubsetCodePoints from "./fonts/toSubsetCodePoints.ts";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const DIST = path.join(ROOT, "dist");
@@ -112,7 +113,7 @@ const buildMono = async (characters: string[]) =>
 const buildCodeHangul = (characters: string[]) => {
   const font = createFont(readFileSync(SOURCES.d2coding), {
     type: "ttf",
-    subset: characters.map((character) => character.codePointAt(0) ?? 0),
+    subset: toSubsetCodePoints(characters),
     hinting: false,
   });
   const data = font.get();
