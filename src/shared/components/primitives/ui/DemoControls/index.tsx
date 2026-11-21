@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import DemoSlider from "@/shared/components/primitives/ui/DemoSlider";
 
 import ControlIcon from "./ui/ControlIcon";
 import styles from "./index.module.css";
@@ -20,7 +20,7 @@ interface DemoControlsProps {
 
 /**
  * 데모 아래의 조작 줄입니다. 재생/멈춤 · 처음으로 단추와 슬라이더, 상태 글을 한 줄에 둡니다.
- * 단추는 「아이콘 단추」, 슬라이더는 「슬라이더」 모양을 따릅니다. React 섬 안이라 Astro의 IconButton 대신 같은 토큰으로 그립니다.
+ * 단추는 「아이콘 단추」 모양을 따릅니다. React 섬 안이라 Astro의 IconButton 대신 같은 토큰으로 그립니다. 슬라이더는 `DemoSlider`가 그립니다.
  * @design design/blog.pen 「데모 틀」 M3NVPX 조작 줄, 「슬라이더」 taHDx (기본 p5EjtZ · 포커스 ZWMAF), 「아이콘 단추」 Bh8HQ
  */
 export default function DemoControls({
@@ -33,10 +33,6 @@ export default function DemoControls({
   sliderValueText,
   status,
 }: DemoControlsProps) {
-  const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onValueChange(Number(event.target.value));
-  };
-
   return (
     <div className={styles.container}>
       <button
@@ -55,24 +51,12 @@ export default function DemoControls({
       >
         <ControlIcon name="reset" />
       </button>
-      <span className={styles.sliderContainer}>
-        {/* 채운 줄은 손잡이 가운데까지 오도록 손잡이 폭(16px)의 절반씩 안쪽에서 셉니다 */}
-        <span className={styles.track} aria-hidden="true">
-          <span
-            className={styles.fill}
-            style={{ width: `calc(8px + (100% - 16px) * ${value / 100})` }}
-          />
-        </span>
-        <input
-          type="range"
-          className={styles.slider}
-          min={0}
-          max={100}
-          step={1}
+      <span className={styles.sliderWrapper}>
+        <DemoSlider
           value={value}
-          onChange={handleSliderChange}
-          aria-label={sliderLabel}
-          aria-valuetext={sliderValueText}
+          onValueChange={onValueChange}
+          label={sliderLabel}
+          valueText={sliderValueText}
         />
       </span>
       {status && <span className={styles.status}>{status}</span>}
