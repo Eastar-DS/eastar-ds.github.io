@@ -134,3 +134,15 @@
 | `.claude/skills/project-structure/SKILL.md` | 폴더 나무의 포트폴리오 페이지 설명, `getPortfolioProjectPath`, `constants/career`의 id 목록을 고침 | 코드가 바뀐 만큼 맞춤 |
 | `src/content.config.ts` | `projects` 칸이 `shared/constants/career`의 id만 받음(`@/` 별칭으로 불러옴) | 없는 프로젝트를 적으면 빌드가 멈춰서 깨진 링크가 배포되지 않게 함 |
 | `shared/seo/getPageOgCards`, `shared/seo/createLlmsTxt` | 이력서와 포트폴리오 그림의 이름 줄과 설명을 `SITE.author.displayName`(「이스타(김동성)」)으로, llms.txt 「글쓴이」 절의 소개 설명에 같은 이름을 넣음. 그림의 사이트 이름 줄은 그대로 둠 | 이력서 머리와 같은 이름 표기 |
+
+## 9단계에서 더 바꾼 것 (2026-11-22, 게시 전 점검 스크립트와 훅, prepublish-check 스킬)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `scripts/checkPost.ts`, `scripts/checkPost/` | 새로 둠. 글 원문(앞머리 길이와 분류, 글 구조, 코드 칸, 표기, 그림 alt와 설명, 〔이스타 확인〕 표시, 글 안 링크와 제목 id, 시리즈 번호, 개인 정보, writing-style)과 빌드 결과(메타, og · twitter, BlogPosting · BreadcrumbList, 공유 그림, RSS · 사이트맵 · llms.txt, 페이지 JS)를 검사. 기준 값은 `constants.ts` 한곳에 정본의 근거와 함께 둠 | `docs/content-guide.md` 10장 확인 목록을 사람이 매번 손으로 돌던 것을 셀 수 있는 만큼 기계로 돌림. 바깥 패키지 없이 Node 24로 돌아서 앞머리 읽기와 제목 id(github-slugger와 같은 규칙)를 직접 옮겼습니다 |
+| `src/shared/constants/post`, `src/content.config.ts` | 분류를 정본 8.1 목록의 enum으로, 제목 40자 · 요약 100자를 넘으면 빌드가 멈춤 | 정본 2장의 상한과 8장 목록을 빌드에서 지킴. 권장 범위는 `checkPost`가 경고로 알림. 스키마와 스크립트가 같은 상수를 씀 |
+| `scripts/hooks/`, `.claude/settings.json` | 게시 막기(초안이 아닌 글에 남은 〔이스타 확인〕 표시), 개인 정보 검사(글과 데모의 로컬 경로 · 이메일 · 토큰 꼴 · 사설 IP · 전화번호) 훅을 더함 | 훅 스크립트를 `.claude/` 아래가 아니라 `scripts/hooks/`에 둔 것은 `.claude/` 아래 `.ts`가 타입 검사와 vitest에서 빠지기 때문입니다. 판단 함수를 떼어 시험하고, 실행 파일도 가짜 훅 입력으로 시험합니다 |
+| `.github/workflows/deploy.yml` | 빌드 뒤 `node scripts/checkPost.ts --all --dist dist` | 초안이 아닌 글이 실패하거나 초안이 배포 빌드에 새면 배포를 멈춤 |
+| `scripts/checkLinks.ts`, `.github/workflows/check-links.yml` | 주 1회 글의 바깥 링크 검사. 결과는 작업 요약에 씀 | lychee-action 대신 같은 MDX 읽기(`parseMdx`)를 써서 코드 칸 속 예시 주소를 세지 않고, 바깥 액션 없이 돎. 404 · 410 · 없는 도메인만 실패로 둬서 봇 막기와 일시 오류로 빨간 표시가 나지 않게 함 |
+| `.claude/skills/prepublish-check/` | 새로 둠. `checkPost --json`의 결과와 판단 항목 J1~J13으로 10장을 점검해 실패 · 사람이 볼 것 · 통과 · 돌리지 않음 표로 보고. 평가 재료(`evals/`) | 설계 문서(설계: prepublish-check와 fact-check-post, 3장)를 따름. 작업 폴더(`scripts/blogWork.ts`)와 사실 대조 상태(`scripts/factCheck.ts status`)는 다른 브랜치가 만듦 |
+| `CLAUDE.md`, `.claude/rules/content-guide.md`, `.claude/rules/shared-layer.md`, `project-structure` 스킬 | 명령 표, 훅, 스키마의 분류 enum, 새 폴더를 적음 | 코드가 바뀐 만큼 맞춤 |

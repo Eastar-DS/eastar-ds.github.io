@@ -42,8 +42,13 @@ scripts/fonts/                       # 글자 모으기 · 글꼴 이름 바꾸�
 scripts/EmptyPart.astro              # 아무것도 그리지 않는 빈 부품 (댓글 · 방문 통계 설정이 비면 astro.config.ts가 대신 넣음)
 scripts/indexNow.ts                  # 배포 때 글이 바뀐 페이지를 골라(plan) IndexNow로 알림(submit). 바깥 패키지 없이 Node만으로 돎
 scripts/indexNow/                    # 페이지 글 해시 · 바뀐 주소 고르기 · 요청 만들기 순수 함수와 IndexNow 키 (단위 테스트 포함)
+scripts/checkPost.ts                 # 게시 전 점검(pnpm check:post). 글 원문과 빌드 결과를 content-guide 10장 기준으로 검사. 머리 주석이 쓰는 법과 출력 칸의 정본
+scripts/checkPost/                   # 앞머리 · MDX 읽기, 제목 id, 원문 · 빌드 결과 검사, 페이지 JS 재기 순수 함수와 기준 값(constants.ts) (단위 테스트 포함)
+scripts/checkLinks.ts                # 글의 바깥 링크 검사(pnpm check:links, 주 1회 워크플로). 순수 함수는 scripts/checkLinks/
+scripts/hooks/                       # Claude Code 훅: 게시 막기(〔이스타 확인〕), 개인 정보 검사. 판단은 decideHooks.ts (시험 포함)
 public/{IndexNow 키}.txt             # IndexNow 키 파일 (규격상 공개 값)
-.github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · GitHub Pages 배포, 배포 뒤 IndexNow 알리기
+.github/workflows/deploy.yml         # main에 올라오면 검사 · 빌드 · 게시 전 점검 · GitHub Pages 배포, 배포 뒤 IndexNow 알리기
+.github/workflows/check-links.yml    # 주 1회 글의 바깥 링크 검사 (배포와 따로)
 worker/                              # Cloudflare Worker: 노션 댓글(/comments)과 PostHog 중계(/bridge). 블로그와 따로 설치 · 시험 · 배포 (docs/worker.md)
 src/
 ├── content.config.ts                # 글 모음 스키마 (Astro가 요구하는 위치)
@@ -126,7 +131,7 @@ src/
 │   │   │   ├── index.ts
 │   │   │   └── test.ts
 │   │   └── isCommentsReady/         # astro.config.ts도 부르므로 import 없는 순수 함수 (shouldLoadAnalytics도 같음)
-│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기, 포트폴리오 공개 판단), career(이력서 · 포트폴리오의 프로젝트 정보, 글 앞머리 projects가 받는 id 목록), services(Worker · Turnstile · PostHog 설정), ogImage(공유 그림 크기)
+│   ├── constants/                   # site(검색 등록 메타 값 포함), theme, features(기능 켜고 끄기, 포트폴리오 공개 판단), career(이력서 · 포트폴리오의 프로젝트 정보, 글 앞머리 projects가 받는 id 목록), services(Worker · Turnstile · PostHog 설정), ogImage(공유 그림 크기), post(분류 목록, 제목 · 요약 상한)
 │   ├── types/                       # post.ts, seo.ts, theme.ts, career.ts
 │   └── styles/                      # tokens.css, base.css, codeFont.css, index.css
 │       └── fonts/                   # 만든 글꼴(Blog Sans · JetBrains Mono · Blog Code Hangul)과 OFL 전문

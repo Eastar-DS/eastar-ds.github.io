@@ -11,12 +11,14 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 **글쓰기와 게시 정책의 정본은 `docs/content-guide.md`입니다.** 제목 · 요약 길이, 글 구조(답을 먼저), 한글 표기, 코드 칸, 그림 · 공유 이미지, 아티팩트를 데모로 다시 만드는 규칙, 분류 목록, 게시 전 확인 목록은 모두 그 문서를 따릅니다. 이 파일은 코드 쪽에서 지킬 것만 적습니다.
 
 - 글을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킵니다.
+- 게시 전 점검은 `node scripts/checkPost.ts <slug>`(`pnpm check:post`)입니다. 셀 수 있는 항목(앞머리 길이와 분류, 글 구조, 코드 칸, 표기, 그림 alt와 설명, 〔이스타 확인〕 표시, 글 안 링크와 제목 id, 시리즈 번호, 개인 정보, writing-style)과 `--dist`의 빌드 결과(메타, 구조화 데이터, 피드, 페이지 JS)를 봅니다. 기준 값과 근거는 `scripts/checkPost/constants.ts`에 있고, 정본의 값이 바뀌면 그 파일을 함께 고칩니다. 초안이 아닌 글이 실패하면 배포 워크플로가 멈춥니다.
+- 〔이스타 확인: …〕은 이스타가 답할 자리 표시입니다. 초안이 아닌 글(.mdx)에 남아 있으면 Write · Edit 뒤 훅(`scripts/hooks/blockUnreviewedPost.ts`)이 돌려보냅니다. 글과 데모 폴더의 개인 정보는 `scripts/hooks/blockPrivateInfo.ts`가 봅니다.
 
 ## 글 원본과 스키마
 
 - 글 하나는 `src/content/posts/{slug}/index.mdx`. 그림은 같은 폴더에 둡니다. 폴더 이름이 글 주소(`/posts/{slug}/`)입니다.
 - 공유 미리보기 그림은 빌드가 분류와 제목으로 그려 `/posts/{slug}/og.png`에 둡니다. 직접 만든 그림을 쓰려면 글 폴더에 `og.png`(1200×630 PNG, 300KB 이하)를 둡니다. 크기가 다르면 빌드가 멈춥니다.
-- 앞머리(frontmatter) 스키마의 원본은 `src/content.config.ts`입니다. 칸을 더하거나 바꾸면 `docs/content-guide.md` 1장의 표와 맞는지 확인하고, 다르면 보고합니다.
+- 앞머리(frontmatter) 스키마의 원본은 `src/content.config.ts`입니다. `category`는 정본 8.1의 분류 목록(`shared/constants/post`의 `POST_CATEGORIES`)만 받고, `title`이 40자 · `description`이 100자를 넘으면 빌드가 멈춥니다(정본 2.1 · 2.2의 상한). 권장 범위(25~32자, 60~80자)는 `checkPost`가 경고로 알립니다. 분류를 더할 때는 정본 8.1에 먼저 더하고 `POST_CATEGORIES`를 고칩니다. 칸을 더하거나 바꾸면 `docs/content-guide.md` 1장의 표와 맞는지 확인하고, 다르면 보고합니다.
 - id는 glob loader의 `generateId`가 폴더 이름으로 만듭니다(`slug/index.mdx` → `slug`).
 - `projects`(선택, 2026-11-21): 이 글과 이어진 프로젝트 id 목록(`projects: [knot]`). `shared/constants/career`의 `CAREER_PROJECT_IDS`(`knot`, `sellerhome`, `bid`)만 받아서 없는 id면 빌드가 멈춥니다. 적으면 글 끝에 「이 글과 이어진 프로젝트」 링크(`features/post/PostProjectLinks`)가 붙습니다. 정본 `docs/content-guide.md` 1장 표에는 아직 이 칸이 없습니다.
 - 이력서 줄과 포트폴리오 사례는 `relatedPostSlugs`에 글 이름(slug)을 적어 「관련 글」로 잇습니다. 글 이름(폴더 이름)을 바꾸면 그 값도 함께 고칩니다. 없는 글 이름이면 그 페이지의 빌드가 멈춥니다.

@@ -22,6 +22,8 @@
 | `pnpm fonts` · `pnpm fonts:check` | `dist`로 글꼴만 다시 만들기 · 빠진 글자만 검사 (보통은 `pnpm build`가 함께 함) |
 | `pnpm test:worker` · `pnpm check:worker` | Worker 시험 · 타입 검사. 먼저 `pnpm --dir worker install` |
 | `pnpm test:all` | 블로그 타입 검사 · 시험과 Worker 타입 검사 · 시험을 한 번에 |
+| `pnpm check:post <slug>` · `--all` · `--include-drafts` | 게시 전 점검(`scripts/checkPost.ts`). 글이 `docs/content-guide.md` 10장과 그 항목이 가리키는 장을 지키는지 셀 수 있는 것만 검사. `--dist`를 붙이면 빌드 결과도 보고, `--json`은 스킬용. 실패가 있으면 끝 코드 1. 배포 워크플로가 `--all --dist dist`로 돌림 |
+| `pnpm check:links` | 글(초안 포함)의 바깥 링크가 열리는지 검사. 주 1회 워크플로(`.github/workflows/check-links.yml`)도 돌림 |
 | `worker`에서 `pnpm dev` · `pnpm dev:fake-notion` | 로컬 Worker(8787)와 가짜 노션 서버(8790). `worker/.dev.vars.example`을 `.dev.vars`로 복사해 씀 |
 
 ---
@@ -62,7 +64,8 @@
 - 디자인 값은 `src/shared/styles/tokens.css`의 CSS 변수만 쓴다. 이름과 값은 `docs/design-system.md`와 같게 두고, 밝은 · 어두운 값은 `light-dark()`로 한 줄에 둔다.
 - `docs/design-system.md`, `docs/content-guide.md`, `design/` 아래는 에이전트가 고치지 않는다. 문서와 코드가 맞지 않거나 문서가 틀렸다고 보면 보고한다.
 - 글에는 공개되면 곤란한 내용을 넣지 않는다. 저장소는 공개 저장소다.
-- 글(`src/content/posts/**/index.mdx`)을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킨다. Write · Edit 뒤에는 같은 검사를 훅(`.claude/settings.json`)이 돌린다.
+- 글(`src/content/posts/**/index.mdx`)을 쓰거나 고칠 때는 `writing-style` 스킬(`.claude/skills/writing-style/SKILL.md`)을 따르고, `bash .claude/skills/writing-style/check.sh <글 파일>`을 출력 없이 통과시킨다. Write · Edit 뒤에는 같은 검사와 게시 막기(초안이 아닌 글에 남은 〔이스타 확인〕 표시), 개인 정보 검사(글과 데모의 로컬 경로 · 이메일 · 토큰 꼴 · 사설 IP · 전화번호)를 훅(`.claude/settings.json`, `scripts/hooks/`)이 돌린다.
+- 게시 전에는 `prepublish-check` 스킬로 10장 확인 목록을 점검한다. 셀 수 있는 기준 값은 `scripts/checkPost/constants.ts`에 정본의 근거와 함께 있고, 분류 목록과 제목 · 요약 상한은 `src/shared/constants/post`에서 빌드 스키마와 함께 쓴다.
 - `.references/`(다른 사이트 화면)와 `design/*.pen`(Pencil 원본)은 저장소에 넣지 않는다. 시안은 `design/exports-system/`의 PNG를 보고, `.pen` 파일은 파일 도구로 열거나 고치지 않는다(다룰 때는 Pencil 도구로만, 이스타가 시킬 때만).
 - 커밋 메시지는 `feat: ...함`처럼 한국어로 쓰고, 공동작업자 줄을 넣지 않는다.
 - 배포는 `.github/workflows/deploy.yml`이 main에 올라올 때 한다. 배포가 끝나면 글이 바뀐 페이지 주소를 IndexNow로 알린다(`scripts/indexNow.ts`, 실패해도 배포는 성공). 저장소 만들기 · 푸시 · 배포는 이스타나 오케스트레이터가 시킬 때만 한다.
