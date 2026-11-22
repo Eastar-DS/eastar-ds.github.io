@@ -9,10 +9,14 @@ import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
 import { MAIN_CONTENT_ID } from "@/shared/routes/paths";
 import createPageMeta from "@/shared/seo/createPageMeta";
 
-/** 없는 주소로 왔을 때의 페이지. GitHub Pages가 404.html로 보여 줍니다. 안내 아래에 최근 글 두 편을 둡니다 */
+/**
+ * 없는 주소로 왔을 때의 페이지. GitHub Pages가 404.html로 보여 줍니다. 안내 아래에 최근 글 두 편을 둡니다.
+ * 어느 주소로 와도 이 내용이라 정해진 주소가 없어서, canonical과 og:url을 두지 않고 noindex만 둡니다.
+ */
 const meta = createPageMeta({
   title: "찾는 글이 없습니다",
   path: "/404.html",
+  hasCanonical: false,
 });
 ---
 

@@ -101,6 +101,7 @@ Astro 범위 스타일의 클래스와 CSS Modules 클래스에 똑같이 적용
 ## 스타일
 
 - Astro 컴포넌트는 같은 파일의 범위 `<style>`로, React 컴포넌트는 옆의 `.module.css`로 작성
+- 빌드는 페이지의 CSS를 HTML 안에 넣음(`astro.config.ts`의 `build.inlineStylesheets: "always"`). CSS 파일을 따로 받지 않아 휴대폰 첫 그림이 빨라지는 대신, 전역 CSS가 커지면 모든 페이지의 HTML이 함께 커지므로 전역 스타일을 크게 늘릴 때는 Lighthouse로 다시 잼
 - 값(색·글자·간격·모서리·움직임)과 화면 폭 구간은 `.claude/rules/design-system.md`(정본 `docs/design-system.md`)를 따름. 토큰만 쓰고 하드코딩하지 않음
 - **Tailwind CSS와 CSS-in-JS는 사용하지 않음.** 전역 클래스는 `shared/styles/base.css`의 `.visually-hidden`과 Document가 붙이는 `no-js`만 둠
 - 자식 컴포넌트가 그리는 요소(예: `Icon`)에는 부모의 범위 속성이 붙지 않으므로 `.부모클래스 :global(.자식클래스)`로 고름

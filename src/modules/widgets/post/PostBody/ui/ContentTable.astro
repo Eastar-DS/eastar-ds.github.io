@@ -2,13 +2,66 @@
 /**
  * 본문의 표입니다. MDX의 표(GFM)를 바꿔 끼워, 좁은 화면에서 넘치면 표만 가로로 밀리게 합니다.
  * 표 설명은 글에서 `<Figure caption="표 1. …" captionSide="top">`으로 감싸 붙입니다.
+ * 표가 실제로 넘칠 때만 작은 스크립트가 감싼 칸을 키보드로 밀 수 있는 이름 있는 칸(`role="region"`, `tabindex="0"`)으로 만듭니다.
+ * 이름은 표 설명이 있으면 그 설명(`aria-labelledby`), 없으면 머리 칸 글입니다. 넘치지 않는 표에서는 Tab이 멈추지 않습니다.
  * @design design/blog.pen 「표」 J9t3G
  */
 ---
 
-<div class="root" role="region" aria-label="표" tabindex="0">
+<div class="root" data-content-table>
   <table class="table"><slot /></table>
 </div>
+
+<script>
+  import getTableRegion from "@/modules/widgets/post/PostBody/utils/getTableRegion";
+
+  const roots = [...document.querySelectorAll<HTMLElement>("[data-content-table]")];
+
+  const update = (root: HTMLElement) => {
+    const caption = root.closest("figure")?.querySelector<HTMLElement>(":scope > figcaption");
+
+    if (caption && !caption.id) caption.id = `content-table-caption-${roots.indexOf(root) + 1}`;
+
+    const region = getTableRegion({
+      scrollWidth: root.scrollWidth,
+      clientWidth: root.clientWidth,
+      captionId: caption?.id,
+      headers: [...root.querySelectorAll("thead th")].map((header) => header.textContent ?? ""),
+    });
+
+    root.removeAttribute("aria-labelledby");
+    root.removeAttribute("aria-label");
+
+    if (!region) {
+      root.removeAttribute("role");
+      root.removeAttribute("tabindex");
+      return;
+    }
+
+    root.setAttribute("role", "region");
+    root.tabIndex = 0;
+
+    if (region.labelledBy) root.setAttribute("aria-labelledby", region.labelledBy);
+    if (region.label) root.setAttribute("aria-label", region.label);
+  };
+
+  // 화면 폭이 바뀌거나 글꼴이 늦게 와서 표 폭이 바뀌면 넘치는지 다시 봅니다. 처음 지켜볼 때도 한 번 불립니다
+  const observer = new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      const root = entry.target.closest<HTMLElement>("[data-content-table]");
+
+      if (root) update(root);
+    });
+  });
+
+  roots.forEach((root) => {
+    observer.observe(root);
+
+    const table = root.querySelector("table");
+
+    if (table) observer.observe(table);
+  });
+</script>
 
 <style>
   .root {

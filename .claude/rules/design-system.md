@@ -44,6 +44,7 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 - 이미 있는 부품을 먼저 씁니다: `Icon`, `IconButton`, `Chip`, `Callout`(kind: key · warn · note), `Figure`, `SkipLink`, `AnchorHeading`, `DemoFrame`, `DemoControls`, `DemoSlider`.
 - 댓글 칸의 부품(목록, 「글쓴이」 표시, 입력 칸, 남기기 단추, 글자 단추)은 정본 7.21에 있고 지금은 `widgets/post/Comments` 안에만 있습니다. 다른 곳에서 입력 칸 · 글자 단추가 필요해지면 primitives로 내립니다. Pencil에는 아직 없습니다(정본 12장).
 - 「관련 글」 링크(`features/post/RelatedPostLinks`)와 글 끝의 「이 글과 이어진 프로젝트」(`features/post/PostProjectLinks`)는 정본 7.25, 7.26에 있습니다. 이름표(보조색) 뒤에 글자 공백을 두고 링크를 놓으며, 「관련 글」은 인쇄할 때 제목 뒤에 글 주소를 괄호로 붙입니다. Pencil에는 없습니다.
+- 본문 각주(마크다운 `[^1]`)의 모양은 정본 7.28에 있고 `widgets/post/PostBody`가 그립니다. 「각주」 제목은 본문 h2와 같고, 목록은 body-sm 보조색, 눌러 온 각주는 `--color-accent-soft` 바탕입니다. Pencil에는 없습니다.
 - 페이지 제목(글 목록 · 시리즈 · 소개 같은 페이지의 h1)은 `title` 단계(`--font-size-title` 28px · 휴대폰 24px), 글 제목은 `h1` 단계(36px · 26px)입니다.
 - 코드 칸
   - 낱말 색은 VS Code Light+ / Dark+를 대비 보정한 `blog-light-plus` · `blog-dark-plus`입니다. 테마를 바꾸거나 Shiki를 올리면 `codeThemes/test.ts`가 모든 글자색의 대비(바탕 · 강조 줄 위 4.5:1)를 확인합니다.
@@ -55,7 +56,7 @@ description: 화면을 그리는 코드가 지켜야 하는 디자인 시스템 
 - 포커스는 `base.css`의 `:focus-visible`(2px `--color-focus`, 간격 2px)을 씁니다. `outline: none`으로 지우거나 `box-shadow`로 대신하지 않습니다. 모서리만 부품 모서리를 따르게 고칩니다.
 - 움직임은 `--duration-*`과 `--ease-standard`를 씁니다. 움직임 줄이기 설정이면 `base.css`가 시간을 0으로 줄입니다. 데모는 자동 재생하지 않습니다.
 - JavaScript가 꺼지면 `<html>`에 `no-js` 클래스가 남습니다. 누를 수 없는 단추는 `:global(.no-js)`로 숨깁니다.
-- 인쇄할 때는 `tokens.css`가 밝은 화면 값으로 고정하고, 머리말 · 꼬리말은 그리지 않으며, `Container`는 좌우 여백과 최대 폭을 풉니다. 인쇄 전용 규칙(`@media print`)은 너비 구간이 아니라서 widgets 안에 써도 됩니다. 이력서의 인쇄 규칙(종이 여백 15mm, 글자 한 단계 줄이기, 쪽 나눔)은 정본 7.23에 있습니다.
+- 인쇄할 때는 `tokens.css`가 밝은 화면 값으로 고정하고, 머리말 · 꼬리말은 그리지 않으며, `Container`는 좌우 여백과 최대 폭을 풉니다. 인쇄 전용 규칙(`@media print`)은 너비 구간이 아니라서 widgets 안에 써도 됩니다. 이력서의 인쇄 규칙(종이 여백 15mm, 글자 한 단계 줄이기, 쪽 나눔)은 정본 7.23에 있습니다. 글 화면 인쇄(복사 단추 · 이전 다음 글 · 이어진 프로젝트 숨김, 바깥 링크 뒤에 주소)는 정본 7.29에 있고, 바깥 링크 주소는 `PostBody/ui/ContentLink`가 붙이는 `data-print-url`을 씁니다.
 
 ## 디자인과 코드 잇기
 

@@ -10,6 +10,7 @@ import {
   DESCRIPTION_LENGTH,
   FIGURE,
   NOTATION,
+  MULTIPLE_TILDES,
   POST_LINK_PATTERN,
   QUESTION_HEADING_ENDING,
   REVIEW_MARKER_BASIS,
@@ -106,6 +107,16 @@ const excerpt = ({ text, index }: { text: string; index: number }) => {
   const end = Math.min(text.length, index + 20);
 
   return `${start > 0 ? "…" : ""}${text.slice(start, end).replace(/\s+/g, " ").trim()}${end < text.length ? "…" : ""}`;
+};
+
+/** 백슬래시가 바로 다음 글자를 이스케이프합니다. 두 백슬래시 뒤의 물결표는 이스케이프되지 않습니다. */
+const unescapedTildeIndexes = (text: string) => {
+  const indexes: number[] = [];
+  for (let index = 0; index < text.length; index += 1) {
+    if (text[index] === "\\") index += 1;
+    else if (text[index] === "~") indexes.push(index);
+  }
+  return indexes;
 };
 
 const safeDecode = (text: string) => {
@@ -554,6 +565,24 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
       findings: findInProse({ post, pattern: new RegExp(`(?<![\\d,.])\\d{4,}(?=${NOTATION.counterWords.join("|")})`) }),
       passSummary: "없습니다",
       fix: "세 자리마다 쉼표를 찍습니다(예: 3,000자).",
+    }),
+  );
+
+  results.push(
+    byFindings({
+      id: "multiple-tildes",
+      label: "본문 한 줄의 물결표 두 개 이상",
+      basis: MULTIPLE_TILDES.basis,
+      statusIfFound: "fail",
+      // parseMdx가 코드 칸·인라인 코드·태그·주소를 가린 본문 줄만 봅니다. 제목·요약은 넣지 않습니다.
+      findings: document.lines.filter(isProse).flatMap((line) => {
+        const indexes = unescapedTildeIndexes(line.text);
+        return indexes.length >= MULTIPLE_TILDES.minCount
+          ? [{ line: line.line, message: `물결표 ${indexes.length}개: ${excerpt({ text: line.text, index: indexes[0] ?? 0 })}` }]
+          : [];
+      }),
+      passSummary: "없습니다",
+      fix: "이스타가 범위 표기 규칙을 정한 뒤 고칩니다. 코드의 물결표는 백틱으로 감쌉니다.",
     }),
   );
 

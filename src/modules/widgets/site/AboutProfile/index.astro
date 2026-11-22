@@ -11,6 +11,7 @@ import { PATHS } from "@/shared/routes/paths";
  * 이메일 링크는 `SITE.author.email`이 있을 때만 둡니다.
  * 이메일 링크는 주소를 바로 읽고 옮겨 적을 수 있게 주소 글자를 그대로 씁니다.
  * 공개 전 숫자를 바로 내보내지 않도록, 기억에 의한 비드의 숫자(구독자 수 등)는 여기에 쓰지 않습니다.
+ * 내용을 고치면 `SITE.author.profileUpdatedAt`(소개 페이지 ProfilePage의 dateModified)도 고친 날로 바꿉니다.
  */
 const { displayName, email, githubUrl } = SITE.author;
 const links = [

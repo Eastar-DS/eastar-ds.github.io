@@ -23,6 +23,7 @@
 | `pnpm build` | 정적 빌드(`dist/`). 빌드 → 사이트 글자로 글꼴 만들기(`scripts/buildFonts.ts`) → 다시 빌드 → 빠진 글자 검사. 글꼴이 바뀌면 `src/shared/styles/fonts/`를 함께 커밋 |
 | `pnpm check` | 타입 검사 (`astro check`, TypeScript strict) |
 | `pnpm test` | 단위 테스트 (vitest) |
+| `pnpm new-post <slug>` | 새 글 폴더와 원본(`src/content/posts/{slug}/index.mdx`, 앞머리 틀 · `draft: true` · 「정리」 절 자리)을 만듦. 글 이름 꼴(영어 소문자 낱말 3~5개)과 겹침을 검사 |
 | `pnpm fonts` · `pnpm fonts:check` | `dist`로 글꼴만 다시 만들기 · 빠진 글자만 검사 (보통은 `pnpm build`가 함께 함) |
 | `pnpm test:worker` · `pnpm check:worker` | Worker 시험 · 타입 검사. 먼저 `pnpm --dir worker install` |
 | `pnpm test:all` | 블로그 타입 검사 · 시험과 Worker 타입 검사 · 시험을 한 번에 |

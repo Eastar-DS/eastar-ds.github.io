@@ -19,7 +19,10 @@ export const MAIN_CONTENT_ID = "main";
 /** 글 목록 페이지에서 시리즈 칩 구획의 id. 머리말의 「시리즈」 링크가 이 자리로 갑니다 */
 export const SERIES_SECTION_ID = "series";
 
-/** 글 주소를 만듭니다. 다른 저장소의 Pages 주소와 겹치지 않게 /posts/ 아래에 둡니다 */
+/**
+ * 글 주소를 만듭니다. 다른 저장소의 Pages 주소와 겹치지 않게 /posts/ 아래에 둡니다.
+ * 꼴을 바꾸면 사이트맵 lastmod가 글 주소를 알아보는 `shared/seo/addPostLastmod`의 `POST_PATH_PATTERN`도 함께 고칩니다.
+ */
 export const getPostPath = (slug: string) => `/posts/${slug}/`;
 
 /**

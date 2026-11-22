@@ -10,14 +10,15 @@ interface Props {
 }
 
 /**
- * 스스로를 가리키는 앵커 링크가 붙은 제목입니다. 제목 글 뒤의 링크 아이콘은 마우스를 올리거나 포커스할 때만 보이고,
+ * 스스로를 가리키는 앵커 링크가 붙은 제목입니다. 링크 이름은 「「제목」 절의 주소」입니다. 제목 글 뒤의 링크 아이콘은 마우스를 올리거나 포커스할 때만 보이고,
  * 숨길 때도 opacity만 바꿔 키보드로 닿게 합니다.
  * @design design/blog.pen 「제목」 bJWiw (h2 기본 k0eVo · h2 올림 B89Pn · h3 기본 PWOAs · h3 올림 IWHBj)
  */
 const { level, id } = Astro.props;
 const Tag = `h${level}` as const;
 const html = await Astro.slots.render("default");
-const label = `「${toPlainText(html)}」 링크`;
+// 화면 낭독기가 역할 「링크」를 따로 읽으므로 이름에는 「링크」를 넣지 않습니다(「「제목」 절의 주소, 링크」로 읽힘)
+const label = `「${toPlainText(html)}」 절의 주소`;
 ---
 
 <Tag id={id} class="container">

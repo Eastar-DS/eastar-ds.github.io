@@ -135,6 +135,7 @@
 | `src/content.config.ts` | `projects` 칸이 `shared/constants/career`의 id만 받음(`@/` 별칭으로 불러옴) | 없는 프로젝트를 적으면 빌드가 멈춰서 깨진 링크가 배포되지 않게 함 |
 | `shared/seo/getPageOgCards`, `shared/seo/createLlmsTxt` | 이력서와 포트폴리오 그림의 이름 줄과 설명을 `SITE.author.displayName`(「이스타(김동성)」)으로, llms.txt 「글쓴이」 절의 소개 설명에 같은 이름을 넣음. 그림의 사이트 이름 줄은 그대로 둠 | 이력서 머리와 같은 이름 표기 |
 
+
 ## 9단계에서 더 바꾼 것 (2026-11-22, 게시 전 점검 스크립트와 훅, prepublish-check 스킬)
 
 | 파일 | 바꾼 것 | 이유 |
@@ -151,3 +152,25 @@
 자료 모으기, 인터뷰, 개요 스킬과 write-post 차례표를 더했습니다. 검사와 평가 스크립트는 `scripts/`에 두고 기존 vitest 범위로 시험하며, 공용 로컬 JSON 설정과 저장소 밖 작업 폴더를 씁니다. `pnpm post:evals`는 가짜 자료로 스크립트를 평가하고, 결과와 원문은 작업 폴더의 `_evals`에만 둡니다.
 
 사실 대조 스킬은 주장 추출·인용 대조·상태 명령과 `research` 검사자 지시문을 씁니다. 공용 설정의 readPolicy·unopenedNames를 자료 수집과 출처 읽기에 함께 적용하며, 글 규칙의 값은 `src/shared/constants/post/index.ts` 한 곳에서 정의합니다. `post:fact-fixtures`와 `post:fact-grade`는 저장소 밖 사본으로 의도한 오류 검출과 원문 보존을 검사합니다.
+
+## 9단계에서 더 바꾼 것 (2026-11-22, SEO · 접근성 · 성능 · 글 형식의 작은 고침)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `.claude/rules/seo-guide.md` | 날짜를 한국 시간(+09:00)으로 쓰는 줄, 404의 canonical · og:url 빼기(`hasCanonical: false`), 첫 화면 WebSite, Person description · ProfilePage dateModified, 사이트맵 lastmod(글 주소만), RSS 본문 전체와 `atom:link rel="self"`, 데모 · 도식 안내 글, 제목 앵커 이름(「「제목」 절의 주소」)을 적음 | 조사(2026-11-21)의 바로 할 일을 코드에 넣은 만큼 맞춤 |
+| `.claude/rules/shared-layer.md` | `content/readPostLastmods`, `seo/addPostLastmod` · `createWebSiteJsonLd` · `createRssChannel` · `renderRssContents` · `toFeedHtml`, `astro.config.ts`가 부르는 shared 코드 목록을 고침 | 새 shared 코드 |
+| `.claude/rules/content-guide.md` | `pnpm new-post`, 각주 쓰는 법과 Sätteri 설정(`markdown.processor`), 표가 넘칠 때만 이름 있는 칸이 된다는 줄, `readPostLastmods`를 적고, 「정본 1장 표에 projects 칸이 아직 없다」는 줄을 정본과 맞춤 | 정본 1장 표에 `projects` 줄이 생겼고, 새 도구와 부품이 생김 |
+| `.claude/rules/design-system.md` | 각주 모양(정본 7.28)과 글 화면 인쇄(정본 7.29) 줄을 더함 | 새 화면 규칙 |
+| `.claude/rules/general-code-convention.md` | 페이지 CSS를 HTML 안에 넣는다(`build.inlineStylesheets: "always"`)는 줄을 더함 | 전역 CSS가 모든 페이지 HTML 크기에 들어가게 되어서 |
+| `.claude/skills/project-structure/SKILL.md`, `CLAUDE.md` | 폴더 나무와 명령 표에 `scripts/newPost.ts`(`pnpm new-post`)를 더함 | 새 도구 |
+| `docs/design-system.md` | 7.28 각주, 7.29 글 인쇄 절을 새로 더함(기존 줄은 고치지 않음) | 오케스트레이터 지시(새 부품 모양은 정본에 새 절로 기록). Pencil과 `design/`은 고치지 않음 |
+| `scripts/buildFonts.ts` | `rss.xml`을 사이트 글꼴 글자 모으기에서 뺌 | RSS에 본문 전체와 데모 자리 안내 글이 들어가는데, RSS 리더는 사이트 글꼴로 그리지 않음 |
+| `package.json` | `ultrahtml`(개발 의존성, RSS 본문 다듬기), `@astrojs/markdown-satteri`(각주 문구 설정)를 직접 의존성으로 더함 | 둘 다 Astro가 이미 쓰는 같은 판이라 새로 받는 패키지는 없음. pnpm은 직접 의존성이 아니면 불러올 수 없게 함 |
+
+
+
+## SEO 통합 뒤 날짜와 물결표 검사 (2026-11-22)
+
+날짜는 `formatDate`가 한국 달력 날짜의 0시(+09:00)로 만들고 구조화 데이터·og·사이트맵·RSS가 같은 뜻을 씁니다. 사이트맵이 UTC로 적으면 전날 15시입니다. `checkPost`의 빌드 결과 검사도 이 날짜를 기대합니다.
+
+`checkPost`에 「본문 한 줄의 물결표 두 개 이상」 실패 항목을 더했습니다(코드 칸·인라인 코드·이스케이프한 물결표 제외). 기준은 「content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그」입니다. 정본과 글 본문은 고치지 않았으며, 초안을 포함한 점검과 배포용 점검을 따로 확인합니다.

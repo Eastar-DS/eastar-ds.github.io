@@ -18,9 +18,10 @@
     "test:all": "pnpm check && pnpm test && pnpm check:worker && pnpm test:worker",
     "fonts": "node scripts/buildFonts.ts",
     "fonts:check": "node scripts/buildFonts.ts --check",
+    "new-post": "node scripts/newPost.ts",
+    "astro": "astro",
     "check:post": "node scripts/checkPost.ts",
     "check:links": "node scripts/checkLinks.ts",
-    "astro": "astro",
     "post:sources": "node scripts/findSources.ts",
     "post:sources:check": "node scripts/checkSources.ts",
     "post:answers": "node scripts/saveAnswers.ts",
@@ -35,6 +36,7 @@
     "post:fact-grade": "node scripts/gradeFactCheck.ts"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.10",
     "@astrojs/mdx": "^8.1.6",
     "@astrojs/react": "^7.1.9",
     "@astrojs/rss": "^4.0.19",
@@ -58,6 +60,7 @@
     "sharp": "^0.35.5",
     "subset-font": "2.9.0",
     "typescript": "^6.0.3",
+    "ultrahtml": "1.7.0",
     "vitest": "^5.1.1"
   }
 }

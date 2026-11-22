@@ -4,7 +4,8 @@ type DateFormat =
   | "monthDay"
   | "monthDayLong"
   | "year"
-  | "iso";
+  | "iso"
+  | "isoDateTime";
 
 interface FormatDateParams {
   date: Date;
@@ -14,13 +15,17 @@ interface FormatDateParams {
    * - `monthDay`: 11.18
    * - `monthDayLong`: 11월 18일
    * - `year`: 2026
-   * - `iso`: 2026-11-18 (`<time datetime>`용)
+   * - `iso`: 2026-11-18 (`<time datetime>`처럼 날짜만 필요한 칸)
+   * - `isoDateTime`: 2026-11-18T00:00:00+09:00 (한국 달력 날짜의 0시. 구조화 데이터 · og · 사이트맵 · RSS용)
    */
   format: DateFormat;
 }
 
 // 빌드하는 곳(내 컴퓨터, GitHub Actions의 UTC)에 따라 날짜가 하루 밀리지 않게 한국 시간으로 고정합니다
 const TIME_ZONE = "Asia/Seoul";
+
+// 한국은 서머타임이 없어 늘 UTC보다 9시간 빠릅니다
+const TIME_ZONE_OFFSET = "+09:00";
 
 /** 날짜를 화면에 보일 문자열로 바꿉니다. 시간대는 늘 한국 시간입니다 */
 const formatDate = ({ date, format }: FormatDateParams) => {
@@ -49,6 +54,8 @@ const formatDate = ({ date, format }: FormatDateParams) => {
       return year;
     case "iso":
       return `${year}-${month}-${day}`;
+    case "isoDateTime":
+      return `${year}-${month}-${day}T00:00:00${TIME_ZONE_OFFSET}`;
   }
 };
 

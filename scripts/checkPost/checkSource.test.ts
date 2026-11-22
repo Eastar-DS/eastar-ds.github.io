@@ -309,3 +309,36 @@ describe("toWritingStyleResult", () => {
     expect(toWritingStyleResult({ error: "bash가 없습니다" }).status).toBe("warn");
   });
 });
+
+
+describe("본문 한 줄의 물결표", () => {
+  const inspect = (body: string) => find(check({ source: `${SERIES_FIRST_SOURCE}\n${body}\n` }), "multiple-tildes");
+
+  it("한 줄의 물결표가 둘 이상이면 초안도 실패하며, 찾은 줄마다 한 곳으로 센다", () => {
+    const result = inspect("시간은 1~2ms에서 3~4ms로 줄었습니다.\n\n범위는 5~6과 7~8입니다.");
+    expect(result.status).toBe("fail");
+    expect(result.findings).toHaveLength(2);
+    expect(result.findings.map((finding) => finding.line)).toEqual([SERIES_FIRST_SOURCE.split("\n").length + 1, SERIES_FIRST_SOURCE.split("\n").length + 3]);
+    expect(result.basis).toBe("content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그");
+  });
+
+  it("줄마다 하나인 물결표는 받는다", () => {
+    expect(inspect("1~2ms입니다.\n3~4ms입니다.").status).toBe("pass");
+  });
+
+  it("코드 칸, 물결표 펜스와 인라인 코드는 가린다", () => {
+    const body = ["```text", "1~2, 3~4", "```", "", "~~~text", "5~6, 7~8", "~~~", "", "`1~2, 3~4`와 ``5~6 ` 7~8``을 씁니다."].join("\n");
+    expect(inspect(body).status).toBe("pass");
+  });
+
+  it("이스케이프한 물결표는 세지 않고, 두 백슬래시 뒤의 물결표는 센다", () => {
+    expect(inspect(String.raw`1\~2, 3\~4, 5~6`).status).toBe("pass");
+    expect(inspect(String.raw`1\\~2, 3~4`).status).toBe("fail");
+  });
+
+  it("앞머리와 링크 주소의 물결표는 본문 물결표로 세지 않는다", () => {
+    expect(inspect("[공식 문서](https://example.com/~user/~page)").status).toBe("pass");
+    const source = SERIES_FIRST_SOURCE.replace('title: "', 'title: "~ ~ ');
+    expect(find(check({ source }), "multiple-tildes").status).toBe("pass");
+  });
+});

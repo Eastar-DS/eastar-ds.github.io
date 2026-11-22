@@ -44,8 +44,8 @@ const PAGE = `<!DOCTYPE html><html lang="ko"><head>
   description: META.description,
   url: URL_,
   image: `${URL_}og.png`,
-  datePublished: "2026-11-21T00:00:00.000Z",
-  dateModified: "2026-11-21T00:00:00.000Z",
+  datePublished: "2026-11-21T00:00:00+09:00",
+  dateModified: "2026-11-21T00:00:00+09:00",
   author: { "@type": "Person", name: "김동성" },
 })}</script>
 <script type="application/ld+json">${JSON.stringify({
@@ -171,4 +171,14 @@ describe("readPngSize", () => {
     expect(readPngSize(png({ width: 1200, height: 630 }))).toEqual({ width: 1200, height: 630 });
     expect(readPngSize(new TextEncoder().encode("GIF89a........................"))).toBeUndefined();
   });
+});
+
+
+it("한국 날짜 0시 대신 같은 날 UTC 0시나 한국 9시를 쓴 BlogPosting은 실패한다", () => {
+  for (const wrong of ["2026-11-21T00:00:00.000Z", "2026-11-21T09:00:00+09:00"]) {
+    const files = { ...goodFiles(), [`posts/${SLUG}/index.html`]: PAGE.replaceAll("2026-11-21T00:00:00+09:00", wrong) };
+    const result = checkDist({ slug: SLUG, meta: META, dist: createDist(files) }).find((result) => result.id === "dist-blogposting");
+    expect(result?.status).toBe("fail");
+    expect(result?.findings.some((finding) => finding.message.includes("datePublished"))).toBe(true);
+  }
 });

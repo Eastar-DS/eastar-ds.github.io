@@ -6,6 +6,7 @@ import renderPost from "@/shared/content/renderPost";
 import CodeBlock from "./ui/CodeBlock.astro";
 import ContentHeading2 from "./ui/ContentHeading2.astro";
 import ContentHeading3 from "./ui/ContentHeading3.astro";
+import ContentLink from "./ui/ContentLink.astro";
 import ContentTable from "./ui/ContentTable.astro";
 
 interface Props {
@@ -15,7 +16,8 @@ interface Props {
 /**
  * 글의 본문(MDX)을 그립니다. 글 머리는 `PostHeader`가 따로 그리고, 둘을 어떻게 놓을지는 페이지가 정합니다.
  * 본문의 코드 칸 · 제목 · 표는 이 컴포넌트가 정한 모양으로 바뀌고, 글에서는 `<Callout>`과 `<Figure>`를 import 없이 씁니다.
- * 본문 속 링크 · 코드 · 인용의 모양도 여기서 정합니다.
+ * 본문 속 링크 · 코드 · 인용과 각주(마크다운 `[^1]`)의 모양도 여기서 정합니다. 각주 문구(「각주」, 돌아가기 링크 이름)는 astro.config.ts가 정합니다.
+ * 인쇄할 때는 본문 링크의 밑줄과 강조색을 빼고, 다른 사이트로 가는 링크 뒤에 주소를 괄호로 붙입니다(docs/design-system.md 7.29).
  *
  * @design design/blog.pen 「링크」 fXlRl (기본 SdtPK · 올림 RTZf1 · 포커스 QGa2Z · 방문 IQdpC),
  * 「본문 속 코드」 egCcp, 「인용」 Myj7O
@@ -31,6 +33,7 @@ const { Content } = await renderPost(slug);
       h2: ContentHeading2,
       h3: ContentHeading3,
       table: ContentTable,
+      a: ContentLink,
       Callout,
       Figure,
     }}
@@ -64,7 +67,8 @@ const { Content } = await renderPost(slug);
     text-wrap: balance;
   }
 
-  .container > :global(h2) {
+  /* 각주 구획의 제목(「각주」)도 본문 h2와 같은 모양과 간격입니다. 목차에도 본문 h2처럼 실립니다 */
+  .container > :global(:is(h2, [data-footnotes] > h2)) {
     margin-top: var(--space-10);
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
@@ -72,7 +76,7 @@ const { Content } = await renderPost(slug);
     letter-spacing: var(--letter-spacing-h2);
   }
 
-  .container > :global(h2 + *) {
+  .container > :global(:is(h2, [data-footnotes] > h2) + *) {
     margin-top: var(--space-5);
   }
 
@@ -89,11 +93,11 @@ const { Content } = await renderPost(slug);
   }
 
   @container post-body (min-width: 560px) {
-    .container > :global(h2) {
+    .container > :global(:is(h2, [data-footnotes] > h2)) {
       margin-top: var(--space-14);
     }
 
-    .container > :global(h2 + *) {
+    .container > :global(:is(h2, [data-footnotes] > h2) + *) {
       margin-top: var(--space-6);
     }
 
@@ -138,7 +142,7 @@ const { Content } = await renderPost(slug);
 
   /* 본문 속 코드: 0.9em, 안쪽 1 · 6px (docs/design-system.md 7.14) */
   .container
-    > :global(:is(p, ul, ol, blockquote, h2, h3, div, figure, [role="note"]) code:not(pre code)) {
+    > :global(:is(p, ul, ol, blockquote, h2, h3, div, figure, [role="note"], [data-footnotes]) code:not(pre code)) {
     padding: 1px 6px;
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-sm);
@@ -162,9 +166,72 @@ const { Content } = await renderPost(slug);
     line-height: var(--line-height-small);
   }
 
+  /*
+   * 각주 (docs/design-system.md 7.28). 본문의 각주 번호는 본문 링크 모양에 위 첨자이고, 줄 간격이 벌어지지 않게 줄 높이를 0으로 둡니다.
+   * 각주 목록은 body-sm · 보조색이고, 목록 안 링크(「↩」 돌아가기 포함)는 본문 링크와 같은 모양입니다.
+   */
+  .container > :global(:is(p, ul, ol, blockquote) sup) {
+    line-height: 0;
+  }
+
+  .container > :global([data-footnotes] > ol) {
+    padding-left: 1.4em;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-body-sm);
+  }
+
+  .container > :global([data-footnotes] > ol li + li) {
+    margin-top: var(--space-2);
+  }
+
+  .container > :global([data-footnotes] > ol li::marker) {
+    color: var(--color-text-muted);
+  }
+
+  /* 각주 번호를 눌러 온 각주는 강조색 옅은 바탕으로 어디인지 알립니다 */
+  .container > :global([data-footnotes] > ol li:target) {
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+  }
+
+  .container > :global([data-footnotes] > ol a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .container > :global([data-footnotes] > ol a:visited) {
+    color: var(--color-link-visited);
+  }
+
+  .container > :global([data-footnotes] > ol a:hover) {
+    color: var(--color-accent-hover);
+    text-decoration-thickness: var(--border-width-strong);
+  }
+
   .container > :global(hr) {
     margin-block: var(--space-10);
     border: 0;
     border-top: var(--border-width) solid var(--color-border);
+  }
+
+  /*
+   * 인쇄 (docs/design-system.md 7.29). 종이에서는 링크를 누를 수 없어서 밑줄과 강조색을 빼고,
+   * 다른 사이트로 가는 링크(`ContentLink`가 `data-print-url`을 붙임)는 링크 글 뒤에 주소를 괄호로 붙입니다.
+   */
+  @media print {
+    .container > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:is(:link, :visited)),
+    .container > :global([data-footnotes] > ol a:is(:link, :visited)) {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container :global(a[data-print-url])::after {
+      content: " (" attr(data-print-url) ")";
+      overflow-wrap: anywhere;
+    }
   }
 </style>

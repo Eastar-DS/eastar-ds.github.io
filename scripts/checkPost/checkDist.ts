@@ -1,5 +1,6 @@
 // 빌드 결과(dist)에서 글 페이지의 메타, 구조화 데이터, 피드, JavaScript 크기를 검사하는 순수 함수입니다(docs/content-guide.md 10.6).
 // 파일은 넘겨받은 읽기 함수로만 읽어서, 시험에서는 메모리 속 파일로 돌립니다.
+import formatDate from "../../src/shared/utils/formatDate/index.ts";
 import { SITE } from "../../src/shared/constants/site/index.ts";
 import { DIST } from "./constants.ts";
 import measurePageJs from "./measurePageJs.ts";
@@ -269,7 +270,7 @@ const checkDist = ({ slug, meta, dist }: CheckDistParams) => {
   const jsonLds = readJsonLds(html);
   const blogPosting = jsonLds.find((item) => item["@type"] === "BlogPosting");
   const breadcrumb = jsonLds.find((item) => item["@type"] === "BreadcrumbList");
-  const toIso = (value: string | undefined) => (value ? new Date(value).toISOString() : undefined);
+  const toIso = (value: string | undefined) => (value ? formatDate({ date: new Date(value), format: "isoDateTime" }) : undefined);
   const expectedPublished = toIso(meta.publishedAt) ?? "";
   const author = blogPosting?.author as { name?: string } | undefined;
 

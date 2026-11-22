@@ -17,7 +17,7 @@ describe("createPageMeta", () => {
       "https://eastar-ds.github.io/posts/virtualized-document-list/",
     );
     expect(meta.ogType).toBe("article");
-    expect(meta.publishedTime).toBe("2026-11-18T00:00:00.000Z");
+    expect(meta.publishedTime).toBe("2026-11-18T00:00:00+09:00");
   });
 
   it("og:title에는 사이트 이름을 붙이지 않는다", () => {
@@ -46,5 +46,11 @@ describe("createPageMeta", () => {
     expect(meta.description).toContain("공부하며");
     expect(meta.ogType).toBe("website");
     expect(meta.image.url).toBe("https://eastar-ds.github.io/og.png");
+  });
+
+  it("hasCanonical이 false면 canonical 주소를 비운다", () => {
+    const meta = createPageMeta({ title: "찾는 글이 없습니다", path: "/404.html", hasCanonical: false });
+
+    expect(meta.canonicalUrl).toBeUndefined();
   });
 });
