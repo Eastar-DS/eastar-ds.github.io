@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 import { CAREER_PROJECT_IDS } from "@/shared/constants/career";
+import { POST_CATEGORIES, POST_DESCRIPTION_MAX_LENGTH, POST_TITLE_MAX_LENGTH } from "@/shared/constants/post";
 
 /**
  * 글 모음입니다. 글 하나는 `src/content/posts/{slug}/index.mdx`이고, 이미지는 같은 폴더에 둡니다.
@@ -15,15 +16,27 @@ const posts = defineCollection({
     generateId: ({ entry }) => entry.replace(/\/index\.mdx$/, ""),
   }),
   schema: z.object({
-    /** 글 제목. 페이지의 h1과 검색 결과 제목이 됩니다 */
-    title: z.string(),
-    /** 한두 문장 요약. 목록, meta description, RSS에 함께 씁니다 */
-    description: z.string(),
+    /**
+     * 글 제목. 페이지의 h1과 검색 결과 제목이 됩니다.
+     * 권장은 25~32자이고(`pnpm check:post`가 경고), 40자를 넘으면 빌드가 멈춥니다(docs/content-guide.md 2.1)
+     */
+    title: z
+      .string()
+      .min(1)
+      .max(POST_TITLE_MAX_LENGTH, `제목이 ${POST_TITLE_MAX_LENGTH}자를 넘습니다(docs/content-guide.md 2.1)`),
+    /**
+     * 한두 문장 요약. 목록, meta description, RSS에 함께 씁니다.
+     * 권장은 60~80자이고(`pnpm check:post`가 경고), 100자를 넘으면 빌드가 멈춥니다(docs/content-guide.md 2.2)
+     */
+    description: z
+      .string()
+      .min(1)
+      .max(POST_DESCRIPTION_MAX_LENGTH, `요약이 ${POST_DESCRIPTION_MAX_LENGTH}자를 넘습니다(docs/content-guide.md 2.2)`),
     publishedAt: z.coerce.date(),
     /** 내용을 고친 날. 없으면 발행일을 씁니다 */
     updatedAt: z.coerce.date().optional(),
-    /** 글 정보 줄 맨 앞에 보이는 주제 하나 */
-    category: z.string(),
+    /** 글 정보 줄 맨 앞에 보이는 주제 하나. 정한 분류 목록(docs/content-guide.md 8.1) 밖이면 빌드가 멈춥니다 */
+    category: z.enum(POST_CATEGORIES),
     series: z
       .object({
         name: z.string(),
