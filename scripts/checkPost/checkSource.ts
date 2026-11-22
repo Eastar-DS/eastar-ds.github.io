@@ -220,7 +220,7 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
       basis: CATEGORY_BASIS,
       statusIfFound: "fail",
       findings:
-        meta.category !== undefined && CATEGORIES.includes(meta.category)
+        meta.category !== undefined && CATEGORIES.some((category) => category === meta.category)
           ? []
           : [{ line: frontmatterLines.category, message: `「${meta.category ?? ""}」는 정한 분류(${CATEGORIES.join(", ")})가 아닙니다` }],
       passSummary: meta.category ?? "",

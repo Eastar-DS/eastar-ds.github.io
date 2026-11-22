@@ -28,7 +28,11 @@
     "post:outline:check": "node scripts/checkOutline.ts",
     "post:measure": "node scripts/measurePosts.ts",
     "post:fixtures": "node scripts/makePostFixtures.ts",
-    "post:evals": "node scripts/evalPostSkills.ts"
+    "post:evals": "node scripts/evalPostSkills.ts",
+    "post:work": "node scripts/blogWork.ts",
+    "post:fact-check": "node scripts/factCheck.ts",
+    "post:fact-fixtures": "node scripts/makeFactCheckFixtures.ts",
+    "post:fact-grade": "node scripts/gradeFactCheck.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.6",

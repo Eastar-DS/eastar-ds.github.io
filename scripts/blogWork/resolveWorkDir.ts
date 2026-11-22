@@ -118,7 +118,7 @@ export const parseBlogWorkConfig = (text: string) => {
   }
   if (!isStringArray(unopenedNames)) return { ok: false, reason: "unopenedNames가 문자열 배열이 아닙니다" } as const;
   if (!Array.isArray(readPolicy) || !readPolicy.every((rule) =>
-    rule && typeof rule === "object" && typeof rule.path === "string" &&
+    rule && typeof rule === "object" && typeof rule.path === "string" && rule.path.trim() !== "" &&
     ["읽음", "단서만", "이름만", "읽지 않음"].includes(rule.read) &&
     [rule.name, rule.kind, rule.defaultUse].every((value) => value === undefined || typeof value === "string")
   )) return { ok: false, reason: "readPolicy의 경로와 읽기 값이 올바르지 않습니다" } as const;

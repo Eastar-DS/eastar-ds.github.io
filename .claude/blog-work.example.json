@@ -1,0 +1,24 @@
+{
+  "workDir": "~/.blog-work",
+  "repos": {
+    "knot": "(Knot 저장소 로컬 사본의 경로)"
+  },
+  "sourceRoots": [
+    "(글 자료를 두는 폴더)"
+  ],
+  "hiddenNames": [
+    "(글과 결과 파일에 들어가면 안 되는 이름)"
+  ],
+  "readPolicy": [
+    {
+      "path": "(개인 노트 폴더)",
+      "read": "단서만",
+      "kind": "개인 노트"
+    },
+    {
+      "path": "(개인 노트 폴더)/인터뷰-원문",
+      "read": "읽지 않음"
+    }
+  ],
+  "unopenedNames": []
+}

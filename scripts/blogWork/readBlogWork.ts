@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
 
+import { assertWorkOutsideRepo } from "./pathSafety.ts";
 import type { BlogWorkConfig } from "./resolveWorkDir.ts";
 import {
   expandHome,
@@ -81,7 +82,11 @@ export const ensurePostWorkDir = (slug: string) => {
 
   if (!resolved.ok) return resolved;
 
-  mkdirSync(resolved.dir, { recursive: true });
-
-  return { ok: true, dir: resolved.dir } as const;
+  try {
+    const dir = assertWorkOutsideRepo(resolved.dir, blogWork.repoRoot);
+    mkdirSync(dir, { recursive: true });
+    return { ok: true, dir } as const;
+  } catch {
+    return { ok: false, kind: "inside-repo", reason: "작업 폴더의 실제 경로를 확인할 수 없거나 저장소 안에 있습니다" } as const;
+  }
 };

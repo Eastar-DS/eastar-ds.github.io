@@ -10,55 +10,19 @@
  * - 경고: 정본이 권장 범위나 알맞은 값으로 적은 것(「25~32자」, 「3~7개가 알맞습니다」), 기계 판단이 틀릴 수 있는 것(묻는 꼴 제목, 숫자 쉼표).
  */
 import { OG_IMAGE } from "../../src/shared/constants/ogImage/index.ts";
-import {
-  POST_CATEGORIES,
-  POST_DESCRIPTION_MAX_LENGTH,
-  POST_TITLE_MAX_LENGTH,
-} from "../../src/shared/constants/post/index.ts";
+import { H2_COUNT } from "../../src/shared/constants/post/index.ts";
+export { TITLE_LENGTH, DESCRIPTION_LENGTH, SLUG, CATEGORIES, CATEGORY_BASIS, QUESTION_HEADING_ENDING } from "../../src/shared/constants/post/index.ts";
 
 const CONTENT_GUIDE = "docs/content-guide.md";
 const DESIGN_SYSTEM = "docs/design-system.md";
-
-/** 글자 수는 공백과 문장 부호를 넣어 한 글자씩 셉니다. 정본은 세는 법을 적지 않았고, 검색 결과가 화면 폭으로 자르므로 공백도 셉니다 */
-export const TITLE_LENGTH = {
-  /** 권장 범위 (content-guide 2.1 「한글 25~32자」). 밖이면 경고 */
-  min: 25,
-  max: 32,
-  /** 상한 (content-guide 2.1 「40자를 넘기지 않습니다」). 넘으면 실패. 빌드 스키마도 같은 값으로 멈춤 */
-  limit: POST_TITLE_MAX_LENGTH,
-  basis: `${CONTENT_GUIDE} 2.1`,
-} as const;
-
-export const DESCRIPTION_LENGTH = {
-  /** 권장 범위 (content-guide 2.2 「한글 60~80자」). 밖이면 경고 */
-  min: 60,
-  max: 80,
-  /** 상한 (content-guide 2.2 「100자를 넘기지 않습니다」). 넘으면 실패 */
-  limit: POST_DESCRIPTION_MAX_LENGTH,
-  basis: `${CONTENT_GUIDE} 2.2`,
-} as const;
-
-/** 주소 (content-guide 2.3 「영어 소문자와 하이픈으로 3~5낱말」, 「한글, 날짜, 숫자 순번을 넣지 않습니다」) */
-export const SLUG = {
-  /** 꼴이 다르면 실패. 숫자도 받지 않습니다 */
-  pattern: /^[a-z]+(?:-[a-z]+)*$/,
-  /** 낱말 수가 밖이면 경고 */
-  minWords: 3,
-  maxWords: 5,
-  basis: `${CONTENT_GUIDE} 2.3`,
-} as const;
-
-/** 분류 (content-guide 8.1의 목록). 밖이면 실패. 빌드 스키마도 같은 목록으로 멈춤 */
-export const CATEGORIES: readonly string[] = POST_CATEGORIES;
-export const CATEGORY_BASIS = `${CONTENT_GUIDE} 8.1`;
 
 /** 글 구조 (content-guide 3장) */
 export const STRUCTURE = {
   /** 본문 제목은 h2 · h3까지만. 더 깊으면 실패 */
   maxHeadingDepth: 3,
   /** h2 개수 「3~7개가 알맞습니다」. 밖이면 경고 */
-  minH2: 3,
-  maxH2: 7,
+  minH2: H2_COUNT.min,
+  maxH2: H2_COUNT.max,
   /** 끝 절의 제목 「끝에 「정리」 절을 두고」. 없거나 끝이 아니면 실패 */
   summaryHeading: "정리",
   /** 「정리」 뒤에 와도 되는 절. 9장 「글 끝 「고친 내용」에 날짜와 한 줄을 남깁니다」 */
@@ -71,12 +35,6 @@ export const STRUCTURE = {
   maxReadingMinutes: 12,
   basis: `${CONTENT_GUIDE} 3장`,
 } as const;
-
-/**
- * 묻는 꼴 h2 (content-guide 10.3 「묻는 꼴의 h2가 하나 이상 있다」). 없으면 경고.
- * 정본은 꼴을 정하지 않아, 지금 글의 묻는 제목 끝(「~까」, 「~나」, 「?」)으로 가릅니다.
- */
-export const QUESTION_HEADING_ENDING = /(까|나|\?)$/;
 
 /** 코드 칸 (content-guide 5장) */
 export const CODE = {

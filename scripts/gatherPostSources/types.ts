@@ -8,7 +8,7 @@ export interface SourceItem {
   headingLines?: number[]; fileCount?: number;
 }
 export interface SourceLink { type: string; url: string; text: string; foundIn: string }
-export interface ArtifactPair { url: string; text: string; localId: string | null; state: string; candidates?: string[] }
+export interface ArtifactPair { url: string; text: string; localId: string | null; state: string; candidates?: string[]; hintIds?: string[] }
 export interface SourceScan {
   work: string; scannedAt: string; topics: string[];
   roots: { name: string; kind: string; read: string; exists: boolean; itemCount: number }[];

@@ -1,4 +1,4 @@
-import { CATEGORIES, DESCRIPTION_LENGTH, H2_COUNT, POST_CHARACTERS, SERIES_MIN_POSTS, SLUG, TITLE_LENGTH } from "../postRules/constants.ts";
+import { CATEGORIES, DESCRIPTION_LENGTH, H2_COUNT, POST_CHARACTERS, SERIES_MIN_POSTS, SLUG, TITLE_LENGTH, QUESTION_HEADING_ENDING } from "../postRules/constants.ts";
 import { countTitleCharacters } from "../postRules/countCharacters.ts";
 import { checkStyle, hiddenNameCount } from "../postWork/io.ts";
 import { sourceIds } from "../postWork/markdown.ts";
@@ -58,7 +58,7 @@ export const checkOutline = ({ text, sources, interview = "", existingSlugs = []
     }
     if (part.sections.length < H2_COUNT.min || part.sections.length > H2_COUNT.max) add(part.line, "h2는 정본의 개수 범위에 맞춰야 합니다");
     if (part.sections.at(-1)?.cells[1] !== "정리") add(part.line, "마지막 h2는 정리여야 합니다");
-    if (!part.sections.some((value) => /(?:까|나|\?)$/.test(value.cells[1]))) add(part.line, "묻는 꼴의 h2가 하나 이상 필요합니다");
+    if (!part.sections.some((value) => QUESTION_HEADING_ENDING.test(value.cells[1]))) add(part.line, "묻는 꼴의 h2가 하나 이상 필요합니다");
     let sum = 0;
     for (const [at, value] of part.sections.entries()) {
       const [order, heading, answer, materials, estimate,,,] = value.cells;

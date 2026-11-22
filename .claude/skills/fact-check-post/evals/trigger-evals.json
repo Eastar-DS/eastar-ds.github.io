@@ -1,0 +1,18 @@
+[
+  { "query": "1편 숫자 맞는지 봐 줘. 966ms랑 46ms, 17,696개 같은 거", "should_trigger": true },
+  { "query": "virtual-list-row-range에 나오는 함수 이름이랑 코드 칸이 Knot 저장소 코드랑 같은지 대조해 줘", "should_trigger": true },
+  { "query": "5편에 React 17부터 onBlur가 버블링한다고 썼는데 공식 문서 기준으로 맞는지 사실 확인해 줘", "should_trigger": true },
+  { "query": "가상화 시리즈 다섯 편 사실 대조 돌려 줘. 글은 고치지 말고 표만 줘", "should_trigger": true },
+  { "query": "3편 문장 다 다듬었어. 게시 전 점검 가기 전에 출처랑 한 번 맞춰 봐 줘", "should_trigger": true },
+  { "query": "4편에 건 react.dev 링크가 내가 쓴 말을 실제로 하고 있는지 확인해 줘", "should_trigger": true },
+  { "query": "1편이랑 2편에 325px, 64px 같은 값이 서로 다르게 적힌 데가 없는지, 자료랑도 맞는지 봐 줘", "should_trigger": true },
+  { "query": "PR #1142 본문이랑 1편의 측정 조건(창 크기, CPU 4배, 12번)이 맞는지 검증해 줘", "should_trigger": true },
+  { "query": "1편 제목이랑 요약 글자 수가 규칙에 맞는지 봐 줘", "should_trigger": false },
+  { "query": "1편에 깨진 링크 있나만 빨리 봐 줘", "should_trigger": false },
+  { "query": "가상화 글에 쓸 자료 좀 모아 줘. 작업 폴더가 어디 있는지부터 찾아서", "should_trigger": false },
+  { "query": "966ms가 틀렸네. 1편에서 전부 969ms로 고쳐 줘", "should_trigger": false },
+  { "query": "results 폴더의 jsonl로 CPU 4배 조건 가운데값을 다시 계산해 줘", "should_trigger": false },
+  { "query": "content-visibility: auto가 어떻게 동작하는지 설명해 줘", "should_trigger": false },
+  { "query": "Knot PR #1142 코드 리뷰해 줘", "should_trigger": false },
+  { "query": "2편을 처음 읽는 사람 입장에서 이해 안 되는 용어를 찾아 줘", "should_trigger": false }
+]

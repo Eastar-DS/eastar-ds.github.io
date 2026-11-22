@@ -7,7 +7,7 @@ import { assignIds, classifySource, COLLAPSED_NAMES, defaultUse, extractLinks, i
 import { collectRepo } from "./repository.ts";
 import { SOURCE_KINDS } from "./types.ts";
 import type { SourceItem, SourceLink, SourceScan } from "./types.ts";
-export interface ScanOptions { work: string; topics: string[]; roots?: string[]; topicDirs?: string[]; repos?: string[]; prs?: string[]; issues?: string[]; branch?: string; since?: string }
+export interface ScanOptions { work: string; topics: string[]; roots?: string[]; topicDirs?: string[]; repos?: string[]; prs?: string[]; issues?: string[]; branch?: string; since?: string; artifactCandidates?: string[] }
 const MAX_BYTES = 2 * 1024 * 1024;
 export const scanSources = (options: ScanOptions) => {
   const context = workContext(options.work, true);
@@ -118,7 +118,16 @@ export const scanSources = (options: ScanOptions) => {
   const numberedFolders = assignIds(unique.filter((item) => folderPaths.has(item.path)), previous?.folders ?? [], "F");
   const all = [...numbered, ...numberedFolders];
   const uniqueLinks = [...new Map(links.map((link) => [`${link.url}\0${link.foundIn}`, { ...link, text: clean(link.text) }])).values()];
-  const pairs = matchArtifacts(uniqueLinks, all);
+  const oldHints = Object.fromEntries((previous?.artifactPairs ?? []).flatMap((pair) => {
+    const item = all.find((item) => !item.removed && pair.hintIds?.includes(item.id));
+    return item ? [[pair.url, item.path]] : [];
+  }));
+  const hints = { ...oldHints, ...Object.fromEntries((options.artifactCandidates ?? []).map((hint) => {
+    const split = hint.indexOf("=");
+    if (split < 1 || !hint.slice(split + 1)) throw new Error("짝 후보는 URL=HTML경로 꼴입니다");
+    return [hint.slice(0, split), absolute(hint.slice(split + 1))];
+  })) };
+  const pairs = matchArtifacts(uniqueLinks, all, hints);
   const kinds = new Set([...all.filter((item) => !item.removed).map((item) => item.kind), ...uniqueLinks.map((link) => link.type === "artifact" ? "아티팩트 링크" : link.type === "other" ? "바깥 자료" : "")]);
   const scan: SourceScan = { work: options.work, scannedAt: new Date().toISOString(), topics: topics.map(clean), roots: rootSummaries, items: numbered, folders: numberedFolders, links: uniqueLinks, ...pairs, missingKinds: SOURCE_KINDS.filter((kind) => !kinds.has(kind)), warnings, repos };
   return { context, scan };

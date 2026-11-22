@@ -61,12 +61,13 @@ export const extractLinks = (text: string, foundIn = "") => {
   return links;
 };
 const normalized = (text: string) => text.normalize("NFKC").toLowerCase().replace(/[\p{P}\p{S}\s]/gu, "");
-export const matchArtifacts = (links: readonly SourceLink[], items: readonly SourceItem[]) => {
+export const matchArtifacts = (links: readonly SourceLink[], items: readonly SourceItem[], hints: Readonly<Record<string, string>> = {}) => {
   const html = items.filter((item) => item.kind === "해설 아티팩트" && !item.removed && !item.unopenable && item.read === "읽음");
   const artifactPairs = [...new Set(links.filter((link) => link.type === "artifact").map((link) => link.url))].map((url) => {
     const labels = links.filter((link) => link.url === url && link.text).map((link) => link.text);
     const candidates = html.filter((item) => item.title && labels.some((label) => normalized(item.title) === normalized(label)));
-    return { url, text: labels[0] ?? "", localId: candidates.length === 1 ? candidates[0].id : null, state: candidates.length === 1 ? "짝" : candidates.length ? "여럿" : "짝 없음", candidates: candidates.map((item) => item.id) };
+    const hintIds = html.filter((item) => item.path === hints[url] && !candidates.some((candidate) => candidate.id === item.id)).map((item) => item.id);
+    return { hintIds, url, text: labels[0] ?? "", localId: candidates.length === 1 ? candidates[0].id : null, state: candidates.length === 1 ? "짝" : candidates.length ? "여럿" : "짝 없음", candidates: candidates.map((item) => item.id) };
   });
   return { artifactPairs, unpairedLocalArtifacts: html.filter((item) => !artifactPairs.some((pair) => pair.localId === item.id)).map((item) => item.id) };
 };

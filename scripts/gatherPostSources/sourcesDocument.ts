@@ -21,13 +21,15 @@ export const renderSources = (scan: SourceScan, names: readonly string[], previo
   });
   const pairs = scan.artifactPairs.map((pair) => {
     const prior = old.pairs.find((value) => value.cells[1] === pair.url)?.cells;
-    return row([safe(pair.text), pair.url, prior?.[3] === "쓰지 않음" ? "" : pair.localId ?? pair.candidates?.join(", ") ?? "", prior?.[3] === "쓰지 않음" ? "쓰지 않음" : pair.state]);
+    const hint = pair.hintIds?.length ? `짝 후보: ${pair.hintIds.map((id) => `${id} ${safe(all.find((item) => item.id === id)?.path ?? "")}`).join(", ")} (이스타 확인)` : "";
+    return row([safe(pair.text), pair.url, prior?.[3] === "쓰지 않음" ? "" : pair.localId ?? (hint || pair.candidates?.join(", ") || ""), prior?.[3] === "쓰지 않음" ? "쓰지 않음" : pair.state]);
   });
   for (const id of scan.unpairedLocalArtifacts) pairs.push(row(["로컬 원본", "", id, "링크 없음"]));
   let questions = old.questions.trim() || "1. 찾은 자료 밖에 더 있나요? 찾지 못한 종류를 확인하고 위치 또는 「없음」으로 답해 주세요.";
   let questionNumber = Math.max(1, ...[...questions.matchAll(/^(\d+)[.)]/gm)].map((match) => Number(match[1])));
   for (const pair of scan.artifactPairs.filter((pair) => pair.state !== "짝")) {
     if (old.pairs.some((value) => value.cells[1] === pair.url && value.cells[3] === "쓰지 않음") || pair.text && questions.includes(safe(pair.text))) continue;
+    if (pair.hintIds?.length) { questions += `\n${++questionNumber}. 아티팩트 「${safe(pair.text)}」의 짝 후보 ${pair.hintIds.join(", ")}를 확인해 주세요. 제목이 달라 자동으로 짝짓지 않았습니다.`; continue; }
     questions += `\n${++questionNumber}. 아티팩트 「${safe(pair.text) || "링크 글 없음"}」의 HTML을 inbox/에 넣어 주시거나 「쓰지 않음」으로 답해 주세요.`;
   }
   return `# 자료 목록: ${scan.work}\n\n- 주제: ${scan.topics.join(", ")}\n- 주제어: ${scan.topics.join(", ")}\n- 훑은 날: ${scan.scannedAt.slice(0, 10)}\n- 상태: ${state}\n\n## 요약\n\n| 종류 | 건수 |\n|---|---|\n${SOURCE_KINDS.map((kind) => row([kind, active.filter((item) => item.kind === kind).length || (kind === "아티팩트 링크" ? scan.artifactPairs.length : kind === "바깥 자료" ? scan.links.filter((link) => link.type === "other").length : 0)])).join("\n")}\n\n| 뿌리 | 찾은 수 |\n|---|---|\n${scan.roots.map((root) => row([root.name, root.itemCount])).join("\n")}\n\n## 자료\n\n| 번호 | 종류 | 위치 | 한 줄 설명 | 쓰임 | 까닭 | 읽은 정도 |\n|---|---|---|---|---|---|---|\n${rows.join("\n")}\n\n## 링크와 로컬 원본의 짝\n\n| 링크 글 | 링크 | 로컬 원본 | 상태 |\n|---|---|---|---|\n${pairs.join("\n")}\n\n## 링크와 경로\n\n| 종류 | 위치 | 찾아낸 곳 | 대상 |\n|---|---|---|---|\n${scan.links.filter((link) => link.type !== "artifact").map((link) => {

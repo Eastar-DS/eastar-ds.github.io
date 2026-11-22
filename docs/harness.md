@@ -144,8 +144,10 @@
 | `scripts/hooks/`, `.claude/settings.json` | 게시 막기(초안이 아닌 글에 남은 〔이스타 확인〕 표시), 개인 정보 검사(글과 데모의 로컬 경로 · 이메일 · 토큰 꼴 · 사설 IP · 전화번호) 훅을 더함 | 훅 스크립트를 `.claude/` 아래가 아니라 `scripts/hooks/`에 둔 것은 `.claude/` 아래 `.ts`가 타입 검사와 vitest에서 빠지기 때문입니다. 판단 함수를 떼어 시험하고, 실행 파일도 가짜 훅 입력으로 시험합니다 |
 | `.github/workflows/deploy.yml` | 빌드 뒤 `node scripts/checkPost.ts --all --dist dist` | 초안이 아닌 글이 실패하거나 초안이 배포 빌드에 새면 배포를 멈춤 |
 | `scripts/checkLinks.ts`, `.github/workflows/check-links.yml` | 주 1회 글의 바깥 링크 검사. 결과는 작업 요약에 씀 | lychee-action 대신 같은 MDX 읽기(`parseMdx`)를 써서 코드 칸 속 예시 주소를 세지 않고, 바깥 액션 없이 돎. 404 · 410 · 없는 도메인만 실패로 둬서 봇 막기와 일시 오류로 빨간 표시가 나지 않게 함 |
-| `.claude/skills/prepublish-check/` | 새로 둠. `checkPost --json`의 결과와 판단 항목 J1~J13으로 10장을 점검해 실패 · 사람이 볼 것 · 통과 · 돌리지 않음 표로 보고. 평가 재료(`evals/`) | 설계 문서(설계: prepublish-check와 fact-check-post, 3장)를 따름. 작업 폴더(`scripts/blogWork.ts`)와 사실 대조 상태(`scripts/factCheck.ts status`)는 다른 브랜치가 만듦 |
+| `.claude/skills/prepublish-check/` | 새로 둠. `checkPost --json`의 결과와 판단 항목 J1~J13으로 10장을 점검해 실패 · 사람이 볼 것 · 통과 · 돌리지 않음 표로 보고. 평가 재료(`evals/`) | 설계 문서(설계: prepublish-check와 fact-check-post, 3장)를 따름. 공용 작업 폴더(`scripts/blogWork.ts`)와 사실 대조 상태(`scripts/factCheck.ts status`)를 사용함 |
 | `CLAUDE.md`, `.claude/rules/content-guide.md`, `.claude/rules/shared-layer.md`, `project-structure` 스킬 | 명령 표, 훅, 스키마의 분류 enum, 새 폴더를 적음 | 코드가 바뀐 만큼 맞춤 |
 ## 글쓰기 준비 스킬 (2026-11-22)
 
 자료 모으기, 인터뷰, 개요 스킬과 write-post 차례표를 더했습니다. 검사와 평가 스크립트는 `scripts/`에 두고 기존 vitest 범위로 시험하며, 공용 로컬 JSON 설정과 저장소 밖 작업 폴더를 씁니다. `pnpm post:evals`는 가짜 자료로 스크립트를 평가하고, 결과와 원문은 작업 폴더의 `_evals`에만 둡니다.
+
+사실 대조 스킬은 주장 추출·인용 대조·상태 명령과 `research` 검사자 지시문을 씁니다. 공용 설정의 readPolicy·unopenedNames를 자료 수집과 출처 읽기에 함께 적용하며, 글 규칙의 값은 `src/shared/constants/post/index.ts` 한 곳에서 정의합니다. `post:fact-fixtures`와 `post:fact-grade`는 저장소 밖 사본으로 의도한 오류 검출과 원문 보존을 검사합니다.

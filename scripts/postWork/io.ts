@@ -1,19 +1,15 @@
-import { lstatSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { lstatSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { parseArgs } from "node:util";
+import { assertWorkOutsideRepo, physicalPath } from "../blogWork/pathSafety.ts";
 import { readBlogWork } from "../blogWork/readBlogWork.ts";
 import { isInsideDir, resolvePostWorkDir } from "../blogWork/resolveWorkDir.ts";
 
 export const REPO_ROOT = path.resolve(import.meta.dirname, "../..");
-/** 아직 없는 경로도 이미 있는 부모의 실제 경로로 검사해 심볼릭 링크 우회를 막습니다. */
-export const physicalPath = (value: string): string => lstatSync(value, { throwIfNoEntry: false }) ? realpathSync(value) : path.join(physicalPath(path.dirname(value)), path.basename(value));
-export const assertOutsideRepo = (value: string) => {
-  const dir = physicalPath(value);
-  if (isInsideDir({ dir, parent: physicalPath(REPO_ROOT) })) throw new Error("작업 자료는 저장소 밖에 둬야 합니다");
-  return dir;
-};
+export { physicalPath } from "../blogWork/pathSafety.ts";
+export const assertOutsideRepo = (value: string) => assertWorkOutsideRepo(value, REPO_ROOT);
 export const workContext = (work: string, create = false) => {
   const config = readBlogWork();
   if (!config.ok) throw new Error(config.reason);

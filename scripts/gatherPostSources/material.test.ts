@@ -35,6 +35,12 @@ describe("자료 식별과 읽기 경계", () => {
     const links = [...extractLinks("[행 위치](https://claude.ai/artifact/a)", "PR"), ...extractLinks("https://claude.ai/artifact/a", "다른 문서")];
     expect(matchArtifacts(links, [item("S001", "/a.html", "행 위치")]).artifactPairs[0].localId).toBe("S001");
   });
+  it("부른 쪽이 준 짝 후보는 자동 짝으로 올리지 않는다", () => {
+    const url = "https://claude.ai/artifact/a";
+    const result = matchArtifacts(extractLinks(`[행 위치](${url})`), [item("S001", "/a.html", "다른 해설")], { [url]: "/a.html" });
+    expect(result.artifactPairs[0]).toMatchObject({ localId: null, state: "짝 없음", hintIds: ["S001"] });
+    expect(result.unpairedLocalArtifacts).toContain("S001");
+  });
   it("다시 훑어도 번호를 재사용하지 않는다", () => {
     const result = assignIds([item("", "/b"), item("", "/c")], [item("S001", "/a"), item("S005", "/b")]);
     expect(result.map((value) => [value.id, value.path, value.removed])).toEqual([["S005", "/b", false], ["S006", "/c", false], ["S001", "/a", true]]);

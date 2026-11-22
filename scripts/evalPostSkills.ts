@@ -10,7 +10,7 @@ import { saveAnswers } from "./interviewForPost/save.ts";
 import { workContext, REPO_ROOT, runCli } from "./postWork/io.ts";
 export const validateEvalFiles = () => {
   const errors: string[] = [];
-  for (const name of ["gather-post-sources", "interview-for-post", "plan-post", "write-post"]) {
+  for (const name of ["gather-post-sources", "interview-for-post", "plan-post", "write-post", "fact-check-post"]) {
     const root = path.join(REPO_ROOT, ".claude/skills", name);
     const evals = JSON.parse(readFileSync(path.join(root, "evals/evals.json"), "utf8"));
     const triggers = JSON.parse(readFileSync(path.join(root, "evals/trigger-evals.json"), "utf8"));
