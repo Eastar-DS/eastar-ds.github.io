@@ -1,0 +1,66 @@
+[
+  {
+    "query": "문서 탭 주제별 목록 가상화로 글 쓸 거야. {자료 뿌리}/rendering 에 작업한 거 다 있으니까 자료부터 모아 줘",
+    "should_trigger": true
+  },
+  {
+    "query": "Knot 401 토큰 재발급(#725) 작업을 블로그에 정리하고 싶은데 뭐뭐 있는지부터 봐줘. PR이랑 노션에 쓴 게 있을 거야",
+    "should_trigger": true
+  },
+  {
+    "query": "가상화 글 1편 다시 쓰자. 저번에 아티팩트 빠뜨렸잖아, 이번엔 빠진 자료 없는지 처음부터 확인해",
+    "should_trigger": true
+  },
+  {
+    "query": "[글쓰기 단계: 자료 모으기] 작업 이름 llm-migration, 주제 「LLM 공급자 바꾸기」. 이스타가 알려 준 것: {자료 뿌리}/llm-migration 폴더",
+    "should_trigger": true
+  },
+  {
+    "query": "PR 본문에 claude.ai/artifact 링크가 7개 있는데 이걸 글 자료로 쓰려면 어떻게 해? 로컬에 있는 html이랑 맞춰서 목록으로 만들어줘",
+    "should_trigger": true
+  },
+  {
+    "query": "sources.md에 발표 자료도 더해 줘. {내려받은 폴더}/렌더링-성능-발표.pdf 야. 그리고 나머지는 더 없어",
+    "should_trigger": true
+  },
+  {
+    "query": "스토리북 mock이 꺼지던 버그 고친 얘기 글감으로 어때? 쓸 만한 자료가 얼마나 있는지 훑어봐",
+    "should_trigger": true
+  },
+  {
+    "query": "다음 글은 셀러홈 결제 흐름인데 측정한 거랑 캡처가 어디 있는지 나도 기억이 안 나. 찾아서 글에 써도 되는 거 안 되는 거 나눠줘",
+    "should_trigger": true
+  },
+  {
+    "query": "가상화 글 2편에 966ms라고 쓴 숫자가 PR이랑 맞는지 확인해줘",
+    "should_trigger": false
+  },
+  {
+    "query": "sources.md 확정됐으니까 이제 개요 짜고 시리즈로 나눌지 봐줘",
+    "should_trigger": false
+  },
+  {
+    "query": "TanStack Virtual이 scrollMargin을 어떻게 쓰는지 공식 문서에서 찾아줘",
+    "should_trigger": false
+  },
+  {
+    "query": "Knot 저장소에서 getVisibleRange 쓰는 곳 다 찾아줘",
+    "should_trigger": false
+  },
+  {
+    "query": "이 아티팩트 HTML을 블로그 데모로 다시 만들어줘. 2026-11-12-explanation-1117-unit-2-4.html",
+    "should_trigger": false
+  },
+  {
+    "query": "이력서에 넣을 Knot 작업 목록을 PR에서 모아서 정리해줘",
+    "should_trigger": false
+  },
+  {
+    "query": "블로그 글 다섯 편에 걸린 바깥 링크 중에 깨진 거 있는지 봐줘",
+    "should_trigger": false
+  },
+  {
+    "query": "가상화 글 쓰기 전에 나한테 물어볼 거 정리해줘. 자료는 다 모았어",
+    "should_trigger": false
+  }
+]

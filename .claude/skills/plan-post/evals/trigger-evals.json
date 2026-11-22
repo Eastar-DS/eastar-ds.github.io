@@ -1,0 +1,66 @@
+[
+  {
+    "query": "자료 목록 확정했어. 개요 짜줘",
+    "should_trigger": true
+  },
+  {
+    "query": "이거 한 편으로 될까 시리즈로 나눠야 할까? 자료는 ~/.blog-work/virtual-list/sources.md 에 있어",
+    "should_trigger": true
+  },
+  {
+    "query": "401 재발급 글 제목이랑 요약, 주소 후보 세 개씩 뽑아줘. 자료는 다 모아놨어",
+    "should_trigger": true
+  },
+  {
+    "query": "[글쓰기 단계: 개요] 작업 이름 virtual-list. sources.md 확정",
+    "should_trigger": true
+  },
+  {
+    "query": "인터뷰 답 왔으니까 개요 고쳐. 배운 점은 1편 끝에 넣기로 했어",
+    "should_trigger": true
+  },
+  {
+    "query": "가상화 1편이 너무 길어. 어디서 끊으면 좋을지 h2 단위로 다시 나눠봐",
+    "should_trigger": true
+  },
+  {
+    "query": "이 글에 데모로 뭘 넣을지 아티팩트 9개 중에 골라줘. 나머지는 그림이나 표로 하고",
+    "should_trigger": true
+  },
+  {
+    "query": "스토리북 mock 글, 독자를 누구로 잡을지부터 정하고 답할 질문 목록 만들어줘",
+    "should_trigger": true
+  },
+  {
+    "query": "개요대로 1편 초안 써줘",
+    "should_trigger": false
+  },
+  {
+    "query": "가상화 2편 제목이 32자 넘는지, 요약 길이 맞는지 검사해줘",
+    "should_trigger": false
+  },
+  {
+    "query": "블로그 시리즈 목록 페이지에 편 수가 안 나와. 고쳐줘",
+    "should_trigger": false
+  },
+  {
+    "query": "이번 분기에 블로그에 뭘 쓸지 글감 목록 좀 뽑아줘",
+    "should_trigger": false
+  },
+  {
+    "query": "가상화 주제로 15분 발표할 건데 발표 자료 목차 짜줘",
+    "should_trigger": false
+  },
+  {
+    "query": "글 자료를 아직 안 모았는데 일단 이 주제로 뭐가 있는지 찾아줘",
+    "should_trigger": false
+  },
+  {
+    "query": "docs/plan.md에 댓글 기능 다음 할 일 정리해줘",
+    "should_trigger": false
+  },
+  {
+    "query": "이미 쓴 2편 구조가 읽기에 어떤지 검토해줘",
+    "should_trigger": false
+  }
+]

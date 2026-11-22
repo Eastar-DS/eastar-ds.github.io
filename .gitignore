@@ -13,3 +13,7 @@ design/*.pen
 .dev.vars*
 !.dev.vars.example
 .env*
+
+# 글 작업의 로컬 경로와 가릴 이름
+.claude/*.local.json
+*.local.md

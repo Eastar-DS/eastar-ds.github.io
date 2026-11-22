@@ -16,6 +16,11 @@ case "$FILE" in
   */.claude/*|*/CLAUDE.md|*/AGENTS.md|*/docs/*) exit 0 ;;
 esac
 
+# 작업 자료는 공개 글이 아니므로 답 원문과 자료 제목을 고치지 않습니다.
+[[ "$FILE" == "$HOME/.blog-work/"* ]] && exit 0
+SCRIPT_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+node "$SCRIPT_ROOT/scripts/blogWork/isWorkFile.ts" "$FILE" >/dev/null 2>&1 && exit 0
+
 [ -f "$FILE" ] || exit 0
 
 DIR="$(cd "$(dirname "$0")" && pwd)"

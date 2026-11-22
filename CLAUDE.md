@@ -15,6 +15,9 @@
 
 | 명령 | 하는 일 |
 | --- | --- |
+| `pnpm post:sources` · `post:sources:check` | 저장소 밖 작업 폴더의 자료 훑기 · 목록 검사 |
+| `pnpm post:answers` · `post:interview:check` · `post:outline:check` | 답 원문 저장 · 인터뷰 대조 · 개요 검사 |
+| `pnpm post:measure` · `post:fixtures` · `post:evals` | 글 분량 재기 · 저장소 밖 평가 재료 만들기 · 스크립트 평가 |
 | `pnpm dev` | 개발 서버 (`http://localhost:4321`). 에이전트는 `pnpm astro dev --background`로 띄우고 `pnpm astro dev stop`으로 끕니다 |
 | `pnpm build` | 정적 빌드(`dist/`). 빌드 → 사이트 글자로 글꼴 만들기(`scripts/buildFonts.ts`) → 다시 빌드 → 빠진 글자 검사. 글꼴이 바뀌면 `src/shared/styles/fonts/`를 함께 커밋 |
 | `pnpm check` | 타입 검사 (`astro check`, TypeScript strict) |

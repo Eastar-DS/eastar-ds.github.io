@@ -20,7 +20,15 @@
     "fonts:check": "node scripts/buildFonts.ts --check",
     "check:post": "node scripts/checkPost.ts",
     "check:links": "node scripts/checkLinks.ts",
-    "astro": "astro"
+    "astro": "astro",
+    "post:sources": "node scripts/findSources.ts",
+    "post:sources:check": "node scripts/checkSources.ts",
+    "post:answers": "node scripts/saveAnswers.ts",
+    "post:interview:check": "node scripts/checkInterview.ts",
+    "post:outline:check": "node scripts/checkOutline.ts",
+    "post:measure": "node scripts/measurePosts.ts",
+    "post:fixtures": "node scripts/makePostFixtures.ts",
+    "post:evals": "node scripts/evalPostSkills.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.6",
