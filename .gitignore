@@ -13,3 +13,6 @@ design/*.pen
 .dev.vars*
 !.dev.vars.example
 .env*
+
+# 글 작업 폴더와 저장소 사본의 로컬 경로(개인 폴더 경로라 올리지 않음). 예시 파일(.claude/blog-work.example.json)만 올립니다
+.claude/*.local.json
