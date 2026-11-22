@@ -38,6 +38,12 @@ export default defineConfig({
   site: "https://eastar-ds.github.io",
   // GitHub Pages는 /posts/글-이름/ 을 posts/글-이름/index.html 로 내보내므로 주소 끝의 / 를 늘 붙입니다
   trailingSlash: "always",
+  build: {
+    // CSS를 따로 받지 않고 HTML 안에 넣어, 첫 그림이 미리 받는 글꼴과 대역폭을 나누지 않게 합니다(docs/design-system.md 10장).
+    // 2026-11-22 Lighthouse 휴대폰으로 잼: 데모 없는 글 FCP 1.05초 → 0.75~0.80초, 첫 화면 0.75초 → 0.60초.
+    // 대신 페이지마다 HTML이 gzip 3~7KB 커지고 CSS를 페이지 사이에 캐시하지 못합니다. 전역 CSS를 크게 늘릴 때 다시 잽니다
+    inlineStylesheets: "always",
+  },
   integrations: [
     mdx(),
     react(),
