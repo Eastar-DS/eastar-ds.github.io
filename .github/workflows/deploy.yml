@@ -49,6 +49,11 @@ jobs:
       - name: 빌드와 빠진 글자 검사
         run: pnpm build
 
+      # 초안이 아닌 글을 docs/content-guide.md 10장 기준으로 검사하고(원문과 빌드 결과), 초안이 배포 빌드에 새지 않았는지 봅니다.
+      # 실패가 하나라도 있으면 끝 코드 1로 배포를 멈춥니다. 경고는 로그에만 남습니다. 쓰는 법은 scripts/checkPost.ts의 머리 주석에 있습니다
+      - name: 게시 전 점검
+        run: node scripts/checkPost.ts --all --dist dist
+
       - name: 커밋된 글꼴이 최신인지 알림
         run: |
           if ! git diff --quiet -- src/shared/styles/fonts; then

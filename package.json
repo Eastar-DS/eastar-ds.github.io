@@ -19,6 +19,7 @@
     "fonts": "node scripts/buildFonts.ts",
     "fonts:check": "node scripts/buildFonts.ts --check",
     "check:post": "node scripts/checkPost.ts",
+    "check:links": "node scripts/checkLinks.ts",
     "astro": "astro"
   },
   "dependencies": {
