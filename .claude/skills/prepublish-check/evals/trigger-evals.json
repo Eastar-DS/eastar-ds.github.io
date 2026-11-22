@@ -1,0 +1,18 @@
+[
+  { "query": "virtualized-document-list 글 게시 전 점검 돌려 줘", "should_trigger": true },
+  { "query": "가상화 1편 올려도 되는 상태인지 봐 줘. draft 지우기 전에 확인하고 싶어", "should_trigger": true },
+  { "query": "content-guide 10장 확인 목록대로 virtual-list-row-range 검사해서 표로 정리해 줘", "should_trigger": true },
+  { "query": "방금 다 쓴 3편, 제목 길이나 alt 같은 거 빠진 거 없는지 체크해 줘", "should_trigger": true },
+  { "query": "시리즈 다섯 편 전부 게시 준비가 됐는지 한 편씩 점검해 줘", "should_trigger": true },
+  { "query": "virtual-list-accessibility 글이 AEO 항목을 지키는지 봐 줘. 답 먼저 문단, 묻는 꼴 h2, 정의 문장 같은 거", "should_trigger": true },
+  { "query": "1편 draft: true 떼기 전에 뭐가 남았는지 정리해 줘", "should_trigger": true },
+  { "query": "4편 빌드 결과에 BlogPosting이랑 og 태그가 제대로 나오는지, 깨진 링크는 없는지 게시 전에 한번 봐 줘", "should_trigger": true },
+  { "query": "1편의 966ms, 46ms 같은 숫자가 PR 본문이랑 맞는지 대조해 줘", "should_trigger": false },
+  { "query": "2편 문장이 AI가 쓴 티가 나는지 봐 줘. 금지 표현 있나", "should_trigger": false },
+  { "query": "1편 게시해. draft 지우고 커밋까지 해 줘", "should_trigger": false },
+  { "query": "scripts/checkPost.ts에 코드 한 줄 60자 검사를 더해 줘", "should_trigger": false },
+  { "query": "content-guide 10장에 맞춤법 검사 항목을 넣으면 어떨지 의견 줘", "should_trigger": false },
+  { "query": "3편을 처음 읽는 사람이 어디서 막힐지 봐 줘", "should_trigger": false },
+  { "query": "글 페이지 Lighthouse 성능이 92점으로 나오는데 원인 좀 찾아 줘", "should_trigger": false },
+  { "query": "가상화 5편 초안 써 줘. 자료는 작업 폴더에 모아 놨어", "should_trigger": false }
+]
