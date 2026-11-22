@@ -3,7 +3,7 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
 
 /**
  * 코드 칸의 코드를 클립보드에 복사하는 단추입니다. 복사하면 2초 동안 체크 아이콘 · 「복사됨」 · --color-code-success로 바뀌고,
- * 바뀐 말은 aria-live로 읽어 줍니다.
+ * 바뀐 말은 aria-live로 읽어 줍니다. 인쇄할 때는 그리지 않습니다.
  * 가장 가까운 [data-copy-scope] 요소 안의 <pre>를 복사하므로, 단추를 넣는 쪽이 그 요소를 표시합니다.
  * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
  */
@@ -98,6 +98,13 @@ import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
       overflow: hidden;
       clip: rect(0 0 0 0);
       white-space: nowrap;
+    }
+  }
+
+  /* 종이에서는 누를 수 없는 단추라 인쇄하지 않습니다 (docs/design-system.md 7.29) */
+  @media print {
+    .container {
+      display: none;
     }
   }
 </style>

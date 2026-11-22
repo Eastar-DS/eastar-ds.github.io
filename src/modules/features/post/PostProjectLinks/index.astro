@@ -11,7 +11,7 @@ interface Props {
 /**
  * 글 끝에서 이 글과 이어진 프로젝트를 「이 글과 이어진 프로젝트: Knot」처럼 보이고, 포트폴리오의 그 프로젝트 구획으로 잇습니다.
  * 프로젝트는 글 앞머리의 `projects` 칸에 적고, 나열 순서는 포트폴리오와 같은 Knot → 셀러홈 → 비드입니다.
- * 적지 않았거나 포트폴리오 페이지가 없으면(`IS_PORTFOLIO_SHOWN`) 아무것도 그리지 않습니다.
+ * 적지 않았거나 포트폴리오 페이지가 없으면(`IS_PORTFOLIO_SHOWN`) 아무것도 그리지 않고, 인쇄할 때도 그리지 않습니다.
  * 디자인은 docs/design-system.md 7.26에 있고, Pencil 시안은 없습니다.
  */
 const { slug } = Astro.props;
@@ -63,5 +63,12 @@ const projects = IS_PORTFOLIO_SHOWN
   .link:hover {
     color: var(--color-accent-hover);
     text-decoration-thickness: var(--border-width-strong);
+  }
+
+  /* 포트폴리오로 옮겨 가는 링크 줄이라 글을 인쇄할 때는 그리지 않습니다 (docs/design-system.md 7.29) */
+  @media print {
+    .container {
+      display: none;
+    }
   }
 </style>

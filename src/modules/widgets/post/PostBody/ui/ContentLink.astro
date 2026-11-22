@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import getPrintUrl from "@/modules/widgets/post/PostBody/utils/getPrintUrl";
+
+type Props = HTMLAttributes<"a">;
+
+/**
+ * 본문의 링크입니다. MDX의 링크(`[글](주소)`, 각주 번호 포함)를 바꿔 끼워, 다른 사이트로 가는 링크에 인쇄용 주소(`data-print-url`)를 붙입니다.
+ * 화면 모양은 `PostBody`가 정하고, 인쇄할 때 `PostBody`가 링크 글 뒤에 「(주소)」를 그립니다(docs/design-system.md 7.29).
+ * 받은 속성(각주 링크의 id, aria-describedby 등)은 그대로 넘깁니다.
+ */
+const { href, ...rest } = Astro.props;
+const attributes = Object.fromEntries(
+  Object.entries(rest).filter(([name]) => !name.startsWith("data-astro-cid-")),
+);
+const printUrl = getPrintUrl(typeof href === "string" ? href : undefined);
+---
+
+<a href={href} data-print-url={printUrl} {...attributes}><slot /></a>
