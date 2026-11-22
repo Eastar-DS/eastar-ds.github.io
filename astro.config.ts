@@ -65,10 +65,11 @@ export default defineConfig({
           footnotes: {
             label: "각주",
             backContent: "↩",
-            // 같은 각주를 여러 곳에서 달면 두 번째부터 몇 번째 자리인지 함께 말합니다
+            // 같은 각주를 여러 곳에서 달면 두 번째부터 링크 글이 「↩²」처럼 자리 번호를 보이므로, 그 숫자를 따로 된 낱말로 이름 끝에 둡니다.
+            // 보이는 글(2)이 이름에 그대로 들어 있어야 음성으로 고르는 사람이 부를 수 있습니다(WCAG 2.5.3). 괄호 안 글은 이름 비교에서 빠지므로 괄호로 감싸지 않습니다
             backLabel: (referenceNumber, rerunIndex) =>
               rerunIndex > 1
-                ? `${referenceNumber}번 각주를 단 ${rerunIndex}번째 곳으로 돌아가기`
+                ? `${referenceNumber}번 각주를 단 곳으로 돌아가기, ${rerunIndex}`
                 : `${referenceNumber}번 각주를 단 곳으로 돌아가기`,
           },
         },
