@@ -18,6 +18,7 @@
     "test:all": "pnpm check && pnpm test && pnpm check:worker && pnpm test:worker",
     "fonts": "node scripts/buildFonts.ts",
     "fonts:check": "node scripts/buildFonts.ts --check",
+    "new-post": "node scripts/newPost.ts",
     "astro": "astro"
   },
   "dependencies": {

@@ -39,6 +39,8 @@ user-invocable: true
 astro.config.ts                      # site, trailingSlash, MDX · React · sitemap, Shiki 두 테마와 transformer, 설정이 빈 기능 부품을 빈 부품으로 바꾸는 별칭
 scripts/buildFonts.ts                # 사이트 글자만 담은 글꼴 만들기 · 빠진 글자 검사 (pnpm build가 돌림)
 scripts/fonts/                       # 글자 모으기 · 글꼴 이름 바꾸기 (단위 테스트 포함)
+scripts/newPost.ts                   # pnpm new-post <slug>: 새 글 폴더와 원본 틀 만들기 (글 이름 꼴 · 겹침 검사)
+scripts/newPost/                     # 글 이름 꼴 판단과 원본 틀 순수 함수 (단위 테스트 포함)
 scripts/EmptyPart.astro              # 아무것도 그리지 않는 빈 부품 (댓글 · 방문 통계 설정이 비면 astro.config.ts가 대신 넣음)
 scripts/indexNow.ts                  # 배포 때 글이 바뀐 페이지를 골라(plan) IndexNow로 알림(submit). 바깥 패키지 없이 Node만으로 돎
 scripts/indexNow/                    # 페이지 글 해시 · 바뀐 주소 고르기 · 요청 만들기 순수 함수와 IndexNow 키 (단위 테스트 포함)

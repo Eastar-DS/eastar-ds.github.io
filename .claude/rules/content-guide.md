@@ -15,6 +15,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 ## 글 원본과 스키마
 
 - 글 하나는 `src/content/posts/{slug}/index.mdx`. 그림은 같은 폴더에 둡니다. 폴더 이름이 글 주소(`/posts/{slug}/`)입니다.
+- 새 글은 `pnpm new-post <slug>`로 만듭니다(`scripts/newPost.ts`). 글 이름 꼴(정본 2.3: 영어 소문자 낱말 3~5개를 하이픈으로, 숫자만인 낱말 없음)과 이미 있는 글 이름을 검사하고, 앞머리 틀(오늘 한국 날짜, 분류 `도구`, `draft: true`)과 첫 문단 · 「정리」 절 자리를 둡니다. 꼴 판단과 틀은 `scripts/newPost/postTemplate.ts`에 있고 시험합니다
 - 공유 미리보기 그림은 빌드가 분류와 제목으로 그려 `/posts/{slug}/og.png`에 둡니다. 직접 만든 그림을 쓰려면 글 폴더에 `og.png`(1200×630 PNG, 300KB 이하)를 둡니다. 크기가 다르면 빌드가 멈춥니다.
 - 앞머리(frontmatter) 스키마의 원본은 `src/content.config.ts`입니다. 칸을 더하거나 바꾸면 `docs/content-guide.md` 1장의 표와 맞는지 확인하고, 다르면 보고합니다.
 - id는 glob loader의 `generateId`가 폴더 이름으로 만듭니다(`slug/index.mdx` → `slug`).
