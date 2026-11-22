@@ -134,3 +134,17 @@
 | `.claude/skills/project-structure/SKILL.md` | 폴더 나무의 포트폴리오 페이지 설명, `getPortfolioProjectPath`, `constants/career`의 id 목록을 고침 | 코드가 바뀐 만큼 맞춤 |
 | `src/content.config.ts` | `projects` 칸이 `shared/constants/career`의 id만 받음(`@/` 별칭으로 불러옴) | 없는 프로젝트를 적으면 빌드가 멈춰서 깨진 링크가 배포되지 않게 함 |
 | `shared/seo/getPageOgCards`, `shared/seo/createLlmsTxt` | 이력서와 포트폴리오 그림의 이름 줄과 설명을 `SITE.author.displayName`(「이스타(김동성)」)으로, llms.txt 「글쓴이」 절의 소개 설명에 같은 이름을 넣음. 그림의 사이트 이름 줄은 그대로 둠 | 이력서 머리와 같은 이름 표기 |
+
+## 9단계에서 더 바꾼 것 (2026-11-22, SEO · 접근성 · 성능 · 글 형식의 작은 고침)
+
+| 파일 | 바꾼 것 | 이유 |
+| --- | --- | --- |
+| `.claude/rules/seo-guide.md` | 날짜를 한국 시간(+09:00)으로 쓰는 줄, 404의 canonical · og:url 빼기(`hasCanonical: false`), 첫 화면 WebSite, Person description · ProfilePage dateModified, 사이트맵 lastmod(글 주소만), RSS 본문 전체와 `atom:link rel="self"`, 데모 · 도식 안내 글, 제목 앵커 이름(「「제목」 절의 주소」)을 적음 | 조사(2026-11-21)의 바로 할 일을 코드에 넣은 만큼 맞춤 |
+| `.claude/rules/shared-layer.md` | `content/readPostLastmods`, `seo/addPostLastmod` · `createWebSiteJsonLd` · `createRssChannel` · `renderRssContents` · `toFeedHtml`, `astro.config.ts`가 부르는 shared 코드 목록을 고침 | 새 shared 코드 |
+| `.claude/rules/content-guide.md` | `pnpm new-post`, 각주 쓰는 법과 Sätteri 설정(`markdown.processor`), 표가 넘칠 때만 이름 있는 칸이 된다는 줄, `readPostLastmods`를 적고, 「정본 1장 표에 projects 칸이 아직 없다」는 줄을 정본과 맞춤 | 정본 1장 표에 `projects` 줄이 생겼고, 새 도구와 부품이 생김 |
+| `.claude/rules/design-system.md` | 각주 모양(정본 7.28)과 글 화면 인쇄(정본 7.29) 줄을 더함 | 새 화면 규칙 |
+| `.claude/rules/general-code-convention.md` | 페이지 CSS를 HTML 안에 넣는다(`build.inlineStylesheets: "always"`)는 줄을 더함 | 전역 CSS가 모든 페이지 HTML 크기에 들어가게 되어서 |
+| `.claude/skills/project-structure/SKILL.md`, `CLAUDE.md` | 폴더 나무와 명령 표에 `scripts/newPost.ts`(`pnpm new-post`)를 더함 | 새 도구 |
+| `docs/design-system.md` | 7.28 각주, 7.29 글 인쇄 절을 새로 더함(기존 줄은 고치지 않음) | 오케스트레이터 지시(새 부품 모양은 정본에 새 절로 기록). Pencil과 `design/`은 고치지 않음 |
+| `scripts/buildFonts.ts` | `rss.xml`을 사이트 글꼴 글자 모으기에서 뺌 | RSS에 본문 전체와 데모 자리 안내 글이 들어가는데, RSS 리더는 사이트 글꼴로 그리지 않음 |
+| `package.json` | `ultrahtml`(개발 의존성, RSS 본문 다듬기), `@astrojs/markdown-satteri`(각주 문구 설정)를 직접 의존성으로 더함 | 둘 다 Astro가 이미 쓰는 같은 판이라 새로 받는 패키지는 없음. pnpm은 직접 의존성이 아니면 불러올 수 없게 함 |

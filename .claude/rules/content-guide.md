@@ -19,7 +19,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 - 공유 미리보기 그림은 빌드가 분류와 제목으로 그려 `/posts/{slug}/og.png`에 둡니다. 직접 만든 그림을 쓰려면 글 폴더에 `og.png`(1200×630 PNG, 300KB 이하)를 둡니다. 크기가 다르면 빌드가 멈춥니다.
 - 앞머리(frontmatter) 스키마의 원본은 `src/content.config.ts`입니다. 칸을 더하거나 바꾸면 `docs/content-guide.md` 1장의 표와 맞는지 확인하고, 다르면 보고합니다.
 - id는 glob loader의 `generateId`가 폴더 이름으로 만듭니다(`slug/index.mdx` → `slug`).
-- `projects`(선택, 2026-11-21): 이 글과 이어진 프로젝트 id 목록(`projects: [knot]`). `shared/constants/career`의 `CAREER_PROJECT_IDS`(`knot`, `sellerhome`, `bid`)만 받아서 없는 id면 빌드가 멈춥니다. 적으면 글 끝에 「이 글과 이어진 프로젝트」 링크(`features/post/PostProjectLinks`)가 붙습니다. 정본 `docs/content-guide.md` 1장 표에는 아직 이 칸이 없습니다.
+- `projects`(선택, 2026-11-21): 이 글과 이어진 프로젝트 id 목록(`projects: [knot]`). `shared/constants/career`의 `CAREER_PROJECT_IDS`(`knot`, `sellerhome`, `bid`)만 받아서 없는 id면 빌드가 멈춥니다. 적으면 글 끝에 「이 글과 이어진 프로젝트」 링크(`features/post/PostProjectLinks`)가 붙습니다. 정본 `docs/content-guide.md` 1장 표의 `projects` 줄과 같습니다.
 - 이력서 줄과 포트폴리오 사례는 `relatedPostSlugs`에 글 이름(slug)을 적어 「관련 글」로 잇습니다. 글 이름(폴더 이름)을 바꾸면 그 값도 함께 고칩니다. 없는 글 이름이면 그 페이지의 빌드가 멈춥니다.
 
 ## 글에서 쓰는 부품
