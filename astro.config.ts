@@ -1,3 +1,4 @@
+import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -56,6 +57,23 @@ export default defineConfig({
     },
   },
   markdown: {
+    // Astro 7 기본 마크다운 처리기(Sätteri)에 각주 문구를 한국어로 넘깁니다. MDX도 이 처리기를 물려받습니다.
+    // markdown.remarkRehype.footnoteLabel은 unified 처리기용이라 Sätteri에서는 쓰지 않습니다
+    processor: satteri({
+      features: {
+        gfm: {
+          footnotes: {
+            label: "각주",
+            backContent: "↩",
+            // 같은 각주를 여러 곳에서 달면 두 번째부터 몇 번째 자리인지 함께 말합니다
+            backLabel: (referenceNumber, rerunIndex) =>
+              rerunIndex > 1
+                ? `${referenceNumber}번 각주를 단 ${rerunIndex}번째 곳으로 돌아가기`
+                : `${referenceNumber}번 각주를 단 곳으로 돌아가기`,
+          },
+        },
+      },
+    }),
     shikiConfig: {
       // VS Code Light+ / Dark+에서 대비가 모자란 색만 고친 두 테마 (docs/design-system.md 2.3 「코드」)
       themes: CODE_THEMES,

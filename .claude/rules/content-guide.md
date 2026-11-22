@@ -34,6 +34,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `<Callout>`, `<Callout kind="warn">`, `<Callout kind="note">` | 핵심 · 주의 · 참고 강조 칸 |
 | `<Figure caption="그림 1. …">` + 그림 | 그림과 설명 |
 | `<Figure caption="표 1. …" captionSide="top">` + 표 | 위에 설명이 붙은 표 |
+| `문장[^1]` + `[^1]: 설명` | 본문 끝 「각주」 구획의 번호 목록과 「↩」 돌아가기 링크 (정본 design-system 7.28). 문구는 `astro.config.ts`의 `satteri()` 각주 설정 |
 
 - 마크다운을 JSX 부품 안에 넣을 때는 앞뒤에 빈 줄을 둡니다.
 - 데모는 `src/modules/features/demo/{데모 이름}/index.tsx`로 만들고, 글에서 import해 `client:visible`로 씁니다.
@@ -58,4 +59,4 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 
 - 컴포넌트는 `astro:content`를 직접 import하지 않고 이 함수들을 부릅니다.
 - 날짜는 `Date`로 넘기고, 문자열로 바꾸는 일은 `shared/utils/formatDate`(한국 시간 고정)가 합니다.
-- 마크다운 처리기는 Astro 7 기본인 Sätteri입니다. 화면 모양을 바꾸는 일은 플러그인보다 `PostBody`의 MDX `components` 바꿔 끼우기로 먼저 해결합니다.
+- 마크다운 처리기는 Astro 7 기본인 Sätteri이고, `astro.config.ts`의 `markdown.processor: satteri({...})`로 설정합니다(각주 문구 등). `markdown.remarkRehype` · `remarkPlugins`는 unified 처리기용이라 쓰지 않습니다. 화면 모양을 바꾸는 일은 플러그인보다 `PostBody`의 MDX `components` 바꿔 끼우기로 먼저 해결합니다.
