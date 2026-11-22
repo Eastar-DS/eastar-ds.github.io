@@ -52,8 +52,12 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 
 ## 사이트맵과 RSS
 
-- 사이트맵은 `@astrojs/sitemap`이 빌드할 때 만듦(`/sitemap-index.xml`). 404는 빠짐. 글 주소에만 `lastmod`(앞머리의 `updatedAt`, 없으면 `publishedAt`)를 붙이고, 글이 아닌 페이지에는 붙이지 않음. 빌드 시각은 넣지 않음. 사이트맵 통합은 콘텐츠 모음을 읽지 못해서 `astro.config.ts`가 `shared/content/readPostLastmods`로 글 원본의 앞머리를 읽고 `serialize`에서 `shared/seo/addPostLastmod`로 붙임 기능 스위치가 꺼진 페이지(공개 전 이력서)는 빌드에 없어서 사이트맵에도 없음. 포트폴리오는 `IS_PORTFOLIO_SHOWN`(지금은 늘 참)을 따라 들어감. 엔드포인트(`og.png`, `llms.txt`, `robots.txt`, `rss.xml`)는 사이트맵에 들어가지 않음
-- RSS는 `src/pages/rss.xml.ts`(`/rss.xml`). 항목은 `createRssItems(posts)`로 만듦
+- 사이트맵은 `@astrojs/sitemap`이 빌드할 때 만듦(`/sitemap-index.xml`). 404는 빠짐. 글 주소에만 `lastmod`(앞머리의 `updatedAt`, 없으면 `publishedAt`)를 붙이고, 글이 아닌 페이지에는 붙이지 않음. 빌드 시각은 넣지 않음. 사이트맵 통합은 콘텐츠 모음을 읽지 못해서 `astro.config.ts`가 `shared/content/readPostLastmods`로 글 원본의 앞머리를 읽고 `serialize`에서 `shared/seo/addPostLastmod`로 붙임. 기능 스위치가 꺼진 페이지(공개 전 이력서)는 빌드에 없어서 사이트맵에도 없음. 포트폴리오는 `IS_PORTFOLIO_SHOWN`(지금은 늘 참)을 따라 들어감. 엔드포인트(`og.png`, `llms.txt`, `robots.txt`, `rss.xml`)는 사이트맵에 들어가지 않음
+- RSS는 `src/pages/rss.xml.ts`(`/rss.xml`). 항목은 `createRssItems({ posts, contents })`로 만들고, description에 요약을, content(`content:encoded`)에 본문 전체를 넣음(네이버 서치어드바이저는 본문 전체를 권함)
+  - 본문은 `shared/seo/renderRssContents`가 글 페이지와 같은 `PostBody`(페이지가 넘김)를 Astro Container API(실험 기능, MDX · React 렌더러)로 그린 뒤 `shared/seo/toFeedHtml`로 다듬음: 스크립트 · 스타일 · 단추 · 꾸밈 아이콘과 화면용 속성(class, style, data-*)을 빼고, 안쪽 링크 · 각주 링크 · 그림 주소를 절대 주소로 바꾸고, 코드 칸은 글자만 남김
+  - React 데모와 도식(그림 · 표 · 코드가 없는 `<figure>`)은 RSS 리더에서 그려지지 않으므로 그 자리에 「이 자리의 데모는 글에서 직접 움직여 볼 수 있습니다」(도식은 「… 볼 수 있습니다」)와 글 주소를 두고, 데모 · 그림 설명(figcaption)은 남김
+  - 채널에는 언어와 피드 제 주소를 알리는 `<atom:link rel="self">`를 `createRssChannel()`로 넣음(W3C 피드 검사기 권장)
+  - Astro를 올리면 Container API가 바뀔 수 있으니 RSS 본문을 다시 확인함. RSS는 리더가 제 글꼴로 그려서 `scripts/buildFonts.ts`가 사이트 글꼴 글자에서 뺌
 - 둘 다 `astro.config.ts`의 `site`(`https://eastar-ds.github.io`)로 절대 주소를 만듦
 
 ## 공유 미리보기 그림 (og:image)

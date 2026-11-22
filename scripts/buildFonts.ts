@@ -7,8 +7,8 @@
  * | jetbrains-mono.woff2 | JetBrains Mono 400 latin (OFL) | 위와 같은 글자 가운데 이 글꼴에 있는 것 |
  * | blog-code-hangul.woff2 | D2Coding 1.3.2 (OFL, 예약 이름 D2Coding) | <pre> · <code> 안의 한글 |
  *
- * - 글자는 빌드 결과(dist의 HTML · RSS · CSS · JS)에서 모읍니다. 코드 주석 속 한글은 빠지고,
- *   JavaScript가 나중에 그리는 글(데모의 「재생 중」 등)은 JS 번들에서 잡힙니다. llms.txt는 화면에 그리지 않아 빼고,
+ * - 글자는 빌드 결과(dist의 HTML · CSS · JS)에서 모읍니다. 코드 주석 속 한글은 빠지고,
+ *   JavaScript가 나중에 그리는 글(데모의 「재생 중」 등)은 JS 번들에서 잡힙니다. llms.txt와 RSS는 화면에 그리지 않아 빼고,
  *   공유 미리보기 그림(og.png)은 Pretendard 원본으로 따로 그려서(`shared/seo/createOgImage`) 여기와 엉키지 않습니다.
  * - OFL 3조: 예약 이름이 있는 글꼴은 줄인 수정본에 그 이름을 쓸 수 없어 Blog Sans · Blog Code Hangul로 바꿉니다.
  *   저작권 표시는 남기고, 라이선스 전문은 같은 폴더의 *-OFL.txt에 둡니다.
@@ -37,8 +37,10 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const FONT_DIR = path.join(ROOT, "src/shared/styles/fonts");
 const require = createRequire(import.meta.url);
-// 빌드 결과에 있지만 브라우저가 사이트 글꼴로 그리지 않는 파일. llms.txt는 AI 에이전트가 읽는 글이라, 그 글자까지 넣으면 글꼴만 커집니다
-const NOT_RENDERED_FILES = ["llms.txt"];
+// 빌드 결과에 있지만 브라우저가 사이트 글꼴로 그리지 않는 파일. 그 글자까지 넣으면 글꼴만 커집니다
+// - llms.txt: AI 에이전트가 읽는 글
+// - rss.xml: RSS 리더가 제 글꼴로 그리는 글. 본문 전체와 데모 자리 안내 글이 들어 있습니다
+const NOT_RENDERED_FILES = ["llms.txt", "rss.xml"];
 
 // 사이트가 쓰는 굵기 범위 (--font-weight-regular 400 ~ --font-weight-heavy 800)
 const WEIGHT_RANGE = { min: 400, max: 800 };
