@@ -12,7 +12,7 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 
 - `<html lang="ko">`는 `Document`가 넣음
 - **h1은 페이지마다 하나.** 글 화면은 `PostHeader`(글 머리), 글 목록은 `SiteIntro`, 소개는 `AboutProfile`, 이력서는 `Resume`(이름 「이스타(김동성)」), 포트폴리오는 `Portfolio`, 개인정보 처리 안내는 `PrivacyNotice`, 404는 `NotFoundMessage`(「찾는 글이 없습니다」)가 가짐. 머리말의 사이트 이름은 h1이 아님
-- 본문 제목(h2, h3)에는 앵커를 붙임. `AnchorHeading`이 제목 뒤에 「제목」 링크 아이콘을 둠(올리거나 포커스할 때만 보임)
+- 본문 제목(h2, h3)에는 앵커를 붙임. `AnchorHeading`이 제목 뒤에 링크 아이콘을 둠(올리거나 포커스할 때만 보임). 링크 이름은 「「제목」 절의 주소」이고, 화면 낭독기가 역할 「링크」를 따로 읽으므로 이름에 「링크」를 넣지 않음
 - 모든 페이지는 `shared/seo/createPageMeta`로 메타를 만들어 `Document`에 넘김. `Document`가 title, description, canonical, og, twitter 메타를 그림
   - `<title>`은 「페이지 제목 · 사이트 이름」, og:title과 twitter:title은 페이지 제목만 씀(`docs/content-guide.md` 2.1). 사이트 이름은 og:site_name이 알림
   - 모든 페이지에 공유 미리보기 그림(og:image · og:image:type · og:image:width · og:image:height · og:image:alt, twitter:image · twitter:image:alt)을 넣고 `twitter:card`는 `summary_large_image`. 그림은 `createPageMeta`가 `getOgImage`로 고르므로 페이지는 넘길 값이 없음(아래 「공유 미리보기 그림」)

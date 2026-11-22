@@ -30,7 +30,7 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `## 제목`, `### 제목` | 앵커 링크가 붙은 제목 (`AnchorHeading`) |
 | ```` ```ts title="파일.ts" ```` | 파일 이름과 복사 단추가 있는 코드 칸 (`CodeBlock`). 20줄 넘으면 줄 번호가 저절로 붙음 |
 | ```` ```ts title="파일.ts" {3,5-6} ```` | 적은 줄을 강조 줄로 (한 칸에 세 줄 이하) |
-| GFM 표 | 좁은 화면에서 가로로 밀리는 표 (`ContentTable`) |
+| GFM 표 | 좁은 화면에서 가로로 밀리는 표 (`ContentTable`). 실제로 넘칠 때만 키보드로 밀 수 있는 이름 있는 칸이 되고, 이름은 표 설명(`Figure`의 caption)이라 표마다 설명을 붙임 |
 | `<Callout>`, `<Callout kind="warn">`, `<Callout kind="note">` | 핵심 · 주의 · 참고 강조 칸 |
 | `<Figure caption="그림 1. …">` + 그림 | 그림과 설명 |
 | `<Figure caption="표 1. …" captionSide="top">` + 표 | 위에 설명이 붙은 표 |
