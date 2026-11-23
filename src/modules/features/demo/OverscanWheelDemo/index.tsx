@@ -45,14 +45,14 @@ export default function OverscanWheelDemo() {
         <div className={styles.panels}>
           <FramePanel
             title="휠을 돌리기 전"
-            detail={`화면 ${formatPx(view.start)}~${formatPx(view.end)}px`}
+            detail={`화면 ${formatPx(view.start)}–${formatPx(view.end)}px`}
             rows={rows}
             view={view}
             widened={widened}
           />
           <FramePanel
             title="합성기가 먼저 내보낸 프레임"
-            detail={`화면 ${formatPx(nextView.start)}~${formatPx(nextView.end)}px, DOM은 그대로`}
+            detail={`화면 ${formatPx(nextView.start)}–${formatPx(nextView.end)}px, DOM은 그대로`}
             rows={rows}
             view={nextView}
             blank={blank}

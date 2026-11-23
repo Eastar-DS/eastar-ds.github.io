@@ -9,7 +9,7 @@ export const CAREER_PROJECTS = {
     id: "knot",
     name: "Knot",
     summary: "회의를 녹음하면 주제별 문서로 정리해 주는 팀 회의 기록 서비스",
-    facts: ["우아한테크코스 팀 프로젝트", "2026.08 ~ 현재", "FE 3명과 BE 2명"],
+    facts: ["우아한테크코스 팀 프로젝트", "2026.08–현재", "FE 3명과 BE 2명"],
     url: "https://knoted.kr",
     role: "프론트엔드(문서 보기, 문서 목록, 녹음 문서 화면, 홈 카드, 소셜 로그인 등, PR 45개 머지), 사용자 데이터 분석과 가설 검증",
   },
@@ -19,7 +19,7 @@ export const CAREER_PROJECTS = {
     summary: "쇼핑몰 발주를 버튼 한 번으로 처리하는 서비스",
     facts: [
       "개인 프로젝트, 운영 중",
-      "2026.06 ~ 현재",
+      "2026.06–현재",
       "기획과 개발, 영업을 혼자 맡음",
     ],
     url: "https://sellerhome.co.kr",
@@ -30,7 +30,7 @@ export const CAREER_PROJECTS = {
     summary: "창업한 부동산 경매 정보 서비스",
     facts: [
       "대표",
-      "2022.06 ~ 2025.03",
+      "2022.06–2025.03",
       "소프트웨어 마에스트로에서 시작",
       "3명(이스타, BE 1명, FE 1명)과 법률 자문",
     ],

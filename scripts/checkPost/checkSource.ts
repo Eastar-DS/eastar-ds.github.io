@@ -10,7 +10,7 @@ import {
   DESCRIPTION_LENGTH,
   FIGURE,
   NOTATION,
-  MULTIPLE_TILDES,
+  RANGE_TILDE,
   POST_LINK_PATTERN,
   QUESTION_HEADING_ENDING,
   REVIEW_MARKER_BASIS,
@@ -110,11 +110,15 @@ const excerpt = ({ text, index }: { text: string; index: number }) => {
 };
 
 /** 백슬래시가 바로 다음 글자를 이스케이프합니다. 두 백슬래시 뒤의 물결표는 이스케이프되지 않습니다. */
-const unescapedTildeIndexes = (text: string) => {
+const rangeTildeIndexes = (text: string) => {
   const indexes: number[] = [];
   for (let index = 0; index < text.length; index += 1) {
     if (text[index] === "\\") index += 1;
-    else if (text[index] === "~") indexes.push(index);
+    else if (
+      text[index] === "~" &&
+      /\d(?:[A-Za-z가-힣%]+)?\s*$/.test(text.slice(0, index)) &&
+      /^\s*[+−-]?\d/.test(text.slice(index + 1))
+    ) indexes.push(index);
   }
   return indexes;
 };
@@ -571,18 +575,18 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
   results.push(
     byFindings({
       id: "multiple-tildes",
-      label: "본문 한 줄의 물결표 두 개 이상",
-      basis: MULTIPLE_TILDES.basis,
+      label: "본문 수 범위의 물결표",
+      basis: RANGE_TILDE.basis,
       statusIfFound: "fail",
       // parseMdx가 코드 칸·인라인 코드·태그·주소를 가린 본문 줄만 봅니다. 제목·요약은 넣지 않습니다.
-      findings: document.lines.filter(isProse).flatMap((line) => {
-        const indexes = unescapedTildeIndexes(line.text);
-        return indexes.length >= MULTIPLE_TILDES.minCount
+      findings: [...document.lines.filter(isProse), ...document.figures.filter((figure) => figure.caption).map((figure) => ({ line: figure.line, text: figure.caption ?? "" }))].flatMap((line) => {
+        const indexes = rangeTildeIndexes(line.text);
+        return indexes.length > 0
           ? [{ line: line.line, message: `물결표 ${indexes.length}개: ${excerpt({ text: line.text, index: indexes[0] ?? 0 })}` }]
           : [];
       }),
       passSummary: "없습니다",
-      fix: "이스타가 범위 표기 규칙을 정한 뒤 고칩니다. 코드의 물결표는 백틱으로 감쌉니다.",
+      fix: "수 범위의 물결표를 짧은 줄표 「–」(U+2013)로 바꿉니다. 코드 칸과 인라인 코드는 검사하지 않습니다.",
     }),
   );
 

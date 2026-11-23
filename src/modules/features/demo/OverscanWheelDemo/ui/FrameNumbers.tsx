@@ -28,7 +28,7 @@ export default function FrameNumbers({ frame }: FrameNumbersProps) {
       <div className={styles.item}>
         <dt className={styles.name}>그린 행</dt>
         <dd className={styles.value}>
-          {formatPx(drawn.start)}~{formatPx(drawn.end)}
+          {formatPx(drawn.start)}–{formatPx(drawn.end)}
         </dd>
       </div>
       <div className={styles.item}>
@@ -38,7 +38,7 @@ export default function FrameNumbers({ frame }: FrameNumbersProps) {
       <div className={styles.item}>
         <dt className={styles.name}>휠 뒤 화면</dt>
         <dd className={styles.value}>
-          {formatPx(nextView.start)}~{formatPx(nextView.end)}
+          {formatPx(nextView.start)}–{formatPx(nextView.end)}
         </dd>
       </div>
       <div className={styles.item}>

@@ -28,7 +28,7 @@ export default function RowStats({
 }: RowStatsProps) {
   const visibleNumbers =
     counts.visible > 0
-      ? `${(visible.start + 1).toLocaleString("ko-KR")}~${visible.end.toLocaleString("ko-KR")}번`
+      ? `${(visible.start + 1).toLocaleString("ko-KR")}–${visible.end.toLocaleString("ko-KR")}번`
       : "";
 
   return (

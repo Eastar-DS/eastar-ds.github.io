@@ -59,10 +59,9 @@ export const NOTATION = {
   basis: `${CONTENT_GUIDE} 4장`,
 } as const;
 
-/** content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그: Sätteri가 한 줄의 물결표 사이를 취소선으로 그립니다. */
-export const MULTIPLE_TILDES = {
-  minCount: 2,
-  basis: "content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그",
+/** content-guide 4.1: 수의 범위는 짧은 줄표(U+2013)로 쓰며, 물결표는 하나라도 실패입니다. */
+export const RANGE_TILDE = {
+  basis: `${CONTENT_GUIDE} 4.1`,
 } as const;
 
 /** 그림 (content-guide 6.1, 표 설명은 3장) */
@@ -146,7 +145,7 @@ export const CHECK_SECTIONS: Record<string, string> = {
   "bold-per-paragraph": "4장",
   "hard-line-break": "4장",
   "number-comma": "4장",
-  "multiple-tildes": "4.1 개정 대기",
+  "multiple-tildes": "4.1",
   "image-alt": "10.4",
   "image-alt-empty": "10.4",
   "figure-caption": "10.4",

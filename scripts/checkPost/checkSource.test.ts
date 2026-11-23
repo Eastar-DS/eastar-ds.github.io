@@ -311,19 +311,25 @@ describe("toWritingStyleResult", () => {
 });
 
 
-describe("본문 한 줄의 물결표", () => {
+describe("본문 수 범위의 물결표", () => {
   const inspect = (body: string) => find(check({ source: `${SERIES_FIRST_SOURCE}\n${body}\n` }), "multiple-tildes");
 
-  it("한 줄의 물결표가 둘 이상이면 초안도 실패하며, 찾은 줄마다 한 곳으로 센다", () => {
+  it("수 사이의 물결표는 초안도 실패하며, 찾은 줄마다 한 곳으로 센다", () => {
     const result = inspect("시간은 1~2ms에서 3~4ms로 줄었습니다.\n\n범위는 5~6과 7~8입니다.");
     expect(result.status).toBe("fail");
     expect(result.findings).toHaveLength(2);
     expect(result.findings.map((finding) => finding.line)).toEqual([SERIES_FIRST_SOURCE.split("\n").length + 1, SERIES_FIRST_SOURCE.split("\n").length + 3]);
-    expect(result.basis).toBe("content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그");
+    expect(result.basis).toBe("docs/content-guide.md 4.1");
   });
 
-  it("줄마다 하나인 물결표는 받는다", () => {
-    expect(inspect("1~2ms입니다.\n3~4ms입니다.").status).toBe("pass");
+  it("줄마다 하나인 물결표 범위도 실패한다", () => {
+    expect(inspect("1~2ms입니다.\n3~4ms입니다.").status).toBe("fail");
+  });
+
+  it("단위와 날짜, 공백이 있는 범위도 잡고 줄표와 수 범위가 아닌 물결표는 받는다", () => {
+    expect(inspect("2초 ~ 1분, 2026.09~2026.11").status).toBe("fail");
+    expect(inspect("38–47자, 2026.09–2026.11, 물결~ 표시").status).toBe("pass");
+    expect(inspect('<Figure caption="그림 1. 6~8번 행" />').status).toBe("fail");
   });
 
   it("코드 칸, 물결표 펜스와 인라인 코드는 가린다", () => {
@@ -332,7 +338,7 @@ describe("본문 한 줄의 물결표", () => {
   });
 
   it("이스케이프한 물결표는 세지 않고, 두 백슬래시 뒤의 물결표는 센다", () => {
-    expect(inspect(String.raw`1\~2, 3\~4, 5~6`).status).toBe("pass");
+    expect(inspect(String.raw`1\~2, 3\~4, 5–6`).status).toBe("pass");
     expect(inspect(String.raw`1\\~2, 3~4`).status).toBe("fail");
   });
 
