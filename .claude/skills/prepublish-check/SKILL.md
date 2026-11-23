@@ -1,6 +1,6 @@
 ---
 name: prepublish-check
-description: 블로그 글 하나가 docs/content-guide.md 10장의 게시 전 확인 목록을 지키는지 점검해, 항목마다 실패, 사람이 볼 것, 통과, 돌리지 않음으로 나눈 표를 보고한다. 글을 다 쓴 뒤나 초안 표시(draft)를 지우기 전에, 「게시 전 점검」, 「올려도 되는 상태야?」, 「draft 떼기 전에 뭐가 남았어」, 「10장 확인 목록 돌려 줘」, 「제목 길이나 alt 빠진 거 없나 봐 줘」 같은 요청을 받으면 쓴다. 숫자와 사실이 출처와 맞는지는 fact-check-post, 문장 표현은 writing-style, 새 독자 시험은 review-post, draft를 지우고 커밋하는 일은 publish-post가 맡으므로 그런 요청에는 쓰지 않는다. 점수를 매기지 않고 게시 여부를 정하지 않는다.
+description: 블로그 글 하나가 docs/content-guide.md 10장의 게시 전 확인 목록을 지키는지 점검해, 항목마다 실패, 사람이 볼 것, 통과, 돌리지 않음으로 나눈 표를 보고한다. 글을 다 쓴 뒤나 초안 표시(draft)를 지우기 전에, 「게시 전 점검」, 「올려도 되는 상태야?」, 「draft 떼기 전에 뭐가 남았어」, 「10장 확인 목록 돌려 줘」, 「제목 길이나 alt 빠진 거 없나 봐 줘」 같은 요청을 받으면 쓴다. 글의 검사 결과를 정리해 달라는 요청에는 빌드 생략이나 간단한 결론만 요구해도 이 스킬을 사용한다. 숫자와 사실이 출처와 맞는지는 fact-check-post, 문장 표현은 writing-style, 새 독자 시험은 review-post, draft를 지우고 커밋하는 일은 publish-post가 맡으므로 그런 요청에는 쓰지 않는다. 점수를 매기지 않고 게시 여부를 정하지 않는다.
 argument-hint: "[slug 또는 index.mdx 경로] [고치기]"
 allowed-tools: Read, Grep, Glob, Bash(node scripts/checkPost.ts *), Bash(node scripts/factCheck.ts status *), Bash(node scripts/blogWork.ts dir *), Bash(bash .claude/skills/writing-style/check.sh *), Bash(pnpm build), Bash(git status *), Bash(git diff *)
 ---
