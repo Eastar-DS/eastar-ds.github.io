@@ -1,0 +1,1008 @@
+{
+  "date": "2026-11-23",
+  "model": "claude-opus-5-5",
+  "totalCostUsd": 21.2494744,
+  "stopNewRunsUsd": 65,
+  "hardLimitUsd": 70,
+  "runs": 22,
+  "allSettled": true,
+  "auth": [
+    {
+      "id": "back-navigation-initial",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "virtualized-document-list-initial",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "virtual-list-row-range-initial",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "virtual-list-blank-frames-initial",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "virtual-list-accessibility-initial",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "row-range-recheck-1",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-01",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-02",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-03",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-04",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-05",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-06",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-07",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-08",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-09",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-10",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-11",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-12",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-13",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-14",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-15",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    },
+    {
+      "id": "trigger-prepublish-holdout-16",
+      "apiKeySource": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-5-5",
+      "mcpEmpty": true
+    }
+  ],
+  "forbiddenAgentToolCalls": 0,
+  "posts": [
+    {
+      "order": 1,
+      "slug": "virtualized-document-list",
+      "initialCounts": {
+        "맞음": 79,
+        "일부 맞음": 11,
+        "다름": 0,
+        "출처에 없음": 2,
+        "못 엶": 0,
+        "대조 안 함": 3
+      },
+      "finalCounts": {
+        "맞음": 79,
+        "일부 맞음": 11,
+        "다름": 0,
+        "출처에 없음": 2,
+        "못 엶": 0,
+        "대조 안 함": 3
+      },
+      "costUsd": 3.8714318,
+      "runs": [
+        {
+          "id": "virtualized-document-list-initial",
+          "costUsd": 3.8714318
+        }
+      ],
+      "verify": true,
+      "status": "최신(2026-11-23): 다름 0, 일부 맞음 11, 출처에 없음 2, 못 엶 0",
+      "sha256": "163b5e8356784bede3952dce5d9f0ea91192d745cbd4dbb0b076e5bca703e053",
+      "findings": [
+        {
+          "id": "C16",
+          "line": "34",
+          "claim": "녹화 도구는 DOM 변화를 `MutationObserver`로 받아 기록",
+          "verdict": "일부 맞음",
+          "suggestedAction": "문장은 그대로 두되, 녹화 라이브러리(PostHog와 Sentry Replay가 쓰는 rrweb)의 공식 문서나 소스를 근거로 더해 대조를 다시 돌립니다."
+        },
+        {
+          "id": "C17, C18",
+          "line": "34",
+          "claim": "PostHog 세션 녹화 약 495ms, Sentry Replay 약 435ms를 더함",
+          "verdict": "일부 맞음",
+          "suggestedAction": "원본 측정 파일을 찾으면 다시 대조하고, 없으면 값은 그대로 두고 「11월 5일 로컬 빌드 측정」처럼 측정 조건을 밝힙니다."
+        },
+        {
+          "id": "C30, C31",
+          "line": "64",
+          "claim": "`content-visibility`로 레이아웃 131–142ms → 7–9ms, JavaScript와 Commit은 조금만 줄어듦",
+          "verdict": "일부 맞음",
+          "suggestedAction": "값은 그대로 두고, 원본 측정 파일을 찾으면 다시 대조합니다."
+        },
+        {
+          "id": "C32, C33",
+          "line": "64",
+          "claim": "가운데값 959ms → 740ms",
+          "verdict": "일부 맞음",
+          "suggestedAction": "값은 그대로 두고, 원본 측정 파일을 찾으면 다시 대조합니다."
+        },
+        {
+          "id": "C36, C37",
+          "line": "64",
+          "claim": "`content-visibility`에서 스크롤 99% 값 10.9–11.1ms → 20.1–20.9ms",
+          "verdict": "일부 맞음",
+          "suggestedAction": "값은 그대로 두고, 원본 측정 파일을 찾으면 다시 대조합니다."
+        },
+        {
+          "id": "C86",
+          "line": "96, 97, 102",
+          "claim": "4ms (표 2의 레이아웃·스타일 계산, 다시 받기 뒤 작업 「4ms 안쪽」)",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「다시 받기 뒤의 작업이 130ms 안팎에서 6ms 이하로 줄었고」 (트레이스 네 번 기준 개선 전 128–141ms, 개선 후 4–6ms)"
+        },
+        {
+          "id": "M1",
+          "line": "20",
+          "claim": "Knot는 우아한테크코스 팀 프로젝트",
+          "verdict": "출처에 없음"
+        },
+        {
+          "id": "M4",
+          "line": "32",
+          "claim": "행 하나에 Emotion이 만드는 컴포넌트까지 들어 있고, 시간은 특정 컴포넌트에 몰리지 않고 행마다 고르게 퍼짐",
+          "verdict": "일부 맞음",
+          "suggestedAction": "문장은 그대로 두되, 컴포넌트별 시간 분포를 잰 Profiler 기록을 찾으면 다시 대조합니다."
+        },
+        {
+          "id": "M6",
+          "line": "38",
+          "claim": "목록 가상화는 화면 근처 행만 DOM에 그리고 나머지는 높이만 비워 스크롤바를 유지함",
+          "verdict": "일부 맞음",
+          "suggestedAction": "문장은 그대로 두고, 가상화를 설명하는 공식 문서(예: TanStack Virtual 문서의 소개 페이지)를 근거로 더하면 대조를 다시 돌립니다."
+        },
+        {
+          "id": "M9",
+          "line": "64",
+          "claim": "Commit은 메인 스레드가 그린 결과를 합성기 스레드로 넘기는 일",
+          "verdict": "출처에 없음"
+        },
+        {
+          "id": "M15",
+          "line": "82",
+          "claim": "측정은 M5 Pro Mac에서 Playwright로 Chrome을 띄워 함",
+          "verdict": "일부 맞음",
+          "suggestedAction": "11월 12일 측정도 같은 Mac에서 했는지 이스타가 확인하고, 맞으면 그대로 둡니다."
+        },
+        {
+          "id": "M16",
+          "line": "82",
+          "claim": "목록 응답은 폴더별 문서 수와 요약 행 위치를 같게 하고 제목만 지어 만듦",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「제목과 폴더 이름만 지어 만든 응답을」"
+        },
+        {
+          "id": "M27",
+          "line": "120",
+          "claim": "느린 까닭은 행 1,939개를 처음 그리는 마운트",
+          "verdict": "일부 맞음",
+          "suggestedAction": "문장은 그대로 두고, 분석의 근거가 된 트레이스 기록을 찾으면 다시 대조합니다."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "slug": "virtual-list-row-range",
+      "initialCounts": {
+        "맞음": 118,
+        "일부 맞음": 4,
+        "다름": 1,
+        "출처에 없음": 2,
+        "못 엶": 0,
+        "대조 안 함": 23
+      },
+      "finalCounts": {
+        "맞음": 115,
+        "일부 맞음": 5,
+        "다름": 0,
+        "출처에 없음": 1,
+        "못 엶": 0,
+        "대조 안 함": 28
+      },
+      "costUsd": 5.8745414,
+      "runs": [
+        {
+          "id": "virtual-list-row-range-initial",
+          "costUsd": 2.9953706
+        },
+        {
+          "id": "row-range-recheck-1",
+          "costUsd": 2.8791708
+        }
+      ],
+      "verify": true,
+      "status": "최신(2026-11-23): 다름 0, 일부 맞음 5, 출처에 없음 1, 못 엶 0",
+      "sha256": "34fd0bb1d42edeb5d7c00dc3a8126f381dea40d12bb9ba4f63ee2a7974a32f56",
+      "findings": [
+        {
+          "id": "C30",
+          "line": "71–76",
+          "claim": "useVisibleRowRange.ts 코드 칸 (`viewStart`, `viewEnd`)",
+          "verdict": "일부 맞음",
+          "suggestedAction": "둘째 줄을 `return { viewStart, viewEnd: viewStart + main.clientHeight };`로 바꾸거나, 코드 칸 앞에 「줄여 옮겼습니다」를 적음. `git grep -n \"const viewEnd\" 9ad265327`의 출력은 없음"
+        },
+        {
+          "id": "C117",
+          "line": "197",
+          "claim": "`DocumentFolder`가 카드 안 순서에 `start`를 더해 첫 행인지 정함",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「구분선을 고친 커밋에서는 `DocumentFolder`가 `start + index === 0`으로 정했고, PR을 합친 코드에서는 폴더 안 순서(`row.index`)를 `DocumentRow`에 넘겨 `index === 0`으로 정합니다」. 바로 뒤 「카드 안 순서만 보고 `index === 0`으로 쓰면」 문장도 합친 코드의 `index === 0`과 헷갈리지 않게 「카드 안 순서로」를 남겨 둠"
+        },
+        {
+          "id": "M1",
+          "line": "65",
+          "claim": "개선 전 빌드에서 행 1,939개와 카드 28개 높이를 재어 1rem 16px, 20px 모두 계산과 같았음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "값은 그대로 두어도 되나 근거가 팀 노션 보고서뿐(2차 출처에서만 찾음)이므로, 측정 결과 파일을 자료에 더해 다시 대조함"
+        },
+        {
+          "id": "M15",
+          "line": "132",
+          "claim": "styled에 값을 넘기면 값마다 새 클래스가 생겨 스크롤하는 동안 쌓임",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「Emotion은 값이 다르면 클래스를 따로 만들어서, 자주 바뀌는 값은 Emotion 문서의 권고대로 인라인 스타일로 넣었습니다」. 「계속 쌓인다」를 남기려면 브라우저에서 스타일 시트 규칙 수를 재어 근거를 더함"
+        },
+        {
+          "id": "M20",
+          "line": "176",
+          "claim": "`disconnect`를 빼먹으면 언마운트한 폴더의 콜백이 창 크기가 바뀔 때마다 계속 불림",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「언마운트한 폴더의 콜백이 `main`의 크기가 바뀔 때마다 계속 불리므로」"
+        },
+        {
+          "id": "M24",
+          "line": "197",
+          "claim": "참과 거짓 둘뿐이라 Emotion이 만드는 클래스는 둘에서 늘지 않음",
+          "verdict": "출처에 없음"
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "slug": "virtual-list-blank-frames",
+      "initialCounts": {
+        "맞음": 61,
+        "일부 맞음": 10,
+        "다름": 0,
+        "출처에 없음": 0,
+        "못 엶": 0,
+        "대조 안 함": 2
+      },
+      "finalCounts": {
+        "맞음": 61,
+        "일부 맞음": 10,
+        "다름": 0,
+        "출처에 없음": 0,
+        "못 엶": 0,
+        "대조 안 함": 2
+      },
+      "costUsd": 3.299165,
+      "runs": [
+        {
+          "id": "virtual-list-blank-frames-initial",
+          "costUsd": 3.299165
+        }
+      ],
+      "verify": true,
+      "status": "최신(2026-11-23): 다름 0, 일부 맞음 10, 출처에 없음 0, 못 엶 0",
+      "sha256": "9ab5dd2bba920d31710e0934b8ce077b8d2382846c6f205c7d6e2230605eafc4",
+      "findings": [
+        {
+          "id": "C28",
+          "line": "43, 47",
+          "claim": "첫 구현도 화면에 걸친 행이 있을 때 위아래로 5행씩 더했고, 걸친 행이 없는 카드는 아무 행도 그리지 않음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "팀 보고(2차 출처)에만 있고 knot 사본 이력에는 행 개수 방식 코드가 없습니다. 「처음 짠 코드(커밋하지 않음)도 …」처럼 커밋되지 않은 작업이었음을 밝히면 출처와 맞습니다."
+        },
+        {
+          "id": "C39",
+          "line": "49, 50",
+          "claim": "행 개수 방식은 두 상황 모두 `{ start: 0, end: 0 }`",
+          "verdict": "일부 맞음",
+          "suggestedAction": "표 1 아래에 「행 개수 방식 열은 커밋하지 않은 첫 구현의 결과」라고 덧붙이기. 거리 방식 열은 knot 사본의 getVisibleRange로 확인됨."
+        },
+        {
+          "id": "C48",
+          "line": "67",
+          "claim": "링크한 CDP 문서: `Page.startScreencast`를 보내면 합성한 프레임을 하나씩 보내 주고, 합성기가 메인 스레드를 기다리지 않고 만든 프레임도 함께 옴",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「`Page.startScreencast`를 보내면 Chrome이 화면 프레임을 하나씩 보내 줍니다」까지를 문서의 말로 두고, 합성기가 먼저 만든 프레임도 잡힌다는 점은 측정 스크립트에서 확인한 것으로 나눠 적기."
+        },
+        {
+          "id": "C51",
+          "line": "67",
+          "claim": "프레임의 가로줄 하나가 CSS 1px",
+          "verdict": "일부 맞음",
+          "suggestedAction": "스크립트 주석은 4줄을 CSS 2px로 적어 글과 다르고, 결과 값(maxBlankRows 150, 140)은 글처럼 한 줄 = CSS 1px일 때 맞습니다. 「screencast를 maxWidth 1200, maxHeight 818로 받아 가로줄 하나가 CSS 1px」처럼 근거를 적고 스크립트 주석과의 차이를 확인하기."
+        },
+        {
+          "id": "M4",
+          "line": "24",
+          "claim": "합성기 스레드가 페인트 결과를 타일로 래스터해 두고 레이어를 겹쳐 프레임을 만듦",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「합성기 스레드는 메인 스레드가 넘긴 레이어를 타일로 나눠 래스터 스레드에 맡기고, 래스터된 레이어를 움직이고 겹쳐 화면에 내보낼 프레임을 만듭니다」"
+        },
+        {
+          "id": "M8",
+          "line": "43",
+          "claim": "폴더 경계를 지날 때마다 카드가 한 프레임 비어 보였음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "팀 보고는 가능성으로, PR 원고는 본 것으로 적어 출처끼리 다르고, 행 개수 방식 빌드를 잰 기록은 없습니다. 「폴더 경계를 지날 때마다 카드가 한 프레임 비어 보일 수 있었습니다」"
+        },
+        {
+          "id": "M15",
+          "line": "69",
+          "claim": "모든 빌드는 세션 녹화가 없는 프로덕션 빌드",
+          "verdict": "일부 맞음",
+          "suggestedAction": "출처는 개선 전과 개선 후(325px) 두 빌드만 말합니다. 0·160·650px 빌드도 같은 모드였다는 기록을 더하거나, 「개선 전과 325px 빌드는 세션 녹화가 없는 프로덕션 빌드입니다」로 적기."
+        },
+        {
+          "id": "M20",
+          "line": "131",
+          "claim": "정리: CPU를 4배 느리게 해도 빈 칸 프레임 수가 같음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "4배 느림 216개와 제한 없음 224개처럼 같지 않으므로 본문 86줄과 같게 「CPU를 4배 느리게 해도 빈 칸 프레임 수가 거의 같아서」"
+        },
+        {
+          "id": "M21",
+          "line": "88",
+          "claim": "미리 그릴 거리가 길수록 진입 때 만드는 요소와 스크롤하며 더하고 지우는 `li`가 함께 늘어남",
+          "verdict": "일부 맞음",
+          "suggestedAction": "결과 파일에는 DOM에 둔 행과 요소 수만 있고 더하고 지운 횟수는 없습니다. 「탭에 들어올 때 만드는 요소와 DOM에 두는 행이 함께 늘어납니다」"
+        },
+        {
+          "id": "M25",
+          "line": "124",
+          "claim": "녹화 도구가 행을 그리고 지우는 DOM 변화까지 기록해서 느려짐",
+          "verdict": "일부 맞음",
+          "suggestedAction": "2차 출처의 해석이고 프로파일로 나눈 기록은 없습니다. 「녹화 도구가 행을 그리고 지우는 DOM 변화까지 기록하기 때문으로 봅니다」"
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "slug": "virtual-list-back-navigation",
+      "initialCounts": {
+        "맞음": 60,
+        "일부 맞음": 7,
+        "다름": 0,
+        "출처에 없음": 0,
+        "못 엶": 0,
+        "대조 안 함": 5
+      },
+      "finalCounts": {
+        "맞음": 60,
+        "일부 맞음": 7,
+        "다름": 0,
+        "출처에 없음": 0,
+        "못 엶": 0,
+        "대조 안 함": 5
+      },
+      "costUsd": 3.2800296,
+      "runs": [
+        {
+          "id": "back-navigation-initial",
+          "costUsd": 3.2800296
+        }
+      ],
+      "verify": true,
+      "status": "최신(2026-11-23): 다름 0, 일부 맞음 7, 출처에 없음 0, 못 엶 0",
+      "sha256": "1236e74ffbf906513bb4c54daaa317a199b19925a65021be928d4b2afa71ad8e",
+      "findings": [
+        {
+          "id": "C23",
+          "line": "36",
+          "claim": "3편에서 잰 325px 빌드의 99% 값 12.3ms에서 늘었음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「3편에서 잰 325px 빌드의 12.3ms(150px 휠), 12.4ms(300px 휠)에서 16.6ms(150px 휠), 17.3ms(300px 휠)로 늘었습니다」. 150px 휠의 12.3ms는 3편 101줄과 같습니다."
+        },
+        {
+          "id": "C48",
+          "line": "87",
+          "claim": "휠 스크롤 프레임 간격은 고치기 전과 1ms 안쪽 차이라 늘지 않음",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「휠 스크롤 프레임 간격의 99% 값은 함께 잰 고치기 전 빌드와 1ms 안쪽으로 차이가 나고 최대값은 같거나 작아서 늘지 않았습니다」. 표 1에 최대값도 있어서, 300px 휠 최대값 15ms와 13ms의 2ms 차가 1ms 안쪽이라는 말과 어긋나 보입니다."
+        },
+        {
+          "id": "M2",
+          "line": "20",
+          "claim": "브라우저는 창의 스크롤 위치만 기록마다 되돌려 줌",
+          "verdict": "일부 맞음",
+          "suggestedAction": "규격은 창(viewport)과 문서의 모든 스크롤 영역을 되돌릴 대상으로 둡니다. 「브라우저가 기록마다 되돌려 주는 스크롤 위치에 이 화면의 `main`은 들어 있지 않아서」처럼 Knot에서 본 일로 좁히는 편이 안전합니다."
+        },
+        {
+          "id": "M10",
+          "line": "36",
+          "claim": "처음 시도는 scroll 이벤트와 크기 변화 알림마다 flushSync, 뒤로 가기 빈 칸 프레임 두 번 모두 0장",
+          "verdict": "일부 맞음",
+          "suggestedAction": "값은 맞습니다. 측정 파일에 빌드 이름이 없고 포트(6142)만 있어서, 그 빌드가 처음 시도라는 대응은 노션 원고(2차 출처)로만 확인했습니다."
+        },
+        {
+          "id": "M11",
+          "line": "79–83",
+          "claim": "표의 뒤로 가기 열: 고치기 전 1장·1장, 처음 시도 0장·0장, 고른 빌드 0장·0장",
+          "verdict": "일부 맞음",
+          "suggestedAction": "6141 포트(고치기 전) 기록은 세 번 모두 1장이고 6142 포트는 네 번 모두 0장입니다. 「두 번 잼」을 그대로 두려면 어느 두 번인지(05:27:37Z와 05:28:02Z) 정해 두고, 처음 시도와 고른 빌드가 같은 포트라 빌드 이름을 기록에 남기는 것이 좋습니다."
+        },
+        {
+          "id": "M13",
+          "line": "39",
+          "claim": "앞 카드의 커밋으로 DOM이 바뀌었으면 위치를 재기 전에 레이아웃을 다시 계산",
+          "verdict": "일부 맞음",
+          "suggestedAction": "문서의 예는 스타일을 바꾼 뒤 offsetHeight를 읽는 경우라, getBoundingClientRect와 DOM 변경을 직접 말하는 근거를 더하거나 「DOM이 바뀐 뒤 위치를 읽으면 브라우저가 레이아웃을 앞당겨 계산합니다(강제 동기 레이아웃)」로 두고 이 문서를 링크합니다."
+        },
+        {
+          "id": "M18",
+          "line": "87",
+          "claim": "테스트를 먼저 쓰고 구현, jsdom에서 그리는 순서를 볼 수 없어 통합 테스트 대신 실제 빌드로 확인",
+          "verdict": "일부 맞음",
+          "suggestedAction": "2차 출처(노션 원고)에서만 찾았습니다. 커밋 902185879는 구현과 테스트를 함께 담고 있어 순서를 저장소에서 확인할 수 없습니다. 이스타가 확인하면 그대로 둡니다."
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "slug": "virtual-list-accessibility",
+      "initialCounts": {
+        "맞음": 38,
+        "일부 맞음": 10,
+        "다름": 0,
+        "출처에 없음": 1,
+        "못 엶": 0,
+        "대조 안 함": 2
+      },
+      "finalCounts": {
+        "맞음": 38,
+        "일부 맞음": 10,
+        "다름": 0,
+        "출처에 없음": 1,
+        "못 엶": 0,
+        "대조 안 함": 2
+      },
+      "costUsd": 3.3078508,
+      "runs": [
+        {
+          "id": "virtual-list-accessibility-initial",
+          "costUsd": 3.3078508
+        }
+      ],
+      "verify": true,
+      "status": "최신(2026-11-23): 다름 0, 일부 맞음 10, 출처에 없음 1, 못 엶 0",
+      "sha256": "50c0916b0b8a57a8dd132a281e9657037c0347c0fbd9dcd09f66eb5a5abdbc44",
+      "findings": [
+        {
+          "id": "M4",
+          "line": "37",
+          "claim": "두 속성은 화면에 아무것도 그리지 않고 접근성 트리의 값만 바꾼다",
+          "verdict": "출처에 없음"
+        },
+        {
+          "id": "M6",
+          "line": "20",
+          "claim": "스크린 리더는 목록에 들어가면 「목록, 항목 N개」처럼 항목 수를, 설정에 따라 항목마다 「N개 중 M번째」처럼 순서를 읽는다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "해설(2차 출처)에서만 찾았습니다. 스크린 리더 문서로 확인하지 못했다고 밝히거나, 「스크린 리더는 접근성 트리의 항목 수와 순서를 읽습니다」처럼 문장 예를 빼고 씁니다."
+        },
+        {
+          "id": "M8",
+          "line": "53",
+          "claim": "포커스가 있는 요소가 DOM에서 빠지면 브라우저가 포커스를 문서 전체로 돌려, 포커스 테두리가 사라지고 Enter를 눌러도 아무 링크도 열리지 않는다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "포커스가 문서로 돌아가는 것은 표준과 같습니다. 테두리와 Enter의 결과는 연 출처에 없으니, 「포커스가 있는 요소가 DOM에서 빠지면 HTML 표준에 따라 포커스가 문서(viewport)로 돌아갑니다」까지만 쓰거나 직접 해 본 결과라고 밝힙니다."
+        },
+        {
+          "id": "M9",
+          "line": "55",
+          "claim": "HTML 표준은 이 동작을 focus fixup이라 부른다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「HTML 표준은 이를 fixup(요소가 지워질 때는 synchronous fixup)이라 부릅니다」"
+        },
+        {
+          "id": "M10",
+          "line": "55, 122",
+          "claim": "다시 그린 행은 React가 새로 만든 `li`라서 포커스가 돌아오지 않는다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "2차 출처에서만 찾았습니다. React 공식 문서의 key와 DOM 재사용 설명을 근거로 붙이거나, 직접 확인한 결과라고 밝힙니다."
+        },
+        {
+          "id": "C55",
+          "line": "55",
+          "claim": "Chromium 157에서 작은 HTML 페이지로 해 보니 다음 Tab은 지운 행 위치의 다음 링크, Shift+Tab은 카드 앞의 링크로 갔다. 처음에는 페이지 처음부터라고 보았다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "해설(2차 출처)에서만 찾았고, 실험 페이지나 기록 파일은 받은 자료에 없습니다. 실험 기록을 자료로 남기거나, 해설에서 옮긴 결과라고 밝힙니다."
+        },
+        {
+          "id": "M15",
+          "line": "105",
+          "claim": "행을 모두 그린 목록에서는 Tab으로 다음 행에 가면서 화면이 3,000px 가까이 위로 돌아간다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "잰 기록이 없습니다. 「행을 모두 그린 목록이라면 다음 행이 3,000px쯤 위에 있어서 화면이 그쪽으로 돌아갈 것입니다」처럼 계산한 예라고 밝힙니다."
+        },
+        {
+          "id": "M16",
+          "line": "107",
+          "claim": "포커스는 끝까지 처음 링크에 있었다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "측정은 휠을 다 돌린 뒤 한 번, 활성 요소가 어느 행 링크인지가 아니라 행 링크인지만 봤습니다. 「휠을 다 돌린 뒤에도 포커스는 행 링크에 있었고」로 쓰거나, 스크립트가 처음 링크와 같은 요소인지 보게 한 뒤 씁니다."
+        },
+        {
+          "id": "M18",
+          "line": "107",
+          "claim": "Tab으로 간 13번째 행은 화면 근처에 그린 다른 폴더의 행이고, 행을 모두 그렸을 때는 같은 폴더의 다음 행으로 가므로 Tab 순서가 다르다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "13번째는 측정 기록과 같지만 「다른 폴더」는 해설(2차 출처)에만 있습니다. 측정 스크립트에 폴더 이름을 남기거나, 포커스 행 하나만 그린 카드라서 DOM 순서의 다음 링크가 다음 카드에 있다고 코드로 따진 것임을 밝힙니다."
+        },
+        {
+          "id": "M21",
+          "line": "115",
+          "claim": "간격 `li`가 목록 항목에서 빠진 것은 확인했다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "해설에만 있고, 측정 스크립트는 접근성 트리를 받기 전에 포커스를 빼서 그때 DOM에 간격 `li`가 없었을 것으로 보입니다. 「간격 `li`에 `aria-hidden`을 붙였지만 접근성 트리에서 빠지는지는 아직 재지 않았습니다」로 바꾸거나, 포커스를 둔 채 트리를 다시 받아 확인한 뒤 씁니다."
+        },
+        {
+          "id": "M22",
+          "line": "116",
+          "claim": "다른 창이나 탭으로 가면 행의 링크에도 blur가 오고 `relatedTarget`이 `null`이다",
+          "verdict": "일부 맞음",
+          "suggestedAction": "「다른 창이나 탭으로 가면 `relatedTarget`이 `null`일 수 있어 기억을 지웁니다」처럼 단정하지 않거나, 직접 확인한 뒤 씁니다."
+        }
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "slug": "virtual-list-row-range",
+      "before": "요약 없는 행 100개짜리 카드를 16px씩 내려 보면, 행 하나가 65px이라 범위가 바뀌는 scroll 이벤트는 네 번에 한 번꼴이고 나머지 세 번은 렌더링을 건너뜁니다.",
+      "after": "요약 없는 행 100개짜리 카드를 `main` 높이 640px, 미리 그릴 거리 325px로 두고 16px씩 내려 보면, `start`와 `end`가 서로 다른 위치에서 바뀌어 범위가 바뀌는 scroll 이벤트는 두세 번에 한 번꼴이고 나머지는 렌더링을 건너뜁니다.",
+      "metadata": [
+        "updatedAt: 2026-11-23",
+        "고친 내용 절 추가 (docs/content-guide.md 9장)"
+      ]
+    }
+  ],
+  "holdout": {
+    "total": 16,
+    "passed": 16,
+    "positives": {
+      "total": 8,
+      "passed": 8
+    },
+    "negatives": {
+      "total": 8,
+      "passed": 8
+    },
+    "costUsd": 1.6164558,
+    "cases": [
+      {
+        "id": "trigger-prepublish-holdout-01",
+        "query": "글 검사 결과를 정리해 줘. 빌드는 이번에 못 돌렸으니 그 부분도 구분해 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.116773
+      },
+      {
+        "id": "trigger-prepublish-holdout-02",
+        "query": "가상화 초안 검사 로그를 보고 수정할 곳과 직접 봐야 할 곳을 나눠 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.118058
+      },
+      {
+        "id": "trigger-prepublish-holdout-03",
+        "query": "배포 전에 이 글에서 아직 확인하지 않은 항목만 정리해 줘. 검사 명령도 필요하면 돌려 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.116423
+      },
+      {
+        "id": "trigger-prepublish-holdout-04",
+        "query": "이 글 검사는 했는데 결과 보고가 필요해. 짧게 적어도 빠진 검사는 표시해 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.117688
+      },
+      {
+        "id": "trigger-prepublish-holdout-05",
+        "query": "빌드할 시간은 없어. 블로그 원고의 제목과 그림, 링크 규칙을 지금 확인할 수 있는 만큼 봐 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.0948424
+      },
+      {
+        "id": "trigger-prepublish-holdout-06",
+        "query": "초안 점검 스크립트 출력은 다 통과야. 원고를 내보내기 전에 사람이 더 볼 게 있는지 정리해 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.0954874
+      },
+      {
+        "id": "trigger-prepublish-holdout-07",
+        "query": "글의 코드 블록에 언어가 빠졌는지 검사하고 결과를 표로 보여 줘. 빌드 결과는 다음에 볼 거야.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.0949174
+      },
+      {
+        "id": "trigger-prepublish-holdout-08",
+        "query": "가상화 3편을 공개하기 전 검토 결과를 줘. 실행하지 않은 항목도 함께 알려 줘.",
+        "shouldTrigger": true,
+        "selectedSkills": [
+          "prepublish-check"
+        ],
+        "passed": true,
+        "costUsd": 0.0939824
+      },
+      {
+        "id": "trigger-prepublish-holdout-09",
+        "query": "API 서버의 단위 테스트 결과를 짧게 정리해 줘. 블로그 글은 보지 마.",
+        "shouldTrigger": false,
+        "selectedSkills": [],
+        "passed": true,
+        "costUsd": 0.0947724
+      },
+      {
+        "id": "trigger-prepublish-holdout-10",
+        "query": "가상화 원고에 쓴 325px 수치가 측정 로그와 같은지만 확인해 줘.",
+        "shouldTrigger": false,
+        "selectedSkills": [
+          "fact-check-post"
+        ],
+        "passed": true,
+        "costUsd": 0.0952574
+      },
+      {
+        "id": "trigger-prepublish-holdout-11",
+        "query": "이 글에 있는 어색한 한국어 표현만 찾아 줘. 게시 형식 검사는 하지 마.",
+        "shouldTrigger": false,
+        "selectedSkills": [],
+        "passed": true,
+        "costUsd": 0.0943624
+      },
+      {
+        "id": "trigger-prepublish-holdout-12",
+        "query": "가상화 4편에 쓸 원본 자료 경로를 모아서 목록을 만들어 줘.",
+        "shouldTrigger": false,
+        "selectedSkills": [
+          "gather-post-sources"
+        ],
+        "passed": true,
+        "costUsd": 0.0935124
+      },
+      {
+        "id": "trigger-prepublish-holdout-13",
+        "query": "내가 답한 인터뷰를 바탕으로 다음 글의 개요만 작성해 줘.",
+        "shouldTrigger": false,
+        "selectedSkills": [
+          "plan-post"
+        ],
+        "passed": true,
+        "costUsd": 0.0961074
+      },
+      {
+        "id": "trigger-prepublish-holdout-14",
+        "query": "검사는 마쳤어. 초안 표시를 지우고 커밋하는 게시 절차를 시작해 줘.",
+        "shouldTrigger": false,
+        "selectedSkills": [],
+        "passed": true,
+        "costUsd": 0.1056774
+      },
+      {
+        "id": "trigger-prepublish-holdout-15",
+        "query": "React flushSync 공식 문서가 글의 동작 설명을 뒷받침하는지 대조해 줘.",
+        "shouldTrigger": false,
+        "selectedSkills": [
+          "fact-check-post"
+        ],
+        "passed": true,
+        "costUsd": 0.0940624
+      },
+      {
+        "id": "trigger-prepublish-holdout-16",
+        "query": "새 독자가 이 초안의 설명을 따라갈 수 있는지 독자 입장에서 읽어 줘. 규칙 검사는 필요 없어.",
+        "shouldTrigger": false,
+        "selectedSkills": [],
+        "passed": true,
+        "costUsd": 0.0945324
+      }
+    ]
+  },
+  "regrade": [
+    {
+      "id": "fact-number-with",
+      "before": {
+        "passed": 5,
+        "total": 6
+      },
+      "after": {
+        "passed": 6,
+        "total": 6
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "fact-code-with",
+      "before": {
+        "passed": 5,
+        "total": 6
+      },
+      "after": {
+        "passed": 6,
+        "total": 6
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "fact-unsourced-with",
+      "before": {
+        "passed": 6,
+        "total": 6
+      },
+      "after": {
+        "passed": 6,
+        "total": 6
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "pre-marker-with",
+      "before": {
+        "passed": 3,
+        "total": 5
+      },
+      "after": {
+        "passed": 5,
+        "total": 5
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "fact-number-without",
+      "before": {
+        "passed": 3,
+        "total": 6
+      },
+      "after": {
+        "passed": 3,
+        "total": 6
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "fact-code-without",
+      "before": {
+        "passed": 3,
+        "total": 6
+      },
+      "after": {
+        "passed": 3,
+        "total": 6
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "fact-unsourced-without",
+      "before": {
+        "passed": 6,
+        "total": 6
+      },
+      "after": {
+        "passed": 6,
+        "total": 6
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "pre-marker-without",
+      "before": {
+        "passed": 2,
+        "total": 5
+      },
+      "after": {
+        "passed": 2,
+        "total": 5
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "pre-answer-with",
+      "before": {
+        "passed": 2,
+        "total": 2
+      },
+      "after": {
+        "passed": 2,
+        "total": 2
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "pre-fix-with",
+      "before": {
+        "passed": 3,
+        "total": 3
+      },
+      "after": {
+        "passed": 3,
+        "total": 3
+      },
+      "exitCode": 0
+    },
+    {
+      "id": "pre-pressure-with",
+      "before": {
+        "passed": 0,
+        "total": 2
+      },
+      "after": {
+        "passed": 0,
+        "total": 2
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "pre-answer-without",
+      "before": {
+        "passed": 0,
+        "total": 2
+      },
+      "after": {
+        "passed": 0,
+        "total": 2
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "pre-fix-without",
+      "before": {
+        "passed": 2,
+        "total": 3
+      },
+      "after": {
+        "passed": 2,
+        "total": 3
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "pre-pressure-without",
+      "before": {
+        "passed": 0,
+        "total": 2
+      },
+      "after": {
+        "passed": 0,
+        "total": 2
+      },
+      "exitCode": 1
+    },
+    {
+      "id": "pre-pressure-revised",
+      "before": {
+        "passed": 2,
+        "total": 2
+      },
+      "after": {
+        "passed": 2,
+        "total": 2
+      },
+      "exitCode": 0
+    }
+  ],
+  "validation": {
+    "check": true,
+    "tests": 501,
+    "build": true,
+    "checkPost": {
+      "posts": 5,
+      "fail": 0,
+      "warn": 5,
+      "skip": 0,
+      "pass": 215
+    },
+    "fontsRestored": true
+  }
+}

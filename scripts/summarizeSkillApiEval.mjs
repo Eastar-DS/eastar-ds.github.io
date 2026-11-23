@@ -29,8 +29,8 @@ const comparisons = runs.filter((r) => r.category !== "trigger").map((r) => {
     selected: r.selectedSkills, disabledSkillAbsent: r.disabledSkillAbsent,
     ...(existsSync(gradeFile) ? { grade: readJson(gradeFile) } : {}) };
 });
-const summary = { model: spend.model, total_cost_usd: spend.total_cost_usd, remainingToStop: 55 - spend.total_cost_usd,
-  remainingToHardLimit: 60 - spend.total_cost_usd, runs: runs.length, pending: spend.runs.length - runs.length,
+const summary = { model: spend.model, total_cost_usd: spend.total_cost_usd, remainingToStop: (spend.stop_new_runs_usd ?? 55) - spend.total_cost_usd,
+  remainingToHardLimit: (spend.hard_limit_usd ?? 60) - spend.total_cost_usd, runs: runs.length, pending: spend.runs.length - runs.length,
   auth: { apiKeySource: [...new Set(runs.map((r) => r.apiKeySource))], models: [...new Set(runs.map((r) => r.actualModel))],
     allMcpEmpty: runs.every((r) => r.mcpServers?.length === 0), allSettled: spend.runs.every((r) => r.status === "complete") },
   usage: Object.fromEntries(["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"].map((key) => [key, runs.reduce((n, r) => n + (r.usage?.[key] ?? 0), 0)])),

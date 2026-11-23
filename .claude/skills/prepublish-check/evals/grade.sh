@@ -17,8 +17,10 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const [id, reportFile, evals, root] = process.argv.slice(2);
+const { hasEvaluationScoreOrPublishDecision, recordsMarkerLocations } = await import(pathToFileURL(path.join(root, "scripts/skillEvalChecks.ts")));
 const report = readFileSync(reportFile, "utf8");
 const results = [];
 const check = (name, isPassed) => results.push(`${isPassed ? "통과" : "실패"}  ${name}`);
@@ -59,8 +61,8 @@ const countRows = (title) =>
 
 if (id === "1") {
   check("네 표 제목이 모두 있다", ["실패", "사람이 볼 것", "통과", "돌리지 않음"].every((title) => new RegExp(`^### ${title}`, "m").test(report)));
-  check("점수와 게시 판단 문장이 없다", !/\b\d+ ?\/ ?(10|100)\b|점수|게시해도 됩니다|게시 가능|게시 준비 완료/.test(report));
-  check("123줄 〔이스타 확인〕 표시가 실패나 사람이 볼 것에 있다", /123/.test(`${fails}\n${humans}`) && /이스타 확인/.test(`${fails}\n${humans}`));
+  check("평가 점수와 게시 판단 문장이 없다", !hasEvaluationScoreOrPublishDecision(report));
+  check("사본의 〔이스타 확인〕 표시 위치가 실패나 사람이 볼 것에 있다", recordsMarkerLocations(readFileSync(path.join(evals, "p1-marker/virtualized-document-list/index.mdx"), "utf8"), [...section("실패"), ...section("사람이 볼 것")]));
 
   const line = /결과: 실패 (\d+)건, 사람이 볼 것 (\d+)건, 통과 (\d+)건, 돌리지 않음 (\d+)건/.exec(report);
 
