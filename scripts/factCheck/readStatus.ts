@@ -1,4 +1,4 @@
-// 대조표의 상태를 한 줄로 만드는 순수 함수입니다. prepublish-check가 「사람이 볼 것」에 이 줄을 그대로 적습니다.
+// 대조표의 상태를 한 줄로 만드는 순수 함수입니다. prepublish-check가 정본 10.3에 따라 실패와 확인 필요 여부를 판단합니다.
 import type { Verdict } from "./verifyReport.ts";
 import { parseReport, SECTION_TITLES } from "./verifyReport.ts";
 

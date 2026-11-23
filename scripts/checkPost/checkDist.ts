@@ -177,7 +177,16 @@ const checkDraftExcluded = ({ slug, dist }: Omit<CheckDistParams, "meta">) => {
 
 /** 게시할 글의 빌드 결과를 검사합니다. 초안이면 배포 빌드에서 빠졌는지만 봅니다 */
 const checkDist = ({ slug, meta, dist }: CheckDistParams) => {
-  if (meta.draft) return checkDraftExcluded({ slug, dist });
+  // GitHub Actions는 저장소 밖 대조표를 읽을 수 없습니다. prepublish-check가 로컬 status 명령으로 별도 판정합니다.
+  const factCheck: CheckResult = {
+    id: "dist-fact-check",
+    label: "사실 대조 상태",
+    status: "skip",
+    summary: "배포 점검은 저장소 밖 대조표를 읽지 않습니다. 게시 전 로컬에서 factCheck.ts status로 확인합니다",
+    findings: [],
+    basis: "docs/content-guide.md 10.3, 12장",
+  };
+  if (meta.draft) return [factCheck, ...checkDraftExcluded({ slug, dist })];
 
   const pagePath = `posts/${slug}/index.html`;
   const html = dist.readText(pagePath);
@@ -185,6 +194,7 @@ const checkDist = ({ slug, meta, dist }: CheckDistParams) => {
 
   if (html === undefined) {
     return [
+      factCheck,
       result({
         id: "dist-page",
         label: "글 페이지",
@@ -206,6 +216,7 @@ const checkDist = ({ slug, meta, dist }: CheckDistParams) => {
     actual?.trim() ? [] : [{ message: `${name}가 없습니다` }];
 
   const results: CheckResult[] = [
+    factCheck,
     result({
       id: "dist-page",
       label: "글 페이지",

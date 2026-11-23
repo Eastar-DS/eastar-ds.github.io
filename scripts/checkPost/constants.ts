@@ -160,6 +160,7 @@ export const CHECK_SECTIONS: Record<string, string> = {
   "series-order": "8.2",
   "private-info": "11장",
   "writing-style": "머리말",
+  "dist-fact-check": "10.3",
   "dist-page": "10.6",
   "dist-meta": "10.6",
   "dist-og": "10.6",

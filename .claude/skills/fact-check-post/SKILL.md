@@ -63,7 +63,7 @@ allowed-tools: Read, Grep, Glob, Bash(node scripts/factCheck.ts *), Bash(node sc
 
 Paseo 도구를 쓰는 법은 paseo 스킬에 있습니다.
 
-1. `mcp__paseo__list_profiles`에서 `research` 프로필(Opus)을 찾습니다. 없으면 다른 프로필로 바꾸지 않고 부른 쪽에 알립니다.
+1. `mcp__paseo__list_profiles`에서 기본인 Codex `codex-work` 프로필(`gpt-6.1-sol`)을 찾습니다. Claude가 쓴 글을 다른 모델로 대조하면 글쓴이의 판단에 덜 의존하며, Claude 사용량도 줄일 수 있습니다. `research` 프로필(Opus)은 부른 쪽이 지정했을 때의 대안입니다. 요청한 프로필이 없으면 임의로 바꾸지 않고 부른 쪽에 알립니다.
 2. 고른 프로필의 값(provider, model, modeId, thinkingOptionId, featureValues)을 `mcp__paseo__create_agent`에 그대로 넣습니다. 모델과 추론 단계를 낮추지 않습니다.
 3. `labels`에 `profile`(프로필 id), `skill`(`fact-check-post`), `post`(slug)를 넣고, `title`은 「사실 대조: {slug}」로 씁니다.
 4. `initialPrompt`는 [agents/checker.md](agents/checker.md) 끝에 있는 지시문 틀에 경로만 채워 씁니다.

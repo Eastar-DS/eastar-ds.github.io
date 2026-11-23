@@ -97,7 +97,9 @@ describe("checkDist: 게시할 글", () => {
   it("메타, 구조화 데이터, 그림, 피드, 링크가 맞으면 모두 통과한다", () => {
     const results = checkDist({ slug: SLUG, meta: META, dist: createDist(goodFiles()) });
 
-    expect(results.filter((result) => result.status !== "pass")).toEqual([]);
+    expect(results.filter((result) => result.status !== "pass")).toEqual([
+      expect.objectContaining({ id: "dist-fact-check", status: "skip", basis: "docs/content-guide.md 10.3, 12장" }),
+    ]);
     expect(results.find((result) => result.id === "dist-js")?.summary).toMatch(/^0\.\dKB \/ 예산 5\.0KB \(데모 없음\)$/);
   });
 
@@ -134,7 +136,7 @@ describe("checkDist: 게시할 글", () => {
   it("글 페이지가 없으면 그 실패 하나만 낸다", () => {
     const { [`posts/${SLUG}/index.html`]: _page, ...files } = goodFiles();
 
-    expect(statusOf(checkDist({ slug: SLUG, meta: META, dist: createDist(files) }))).toEqual({ "dist-page": "fail" });
+    expect(statusOf(checkDist({ slug: SLUG, meta: META, dist: createDist(files) }))).toEqual({ "dist-fact-check": "skip", "dist-page": "fail" });
   });
 });
 
@@ -148,7 +150,7 @@ describe("checkDist: 초안", () => {
     };
     const results = checkDist({ slug: SLUG, meta: { ...META, draft: true }, dist: createDist(files) });
 
-    expect(results.filter((result) => result.status === "skip")).toHaveLength(10);
+    expect(results.filter((result) => result.status === "skip")).toHaveLength(11);
     expect(results.find((result) => result.id === "dist-draft-excluded")?.status).toBe("pass");
   });
 

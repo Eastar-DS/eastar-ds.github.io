@@ -12,6 +12,7 @@
  * - `node scripts/checkPost.ts --include-drafts`: 초안까지 모든 글을 검사합니다(`--all --include-drafts`와 같음).
  * - `--dist [폴더]`: 빌드 결과도 검사합니다. 폴더를 주지 않으면 저장소의 `dist`입니다. 먼저 `pnpm build`를 돌립니다.
  *   초안은 글 페이지 항목을 건너뜀(skip)으로 내고, 글이 dist, RSS, 사이트맵, llms.txt, 다른 페이지의 링크에 새지 않았는지만 봅니다.
+ *   사실 대조는 저장소 밖 대조표를 CI가 읽을 수 없어 항상 skip입니다. prepublish-check가 로컬 status로 별도 확인합니다.
  * - `--json`: 결과를 JSON으로 냅니다. 통과한 항목까지 모두 들어갑니다.
  * - `--verbose`: 사람이 읽는 표에 통과한 항목도 한 줄씩 보입니다.
  *
