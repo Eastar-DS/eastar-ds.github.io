@@ -1,0 +1,37 @@
+---
+import SeriesList from "@/modules/widgets/series/SeriesList/index.astro";
+import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
+import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import { MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
+import createPageMeta from "@/shared/seo/createPageMeta";
+import getSeriesList from "@/shared/content/getSeriesList";
+import getSwitchPagePaths from "@/shared/routes/getSwitchPagePaths";
+
+/** 공개한 편이 있는 시리즈 목록을 본문 폭으로 배치합니다. */
+export const getStaticPaths = async () => getSwitchPagePaths((await getSeriesList()).length > 0);
+const meta = createPageMeta({ title: "시리즈", description: "같은 주제로 이어지는 글을 시리즈별로 읽습니다.", path: PATHS.series });
+---
+
+<Document meta={meta}>
+  <SiteHeader />
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
+    <Container size="content">
+      <SeriesList />
+    </Container>
+  </main>
+  <SiteFooter />
+</Document>
+
+<style>
+  .main {
+    padding-block: var(--space-10) var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .main {
+      padding-block: var(--space-18) var(--space-24);
+    }
+  }
+</style>

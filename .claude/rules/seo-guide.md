@@ -11,7 +11,7 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 ## 페이지마다 지킬 것
 
 - `<html lang="ko">`는 `Document`가 넣음
-- **h1은 페이지마다 하나.** 글 화면은 `PostHeader`(글 머리), 글 목록은 `SiteIntro`, 소개는 `AboutProfile`, 이력서는 `Resume`(이름 「이스타(김동성)」), 포트폴리오는 `Portfolio`, 개인정보 처리 안내는 `PrivacyNotice`, 404는 `NotFoundMessage`(「찾는 글이 없습니다」)가 가짐. 머리말의 사이트 이름은 h1이 아님
+- **h1은 페이지마다 하나.** 글 화면은 `PostHeader`(글 머리), 글 목록은 `SiteIntro`, 시리즈는 `SeriesOverview`와 `SeriesList`, 소개는 `AboutProfile`, 이력서는 `Resume`(이름 「이스타(김동성)」), 포트폴리오는 `Portfolio`, 개인정보 처리 안내는 `PrivacyNotice`, 404는 `NotFoundMessage`(「찾는 글이 없습니다」)가 가짐. 머리말의 사이트 이름은 h1이 아님
 - 본문 제목(h2, h3)에는 앵커를 붙임. `AnchorHeading`이 제목 뒤에 링크 아이콘을 둠(올리거나 포커스할 때만 보임). 링크 이름은 「「제목」 절의 주소」이고, 화면 낭독기가 역할 「링크」를 따로 읽으므로 이름에 「링크」를 넣지 않음
 - 모든 페이지는 `shared/seo/createPageMeta`로 메타를 만들어 `Document`에 넘김. `Document`가 title, description, canonical, og, twitter 메타를 그림
   - `<title>`은 「페이지 제목 · 사이트 이름」, og:title과 twitter:title은 페이지 제목만 씀(`docs/content-guide.md` 2.1). 사이트 이름은 og:site_name이 알림
@@ -40,7 +40,7 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 | 페이지 | 넣는 것 | 만드는 함수 |
 | --- | --- | --- |
 | 글 화면 | BlogPosting (제목, 요약, 작성자 Person, 발행일, 수정일, 주소, 공유 그림 `image`) | `createBlogPostingJsonLd(post)` |
-| 글 화면 | BreadcrumbList (사이트 → 글) | `createBreadcrumbListJsonLd([...])` |
+| 글 화면 | BreadcrumbList (시리즈 글은 사이트 → 시리즈 → 글, 그 밖에는 사이트 → 글) | `createBreadcrumbListJsonLd([...])` |
 | 첫 화면 | WebSite (사이트 이름, 첫 화면 주소). Google이 검색 결과의 사이트 이름으로 읽으며 첫 화면에만 둠 | `createWebSiteJsonLd()` |
 | 소개 | ProfilePage (소개하는 사람 mainEntity = 글쓴이 Person, 소개를 고친 날 dateModified) | `createProfilePageJsonLd()` |
 
@@ -72,7 +72,7 @@ description: 검색(SEO)과 AI 답변(AEO)을 위한 메타, 구조화 데이터
 ## llms.txt
 
 - `src/pages/llms.txt.ts`(`/llms.txt`)가 `shared/seo/createLlmsTxt`로 만듦. 규격은 https://llmstxt.org v2: H1 사이트 이름 → 인용문 사이트 설명 → 읽는 법 문단 → H2 절마다 `- [이름](주소): 설명` 목록
-- 절: 「글」(최신순, 제목 · 주소 · 요약 · 분류 · 쓴 날), 「글쓴이」(소개 설명에 「이스타(김동성)」 이름 표기, 페이지가 있을 때만 포트폴리오 · 이력서), 「Optional」(RSS, 사이트맵, 개인정보 처리 안내)
+- 절: 「시리즈」(공개한 편이 있는 시리즈의 이름과 페이지 주소, 소개), 「글」(최신순, 제목 · 주소 · 요약 · 분류 · 쓴 날), 「글쓴이」(소개 설명에 「이스타(김동성)」 이름 표기, 페이지가 있을 때만 포트폴리오 · 이력서), 「Optional」(RSS, 사이트맵, 개인정보 처리 안내)
 - 모든 페이지 `<head>`에 `<link rel="describedby" href="/llms.txt">`를 둠(규격 v2의 찾게 하는 방법). robots.txt와 사이트맵에는 llms.txt를 알리는 표준 관례가 없어 적지 않음
 - llms-full.txt와 글별 `.md` 사본은 두지 않음. 글 페이지가 JavaScript 없는 정적 HTML이라 에이전트가 주소를 그대로 읽으면 됨
 - `scripts/buildFonts.ts`는 llms.txt의 글자를 사이트 글꼴에 넣지 않음(화면에 그리지 않는 글)

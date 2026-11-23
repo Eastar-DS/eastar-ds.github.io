@@ -41,7 +41,7 @@ describe("평가 재료: 가상화 1편 사본", () => {
 
     expect(marker.status).toBe("fail");
     expect(marker.summary).toBe("1개");
-    expect(marker.findings).toEqual([{ line: 53, message: "〔이스타 확인: 가상화 작업에서 배운 점이나 다음에 다르게 해 볼 점을 덧붙일지〕" }]);
+    expect(marker.findings).toEqual([{ line: 54, message: "〔이스타 확인: 가상화 작업에서 배운 점이나 다음에 다르게 해 볼 점을 덧붙일지〕" }]);
     expect(fails(results)).toEqual(["review-marker"]);
   });
 
@@ -70,7 +70,7 @@ describe("평가 재료: 가상화 1편 사본", () => {
     const links = find(check({ source }), "internal-links");
 
     expect(links.status).toBe("fail");
-    expect(links.findings).toEqual([{ line: 15, message: "/posts/no-such-post/: 없는 글입니다" }]);
+    expect(links.findings).toEqual([{ line: 16, message: "/posts/no-such-post/: 없는 글입니다" }]);
   });
 });
 
@@ -185,7 +185,7 @@ describe("코드 칸", () => {
   it("언어가 없는 칸은 실패한다", () => {
     const source = SERIES_FIRST_SOURCE.replace('```ts title="getRowOffsets.ts" {2}', "```");
 
-    expect(find(check({ source }), "code-language").findings).toEqual([{ line: 43, message: "언어가 없습니다" }]);
+    expect(find(check({ source }), "code-language").findings).toEqual([{ line: 44, message: "언어가 없습니다" }]);
   });
 
   it("61자 줄, 26줄 칸, 강조 네 줄은 실패한다", () => {
@@ -193,7 +193,7 @@ describe("코드 칸", () => {
     const manyLines = SERIES_FIRST_SOURCE.replace("offsets.push(64);", Array.from({ length: 25 }, () => "offsets.push(64);").join("\n"));
     const highlights = SERIES_FIRST_SOURCE.replace("{2}", "{1,2-4}");
 
-    expect(find(check({ source: longLine }), "code-line-length").findings).toEqual([{ line: 45, message: "61자 (상한 60자)" }]);
+    expect(find(check({ source: longLine }), "code-line-length").findings).toEqual([{ line: 46, message: "61자 (상한 60자)" }]);
     expect(find(check({ source: manyLines }), "code-block-lines").status).toBe("fail");
     expect(find(check({ source: highlights }), "code-highlight").findings[0]?.message).toBe("4줄 (상한 3줄)");
   });
@@ -233,7 +233,7 @@ describe("한글 표기", () => {
   it("문단 안에서 손으로 줄을 바꾸면 경고한다", () => {
     const source = SERIES_FIRST_SOURCE.replace("한꺼번에 만들었기 때문에", "한꺼번에\n만들었기 때문에");
 
-    expect(find(check({ source }), "hard-line-break").findings).toEqual([{ line: 20, message: "앞 줄과 같은 문단입니다" }]);
+    expect(find(check({ source }), "hard-line-break").findings).toEqual([{ line: 21, message: "앞 줄과 같은 문단입니다" }]);
   });
 
   it("네 자리 넘는 수에 쉼표가 없으면 경고하고, 연도와 쉼표 찍은 수는 넘긴다", () => {

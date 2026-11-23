@@ -11,11 +11,12 @@ export interface Post {
   series?: PostSeries;
   /** 이 글과 이어진 프로젝트 id(`shared/constants/career`). 글 끝에 포트폴리오의 프로젝트 구획으로 잇습니다 */
   projects?: string[];
-  /** 초안이면 true. 배포 빌드에서는 `getPosts`가 빼서 어디에도 나오지 않습니다 */
+  /** 초안이면 true. 배포에서 본문은 빠지며, 공개 시리즈의 편 목록에는 제목과 「준비 중」을 보입니다 */
   draft?: boolean;
 }
 
 export interface PostSeries {
+  id: string;
   name: string;
   order: number;
 }
@@ -28,8 +29,17 @@ export interface PostYearGroup {
 
 /** 시리즈 하나의 요약 */
 export interface SeriesSummary {
+  id: string;
+  description: string;
   name: string;
   count: number;
-  /** 시리즈의 첫 글. 시리즈 칩을 누르면 이 글로 갑니다 */
+  /** 시리즈의 첫 글 */
   firstPostSlug: string;
+}
+
+/** 시리즈 목록에 보일 편. 배포에서 초안이면 slug가 없어 링크를 만들 수 없습니다. */
+export interface SeriesPart {
+  title: string;
+  order: number;
+  slug?: string;
 }

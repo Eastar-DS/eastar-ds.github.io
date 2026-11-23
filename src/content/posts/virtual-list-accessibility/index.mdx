@@ -4,6 +4,7 @@ description: "화면 근처의 행만 그려도 스크린 리더가 순서와 �
 publishedAt: 2026-11-17
 category: 접근성
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 5
 projects: [knot]
@@ -12,7 +13,7 @@ draft: true
 
 import FocusedRowGapDiagram from "@/modules/features/demo/FocusedRowGapDiagram/index.astro";
 
-화면 근처의 행만 DOM에 그리면 스크린 리더는 DOM에 있는 행만 세어 폴더의 행 수와 지금 행의 순서를 잘못 읽고, 키보드로 포커스를 둔 행이 화면에서 멀어지면 행과 함께 포커스가 지워집니다. Knot 문서 탭 「주제별」 목록에서는 행마다 `aria-posinset`과 `aria-setsize`로 폴더 안 순서와 행 수를 알리고, 포커스가 있는 행은 범위 밖에서도 제자리에 그리면서 범위와의 사이를 간격 `li` 하나로 채웠습니다. 「라이브러리 없이 목록 가상화」 시리즈 5편이고, 카드에 그릴 범위를 구하는 계산은 [2편](/posts/virtual-list-row-range/)에 있습니다.
+화면 근처의 행만 DOM에 그리면 스크린 리더는 DOM에 있는 행만 세어 폴더의 행 수와 지금 행의 순서를 잘못 읽고, 키보드로 포커스를 둔 행이 화면에서 멀어지면 행과 함께 포커스가 지워집니다. Knot 문서 탭 「주제별」 목록에서는 행마다 `aria-posinset`과 `aria-setsize`로 폴더 안 순서와 행 수를 알리고, 포커스가 있는 행은 범위 밖에서도 제자리에 그리면서 범위와의 사이를 간격 `li` 하나로 채웠습니다.
 
 ## 일부만 그리면 스크린 리더는 무엇을 읽을까
 

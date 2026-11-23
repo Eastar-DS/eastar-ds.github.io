@@ -1,11 +1,12 @@
 import { SITE } from "@/shared/constants/site";
-import { getPostPath, PATHS } from "@/shared/routes/paths";
-import type { Post } from "@/shared/types/post";
+import { getPostPath, getSeriesPath, PATHS } from "@/shared/routes/paths";
+import type { Post, SeriesSummary } from "@/shared/types/post";
 import formatDate from "@/shared/utils/formatDate";
 
 interface CreateLlmsTxtParams {
   /** 최신순 글 목록 (`getPosts`) */
   posts: Post[];
+  seriesList?: SeriesSummary[];
   /** 이력서 페이지가 있는지 (`shared/constants/features`의 `IS_RESUME_SHOWN`) */
   isResumeShown: boolean;
   /** 포트폴리오 페이지가 있는지 (`shared/constants/features`의 `IS_PORTFOLIO_SHOWN`) */
@@ -40,7 +41,7 @@ const toPostNote = (post: Post) => {
  * - 「글쓴이」 절의 소개 설명에는 이력서 머리와 같은 이름 표기(`SITE.author.displayName`, 「이스타(김동성)」)를 씁니다.
  * - 이력서와 포트폴리오는 페이지가 있을 때만 넣고, RSS와 사이트맵 같은 보조 링크는 규격의 관례대로 「Optional」 절에 둡니다.
  */
-const createLlmsTxt = ({ posts, isResumeShown, isPortfolioShown }: CreateLlmsTxtParams) => {
+const createLlmsTxt = ({ posts, seriesList = [], isResumeShown, isPortfolioShown }: CreateLlmsTxtParams) => {
   const authorLinks: LlmsLink[] = [
     {
       name: "소개",
@@ -86,6 +87,11 @@ const createLlmsTxt = ({ posts, isResumeShown, isPortfolioShown }: CreateLlmsTxt
           "",
         ]
       : []),
+    ...(seriesList.length > 0 ? [
+      "## 시리즈", "",
+      ...seriesList.map((series) => toListItem({ name: series.name, path: getSeriesPath(series.id), note: series.description })),
+      "",
+    ] : []),
     "## 글쓴이",
     "",
     ...authorLinks.map(toListItem),

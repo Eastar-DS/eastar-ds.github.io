@@ -12,6 +12,8 @@ const withTrailingSlash = (path: string) =>
 const isCurrentPath = ({ pathname, href }: IsCurrentPathParams) => {
   if (href.includes("#")) return false;
 
+  if (href === "/series/" && pathname.startsWith(href)) return true;
+
   return withTrailingSlash(pathname) === withTrailingSlash(href);
 };
 

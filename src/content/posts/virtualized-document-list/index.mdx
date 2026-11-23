@@ -5,6 +5,7 @@ publishedAt: 2026-11-13
 updatedAt: 2026-11-19
 category: React
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 1
 projects: [knot]
@@ -16,7 +17,7 @@ import VirtualListDemo from "@/modules/features/demo/VirtualListDemo";
 import VirtualizationResultChart from "@/modules/features/demo/VirtualizationResultChart/index.astro";
 import VirtualWindowDiagram from "@/modules/features/demo/VirtualWindowDiagram/index.astro";
 
-우아한테크코스 팀 프로젝트 Knot의 문서 탭 「주제별」 목록은 문서가 1,939개인 워크스페이스에서 행을 모두 그리느라, 탭을 누른 뒤 목록이 보이기까지 CPU를 4배 느리게 한 조건에서 966ms가 걸렸습니다. 폴더 카드의 틀은 지키면서 카드마다 화면 근처의 행만 그리도록 라이브러리 없이 바꾸었더니, 같은 조건의 가운데값이 46ms로 줄었습니다. 「라이브러리 없이 목록 가상화」 시리즈 1편에서는 목록이 왜 느렸는지와 어떤 방법을 골랐는지, 얼마나 빨라졌는지를 다루고, 행 위치와 그릴 범위를 구하는 계산은 [2편](/posts/virtual-list-row-range/), 휠 스크롤 중의 빈 칸은 [3편](/posts/virtual-list-blank-frames/), 뒤로 가기의 빈 프레임은 [4편](/posts/virtual-list-back-navigation/), 키보드 포커스와 스크린 리더는 [5편](/posts/virtual-list-accessibility/)에서 이어서 씁니다.
+우아한테크코스 팀 프로젝트 Knot의 문서 탭 「주제별」 목록은 문서가 1,939개인 워크스페이스에서 행을 모두 그리느라, 탭을 누른 뒤 목록이 보이기까지 CPU를 4배 느리게 한 조건에서 966ms가 걸렸습니다. 폴더 카드의 틀은 지키면서 카드마다 화면 근처의 행만 그리도록 라이브러리 없이 바꾸었더니, 같은 조건의 가운데값이 46ms로 줄었습니다.
 
 ## 「주제별」 목록은 왜 느렸을까
 

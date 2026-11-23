@@ -8,7 +8,7 @@ describe("createProfilePageJsonLd", () => {
       "@context": "https://schema.org",
       "@type": "ProfilePage",
       url: "https://eastar-ds.github.io/about/",
-      dateModified: "2026-11-21T00:00:00+09:00",
+      dateModified: "2026-11-23T00:00:00+09:00",
       mainEntity: {
         "@type": "Person",
         name: "김동성",

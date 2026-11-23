@@ -1,4 +1,6 @@
 ---
+import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
 import getPost from "@/shared/content/getPost";
 import splitTitle from "@/shared/content/splitTitle";
 import formatDate from "@/shared/utils/formatDate";
@@ -12,7 +14,7 @@ interface Props {
  * 쓴 날은 넓은 칸에서 「2026년 11월 18일」, 좁은 칸에서 「2026.11.18」입니다.
  * 고친 날은 frontmatter의 updatedAt이 쓴 날과 다를 때만 보입니다.
  * 본문과 어떻게 놓일지(목차와의 줄 맞춤 등)는 페이지가 정합니다.
- * @design design/blog.pen 「글 머리」 tV22U
+ * @design design/blog.pen 「글 머리」 tV22U (글쓴이 표시: docs/design-system.md 7.32, Pencil 시안 없음)
  */
 const { slug } = Astro.props;
 const post = await getPost(slug);
@@ -24,6 +26,7 @@ const isUpdated = publishedIso !== updatedIso;
 <header class="container">
   <p class="meta">
     <span class="category">{post.category}</span>
+    <span><a class="author" href={PATHS.about}>{SITE.author.displayName}</a></span>
     <time datetime={publishedIso}>
       <span class="dateLong">
         {formatDate({ date: post.publishedAt, format: "long" })}
@@ -85,6 +88,15 @@ const isUpdated = publishedIso !== updatedIso;
   .category {
     color: var(--color-accent);
     font-weight: var(--font-weight-semibold);
+  }
+
+  .author {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .author:hover {
+    color: var(--color-accent-hover);
   }
 
   .dateShort {

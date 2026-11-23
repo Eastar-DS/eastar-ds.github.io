@@ -1,0 +1,60 @@
+---
+import SeriesParts from "@/modules/features/series/SeriesParts/index.astro";
+import getPost from "@/shared/content/getPost";
+import getSeries from "@/shared/content/getSeries";
+import { getSeriesPath } from "@/shared/routes/paths";
+
+interface Props {
+  slug: string;
+}
+
+/**
+ * 글 첫 문단 위에서 시리즈와 지금 편을 알립니다. 편 목록은 JavaScript 없이 접습니다.
+ * @design docs/design-system.md 7.30 (Pencil 시안 없음)
+ */
+const { slug } = Astro.props;
+const post = await getPost(slug);
+const series = post.series ? await getSeries(post.series.id) : undefined;
+---
+
+{series && (
+  <nav class="container" aria-label="이 글의 시리즈">
+    <p class="heading"><a href={getSeriesPath(series.id)}>{series.name}</a><span aria-hidden="true"> · </span>{series.count}편 중 {post.series?.order}편</p>
+    <details class="details">
+      <summary>편 목록</summary>
+      <div class="parts"><SeriesParts id={series.id} currentSlug={slug} /></div>
+    </details>
+  </nav>
+)}
+
+<style>
+  .container {
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+  }
+  .heading a {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .heading a:hover {
+    color: var(--color-accent-hover);
+  }
+  .details {
+    margin-top: var(--space-2);
+  }
+  summary {
+    width: fit-content;
+    padding-block: var(--space-2);
+    cursor: pointer;
+  }
+  .parts {
+    margin-top: var(--space-2);
+  }
+  @media print { .details { display: none; } }
+</style>

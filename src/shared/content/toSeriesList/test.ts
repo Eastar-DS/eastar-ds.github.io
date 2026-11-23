@@ -6,7 +6,7 @@ import toSeriesList from ".";
 
 const createPost = (
   slug: string,
-  series?: { name: string; order: number },
+  series?: { id: string; name: string; order: number },
 ): Post => ({
   slug,
   title: slug,
@@ -21,15 +21,15 @@ const createPost = (
 describe("toSeriesList", () => {
   it("시리즈별 글 수와 첫 편을 모은다", () => {
     const posts = [
-      createPost("rendering-2", { name: "브라우저 렌더링", order: 2 }),
-      createPost("react-1", { name: "React 데이터 흐름", order: 1 }),
-      createPost("rendering-1", { name: "브라우저 렌더링", order: 1 }),
+      createPost("rendering-2", { id: "rendering", name: "브라우저 렌더링", order: 2 }),
+      createPost("react-1", { id: "react-data", name: "React 데이터 흐름", order: 1 }),
+      createPost("rendering-1", { id: "rendering", name: "브라우저 렌더링", order: 1 }),
       createPost("single"),
     ];
 
     expect(toSeriesList(posts)).toEqual([
-      { name: "브라우저 렌더링", count: 2, firstPostSlug: "rendering-1" },
-      { name: "React 데이터 흐름", count: 1, firstPostSlug: "react-1" },
+      { id: "rendering", name: "브라우저 렌더링", description: "", count: 2, firstPostSlug: "rendering-1" },
+      { id: "react-data", name: "React 데이터 흐름", description: "", count: 1, firstPostSlug: "react-1" },
     ]);
   });
 

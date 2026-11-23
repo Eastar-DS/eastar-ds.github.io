@@ -14,6 +14,7 @@ describe("parseFrontmatter", () => {
       "draft: true",
       "category: 브라우저",
       "series:",
+      "  id: browser-rendering",
       "  name: 브라우저 렌더링",
       "  order: 1",
       "---",
@@ -23,14 +24,14 @@ describe("parseFrontmatter", () => {
     const { data, bodyStartLine, errors } = parseFrontmatter(source);
 
     expect(errors).toEqual([]);
-    expect(bodyStartLine).toBe(13);
+    expect(bodyStartLine).toBe(14);
     expect(toPostMeta(data)).toEqual({
       title: "브라우저는 언제 화면을 다시 그릴까: 레이아웃과 페인트",
       description: "작은 따옴표 안의 '인용'도 읽습니다.",
       publishedAt: "2026-11-18",
       updatedAt: "2026-11-20",
       category: "브라우저",
-      series: { name: "브라우저 렌더링", order: 1 },
+      series: { id: "browser-rendering", name: "브라우저 렌더링", order: 1 },
       projects: ["knot", "bid"],
       draft: true,
     });

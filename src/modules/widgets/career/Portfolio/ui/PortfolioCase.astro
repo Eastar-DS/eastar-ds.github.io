@@ -11,6 +11,7 @@ interface Props {
  * 포트폴리오의 사례 하나입니다. 제목(h3) 아래에 문제 → 가설 → 한 일 → 결과 → 배운 것(있을 때만) 칸을 둡니다.
  * 칸 글이 문자열이면 문단, 배열이면 목록으로 그립니다. 칸이 넓으면 이름표와 글을 두 열로, 좁으면 위아래로 놓습니다.
  * 이름표와 글을 한 줄(`.step`)로 묶어 줄마다 위쪽 선을 하나만 그리고, 두 열은 subgrid로 모든 줄의 이름표 폭을 맞춥니다.
+ * @design docs/design-system.md 7.24, 7.33 (결과 안내: Pencil 시안 없음)
  * 사례 끝에는 위쪽 선 아래에 관련 글(「관련 글: 제목」)과 블로그 밖 링크를 차례로 둡니다. 둘 다 없으면 그리지 않습니다.
  */
 const { portfolioCase } = Astro.props;
@@ -21,6 +22,7 @@ const links = portfolioCase.links ?? [];
 
 <article class="container">
   <h3 class="title">{portfolioCase.title}</h3>
+  {portfolioCase.resultSummary && <p class="resultSummary">{portfolioCase.resultSummary}</p>}
   <dl class="steps">
     {
       steps.map((step) => (
@@ -80,6 +82,13 @@ const links = portfolioCase.links ?? [];
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-lead);
     text-wrap: balance;
+  }
+
+  .resultSummary {
+    color: var(--color-text);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body-sm);
   }
 
   .steps {

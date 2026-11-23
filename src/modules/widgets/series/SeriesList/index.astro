@@ -1,0 +1,59 @@
+---
+import getSeriesList from "@/shared/content/getSeriesList";
+import { getSeriesPath } from "@/shared/routes/paths";
+
+/**
+ * 공개한 편이 있는 시리즈를 소개와 함께 모읍니다.
+ * @design docs/design-system.md 7.31 (Pencil 시안 없음)
+ */
+const seriesList = await getSeriesList();
+---
+<section class="container">
+  <h1 class="title">시리즈</h1>
+  <ul class="list">
+    {seriesList.map((series) => (
+      <li class="item">
+        <h2 class="name"><a href={getSeriesPath(series.id)}>{series.name}</a></h2>
+        <p class="description">{series.description}</p>
+        <p class="count">{series.count}편</p>
+      </li>
+    ))}
+  </ul>
+</section>
+<style>
+  .title {
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-title);
+    letter-spacing: var(--letter-spacing-title);
+  }
+  .list {
+    margin-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    list-style: none;
+  }
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .name {
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-lead);
+  }
+  .name a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .name a:hover {
+    color: var(--color-accent-hover);
+  }
+  .description, .count {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+  }
+</style>

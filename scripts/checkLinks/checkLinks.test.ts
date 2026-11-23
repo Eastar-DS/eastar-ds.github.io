@@ -12,7 +12,7 @@ describe("collectExternalLinks", () => {
     expect(links).toEqual([
       {
         url: "https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility",
-        places: ["virtualized-document-list:27", "virtualized-document-list:56"],
+        places: ["virtualized-document-list:28", "virtualized-document-list:57"],
       },
     ]);
   });

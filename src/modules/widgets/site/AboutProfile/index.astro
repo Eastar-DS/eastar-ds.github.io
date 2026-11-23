@@ -1,7 +1,8 @@
 ---
 import { IS_PORTFOLIO_SHOWN, IS_RESUME_SHOWN } from "@/shared/constants/features";
 import { SITE } from "@/shared/constants/site";
-import { PATHS } from "@/shared/routes/paths";
+import getPostsBySlugs from "@/shared/content/getPostsBySlugs";
+import { getPostPath, PATHS } from "@/shared/routes/paths";
 
 /**
  * 소개 페이지의 본문입니다. 이 페이지의 h1을 가집니다.
@@ -11,8 +12,10 @@ import { PATHS } from "@/shared/routes/paths";
  * 이메일 링크는 `SITE.author.email`이 있을 때만 둡니다.
  * 이메일 링크는 주소를 바로 읽고 옮겨 적을 수 있게 주소 글자를 그대로 씁니다.
  * 공개 전 숫자를 바로 내보내지 않도록, 기억에 의한 비드의 숫자(구독자 수 등)는 여기에 쓰지 않습니다.
+ * @design docs/design-system.md 7.33 (추천 글: Pencil 시안 없음)
  * 내용을 고치면 `SITE.author.profileUpdatedAt`(소개 페이지 ProfilePage의 dateModified)도 고친 날로 바꿉니다.
  */
+const recommendedPosts = await getPostsBySlugs(["virtualized-document-list"]);
 const { displayName, email, githubUrl } = SITE.author;
 const links = [
   ...(IS_PORTFOLIO_SHOWN ? [{ label: "포트폴리오", href: PATHS.portfolio }] : []),
@@ -62,10 +65,27 @@ const links = [
         ))
       }
     </ul>
+    {recommendedPosts.length > 0 && (
+      <section class="recommended" aria-labelledby="recommended-posts">
+        <h2 id="recommended-posts">먼저 읽어 볼 글</h2>
+        <ul class="links">{recommendedPosts.map((post) => <li><a href={getPostPath(post.slug)}>{post.title}</a></li>)}</ul>
+      </section>
+    )}
   </div>
 </section>
 
 <style>
+  .recommended {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .recommended h2 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-h3);
+  }
+
   .title {
     font-size: var(--font-size-title);
     font-weight: var(--font-weight-bold);

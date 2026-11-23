@@ -1,0 +1,55 @@
+---
+import { IS_PORTFOLIO_SHOWN } from "@/shared/constants/features";
+import { SITE } from "@/shared/constants/site";
+import { PATHS } from "@/shared/routes/paths";
+
+/**
+ * 글 끝에서 글쓴이와 소개, 포트폴리오, RSS 구독을 알립니다.
+ * @design docs/design-system.md 7.32 (Pencil 시안 없음)
+ */
+const links = [
+  { label: "소개", href: PATHS.about },
+  ...(IS_PORTFOLIO_SHOWN ? [{ label: "포트폴리오", href: PATHS.portfolio }] : []),
+  { label: "RSS 구독", href: PATHS.rss },
+];
+---
+<section class="container" aria-labelledby="post-author">
+  <h2 class="name" id="post-author">{SITE.author.displayName}</h2>
+  <p class="tagline">{SITE.author.tagline}</p>
+  <ul class="links">{links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+</section>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .name {
+    font-size: var(--font-size-lead);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-lead);
+  }
+  .tagline {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-sm);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+    font-size: var(--font-size-body-sm);
+  }
+  .links a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .links a:hover {
+    color: var(--color-accent-hover);
+  }
+</style>

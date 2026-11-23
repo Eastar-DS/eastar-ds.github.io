@@ -5,6 +5,7 @@ import {
   getOgImagePath,
   getPortfolioProjectPath,
   getPostPath,
+  getSeriesPath,
   NAV_ITEMS,
 } from ".";
 
@@ -36,9 +37,9 @@ describe("getPortfolioProjectPath", () => {
 });
 
 describe("NAV_ITEMS", () => {
-  it("시리즈 메뉴는 글 목록의 시리즈 구획으로 간다", () => {
+  it("시리즈 메뉴는 시리즈 목록으로 간다", () => {
     expect(NAV_ITEMS.find((item) => item.label === "시리즈")?.href).toBe(
-      "/#series",
+      "/series/",
     );
   });
 });
@@ -56,7 +57,7 @@ describe("getNavItems", () => {
     expect(getNavItems({ isResumeShown: true, isPortfolioShown: true })).toEqual(
       [
         { label: "글", href: "/" },
-        { label: "시리즈", href: "/#series" },
+        { label: "시리즈", href: "/series/" },
         { label: "소개", href: "/about/" },
         { label: "포트폴리오", href: "/portfolio/" },
         { label: "이력서", href: "/resume/" },
@@ -71,4 +72,8 @@ describe("getNavItems", () => {
       ),
     ).toEqual(["글", "시리즈", "소개"]);
   });
+});
+
+it("시리즈 id로 시리즈 페이지 주소를 만든다", () => {
+  expect(getSeriesPath("virtual-list")).toBe("/series/virtual-list/");
 });

@@ -4,7 +4,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import { fileURLToPath } from "node:url";
 
-import { transformerMetaHighlight } from "@shikijs/transformers";
+import { transformerMetaHighlight, transformerNotationDiff } from "@shikijs/transformers";
 import { defineConfig } from "astro/config";
 
 import { IS_COMMENTS_ENABLED } from "./src/shared/constants/features";
@@ -83,6 +83,7 @@ export default defineConfig({
       transformers: [
         // ```ts {3,5-6} 처럼 적은 줄에 highlighted 클래스를 붙입니다
         transformerMetaHighlight(),
+        transformerNotationDiff(),
         codeTitleTransformer(),
         codeLineNumbersTransformer(),
       ],

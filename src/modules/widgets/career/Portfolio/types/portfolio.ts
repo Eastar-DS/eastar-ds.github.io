@@ -18,6 +18,8 @@ export interface PortfolioLink {
 /** 문제 하나를 풀어 간 사례. 칸은 문제 → 가설 → 한 일 → 결과 → 배운 것(있을 때만) 순서로 그립니다 */
 export interface PortfolioCase {
   title: string;
+  /** 기존 결과 문장에 있는 숫자와 조건만 줄여 쓴 안내 */
+  resultSummary?: string;
   problem: PortfolioContent;
   hypothesis: PortfolioContent;
   action: PortfolioContent;

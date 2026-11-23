@@ -1,4 +1,5 @@
 import { IS_PORTFOLIO_SHOWN, IS_RESUME_SHOWN } from "@/shared/constants/features";
+import getSeriesList from "@/shared/content/getSeriesList";
 import getPosts from "@/shared/content/getPosts";
 import createLlmsTxt from "@/shared/seo/createLlmsTxt";
 
@@ -7,6 +8,7 @@ export const GET = async () =>
   new Response(
     createLlmsTxt({
       posts: await getPosts(),
+      seriesList: await getSeriesList(),
       isResumeShown: IS_RESUME_SHOWN,
       isPortfolioShown: IS_PORTFOLIO_SHOWN,
     }),

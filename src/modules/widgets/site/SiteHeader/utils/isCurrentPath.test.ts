@@ -16,3 +16,7 @@ describe("isCurrentPath", () => {
     expect(isCurrentPath({ pathname: "/", href: "/#series" })).toBe(false);
   });
 });
+
+it("시리즈 상세에서도 시리즈 메뉴를 표시한다", () => {
+  expect(isCurrentPath({ pathname: "/series/virtual-list/", href: "/series/" })).toBe(true);
+});

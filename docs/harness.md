@@ -174,3 +174,9 @@
 날짜는 `formatDate`가 한국 달력 날짜의 0시(+09:00)로 만들고 구조화 데이터·og·사이트맵·RSS가 같은 뜻을 씁니다. 사이트맵이 UTC로 적으면 전날 15시입니다. `checkPost`의 빌드 결과 검사도 이 날짜를 기대합니다.
 
 `checkPost`에 「본문 한 줄의 물결표 두 개 이상」 실패 항목을 더했습니다(코드 칸·인라인 코드·이스케이프한 물결표 제외). 기준은 「content-guide 4.1 개정 대기, 2026-11-22 렌더링 버그」입니다. 정본과 글 본문은 고치지 않았으며, 초안을 포함한 점검과 배포용 점검을 따로 확인합니다.
+
+## 2026년 11월 23일: 시리즈와 글쓴이 안내
+
+시리즈 주소와 소개는 `shared/content`와 `shared/constants/series`, 주소 함수는 `shared/routes/paths`에 있습니다. `SeriesGuide`, `SeriesOverview`, `SeriesList`는 widgets이고 공통 편 목록은 `features/series/SeriesParts`입니다. 페이지는 기존처럼 widgets를 직접 배치합니다. 글쓴이 소개는 `widgets/post/PostAuthor`에 있으며 코드 칸과 슬라이더는 기존 컴포넌트를 고쳤습니다. 정본 디자인 7.30부터 7.35까지 새 규칙을 적었고 Pencil 시안은 없습니다.
+
+게시 전 확인 목록은 정본 10.3과 12장에 따라 사실 대조 상태를 로컬에서 확인합니다. CI는 저장소 밖 대조표를 읽을 수 없어 건너뜁니다. 검사 에이전트의 기본은 Codex `codex-work`이며 `research`는 부른 쪽이 지정할 때의 대안입니다. 범위 표기는 정본 4.1의 짧은 줄표(U+2013)를 따르고 `checkPost`가 수 사이의 물결표 하나부터 실패로 냅니다.

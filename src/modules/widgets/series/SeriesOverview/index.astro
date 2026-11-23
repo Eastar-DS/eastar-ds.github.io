@@ -1,0 +1,37 @@
+---
+import SeriesParts from "@/modules/features/series/SeriesParts/index.astro";
+import getSeries from "@/shared/content/getSeries";
+
+interface Props {
+  id: string;
+}
+
+/**
+ * 시리즈 이름, 한 문장 소개와 전체 편 목록을 보입니다.
+ * @design docs/design-system.md 7.31 (Pencil 시안 없음)
+ */
+const { id } = Astro.props;
+const series = await getSeries(id);
+---
+<section class="container">
+  <h1 class="title">{series.name}</h1>
+  <p class="description">{series.description}</p>
+  <SeriesParts id={id} />
+</section>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .title {
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-title);
+    letter-spacing: var(--letter-spacing-title);
+    text-wrap: balance;
+  }
+  .description {
+    color: var(--color-text-muted);
+  }
+</style>

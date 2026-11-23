@@ -2,6 +2,7 @@
 export const PATHS = {
   home: "/",
   about: "/about/",
+  series: "/series/",
   /** 공개 스위치(`IS_RESUME_PUBLIC`)가 꺼져 있으면 배포 빌드에 없는 주소입니다 */
   resume: "/resume/",
   /** 공개 스위치(`IS_PORTFOLIO_SHOWN`, 지금은 늘 참)를 따릅니다. 프로젝트 구획으로 가는 주소는 `getPortfolioProjectPath`로 만듭니다 */
@@ -16,7 +17,7 @@ export const PATHS = {
 /** 페이지마다 하나인 `<main>`의 id. 건너뛰기 링크가 이 자리로 옮겨 줍니다 */
 export const MAIN_CONTENT_ID = "main";
 
-/** 글 목록 페이지에서 시리즈 칩 구획의 id. 머리말의 「시리즈」 링크가 이 자리로 갑니다 */
+/** 글 목록 페이지에서 시리즈 칩 구획의 id */
 export const SERIES_SECTION_ID = "series";
 
 /**
@@ -41,7 +42,7 @@ export const getPortfolioProjectPath = (projectId: string) =>
 /** 머리말의 주 메뉴 가운데 늘 보이는 것 */
 export const NAV_ITEMS = [
   { label: "글", href: PATHS.home },
-  { label: "시리즈", href: `${PATHS.home}#${SERIES_SECTION_ID}` },
+  { label: "시리즈", href: PATHS.series },
   { label: "소개", href: PATHS.about },
 ] as const;
 
@@ -70,3 +71,6 @@ export const getNavItems = ({ isResumeShown, isPortfolioShown }: GetNavItemsPara
   ...(isPortfolioShown ? [PORTFOLIO_NAV_ITEM] : []),
   ...(isResumeShown ? [RESUME_NAV_ITEM] : []),
 ];
+
+/** 영문 id로 시리즈 페이지 주소를 만듭니다. */
+export const getSeriesPath = (id: string) => `${PATHS.series}${id}/`;

@@ -3,6 +3,8 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import PostProjectLinks from "@/modules/features/post/PostProjectLinks/index.astro";
 import Comments from "@/modules/widgets/post/Comments/index.astro";
+import PostAuthor from "@/modules/widgets/post/PostAuthor/index.astro";
+import SeriesGuide from "@/modules/widgets/series/SeriesGuide/index.astro";
 import PostBody from "@/modules/widgets/post/PostBody/index.astro";
 import PostHeader from "@/modules/widgets/post/PostHeader/index.astro";
 import PostNav from "@/modules/widgets/post/PostNav/index.astro";
@@ -16,7 +18,7 @@ import Stack from "@/shared/components/primitives/layout/Stack/index.astro";
 import WithAside from "@/shared/components/primitives/layout/WithAside/index.astro";
 import { SITE } from "@/shared/constants/site";
 import getPosts from "@/shared/content/getPosts";
-import { getPostPath, MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
+import { getPostPath, getSeriesPath, MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
 import createBlogPostingJsonLd from "@/shared/seo/createBlogPostingJsonLd";
 import createBreadcrumbListJsonLd from "@/shared/seo/createBreadcrumbListJsonLd";
 import createPageMeta from "@/shared/seo/createPageMeta";
@@ -48,6 +50,7 @@ const jsonLds = [
   createBlogPostingJsonLd(post),
   createBreadcrumbListJsonLd([
     { name: SITE.title, path: PATHS.home },
+    ...(post.series ? [{ name: post.series.name, path: getSeriesPath(post.series.id) }] : []),
     { name: post.title, path },
   ]),
 ];
@@ -61,6 +64,7 @@ const jsonLds = [
         <PostHeader slug={post.slug} slot="top" />
         <Stack gap={14}>
           <Stack gap={5}>
+            <SeriesGuide slug={post.slug} />
             <ShowOn screen="narrow">
               <TableOfContents slug={post.slug} variant="collapsible" />
             </ShowOn>
@@ -68,6 +72,7 @@ const jsonLds = [
             <PostProjectLinks slug={post.slug} />
           </Stack>
           <PostNav slug={post.slug} />
+          <PostAuthor />
           <Comments slug={post.slug} />
         </Stack>
         <ShowOn screen="wide" slot="aside">

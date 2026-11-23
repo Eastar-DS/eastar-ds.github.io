@@ -56,6 +56,11 @@
   --color-code-line-number: light-dark(#237893, #858585);
   --color-code-line-highlight: light-dark(#f1f5fe, #232830);
   --color-code-line-highlight-bar: light-dark(#2457d6, #7aa2ff);
+  /* 바뀐 줄과 기호. 정본 7.34, codeThemes의 CODE_BACKGROUNDS와 같은 값입니다. */
+  --color-code-diff-add-bg: light-dark(#f0f5f2, #212721);
+  --color-code-diff-remove-bg: light-dark(#faf1f1, #2a2224);
+  --color-code-diff-add: light-dark(#047857, #34d399);
+  --color-code-diff-remove: light-dark(#b91c1c, #f87171);
 
   /* 데모 데이터. 데모와, 데모를 가리키는 본문 낱말에만 씁니다 */
   --color-data-1: light-dark(#c2410c, #fb923c);

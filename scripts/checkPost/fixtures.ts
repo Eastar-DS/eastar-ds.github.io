@@ -7,6 +7,7 @@ description: "문서 1,939개를 모두 그리던 React 목록이 왜 느렸는�
 publishedAt: 2026-11-21
 category: React
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 1
 projects: [knot]
@@ -63,6 +64,7 @@ description: "행 높이를 그리기 전에 계산하고, 넓힌 화면 구간�
 publishedAt: 2026-11-21
 category: React
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 2
 draft: true

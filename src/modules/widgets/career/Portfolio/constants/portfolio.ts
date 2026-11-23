@@ -17,6 +17,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     cases: [
       {
         title: "퍼널에서 크게 좁아지는 세 곳의 원인 찾기",
+        resultSummary: "첫 방문 녹음 버튼 클릭 47% → 68%",
         problem:
           "Knot를 공개한 뒤 워크스페이스 생성 → 녹음 시작 → 녹음 끝 → 문서 생성 → 문서 읽기 퍼널에서 크게 좁아지는 곳이 세 군데 있었습니다. 팀 회의는 한 명이 녹음하고 서기가 문서를 확인하므로, 사람 단위로 세면 오차가 크다고 보고 활성의 기준을 워크스페이스로 정했습니다.",
         hypothesis: [
@@ -68,6 +69,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
       },
       {
         title: "문서 1,939개 목록이 늦게 보이던 문제",
+        resultSummary: "목록 표시 966ms → 46ms (CPU 4배 느림)",
         problem:
           "문서 1,939개인 팀 워크스페이스에서 문서 탭 「주제별」을 누른 뒤 목록이 보일 때까지 966ms(CPU 4배 느림)가 걸렸습니다. 지금 사용자의 워크스페이스는 문서가 많지 않지만, 문서를 가져오는 기능(기획 중)으로 문서가 많아질 것에 대비해 우테코 렌더링 성능 과제의 대상으로 골랐습니다.",
         hypothesis:
@@ -98,6 +100,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     cases: [
       {
         title: "쇼핑몰마다 다른 엑셀 양식으로 반복하던 발주 업무",
+        resultSummary: "무료 체험 없이 유료 구독 10곳",
         problem:
           "아는 쇼핑몰 사장님의 일을 무급으로 도우며 발주 업무를 직접 배웠습니다. 주문을 처리할 때마다 엑셀 양식 변환이 세 번 들어가고, 쇼핑몰마다 양식이 달라 쇼핑몰 수만큼 반복되는 것이 병목이었습니다.",
         hypothesis:
@@ -125,6 +128,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     cases: [
       {
         title: "실제 사용자를 찾아 타깃을 학원 수강생으로 바꾼 일",
+        resultSummary: "월 유료 구독자 50명 미만 → 1,000명 이상, 수업 사용 학원 약 20곳",
         problem:
           "처음에는 경매 투자를 적극적으로 하는 사람을 타깃으로 잡았는데, 정확도를 공개해도 결제가 늘지 않았고 월 유료 구독자도 50명 미만(2023.09)에 머물렀습니다.",
         hypothesis:
@@ -136,6 +140,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
       },
       {
         title: "「사용자는 수익이 큰 물건을 원할 것」이라는 틀린 가설",
+        resultSummary: "추천 탭 사용자는 지역 필터 사용자의 1/3–1/5",
         problem:
           "경매 투자자는 수많은 물건 가운데 투자할 물건을 고르고 입찰가를 정하는 데 가장 오랜 시간을 씁니다.",
         hypothesis:

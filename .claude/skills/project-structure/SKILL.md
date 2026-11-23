@@ -61,6 +61,8 @@ src/
 │
 ├── pages/                           # 라우트. widgets를 배치·조립만 함
 │   ├── index.astro                  # 글 목록 (/)
+│   ├── series/[id]/index.astro    # 시리즈 한 묶음 (/series/{id}/)
+│   ├── series/[...path]/index.astro # 시리즈 목록. 공개한 편이 있을 때 만듦
 │   ├── about/index.astro            # 소개 (/about/)
 │   ├── resume/[...path]/index.astro # 이력서 (/resume/). 공개 스위치가 꺼지면 배포 빌드에 없음
 │   ├── portfolio/[...path]/index.astro # 포트폴리오 (/portfolio/). 포트폴리오 스위치(IS_PORTFOLIO_SHOWN, 지금은 켜 둠)를 따름

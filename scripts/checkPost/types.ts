@@ -31,6 +31,7 @@ export interface CheckResult {
 
 /** 앞머리의 `series` */
 export interface PostSeries {
+  id?: string;
   name: string;
   order: number;
 }

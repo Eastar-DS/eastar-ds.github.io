@@ -19,10 +19,10 @@ const findAdjacentPosts = ({ posts, slug }: FindAdjacentPostsParams) => {
 
   if (!current) return { prev: undefined, next: undefined };
 
-  const seriesName = current.series?.name;
-  const orderedPosts = seriesName
+  const seriesId = current.series?.id;
+  const orderedPosts = seriesId
     ? posts
-        .filter((post) => post.series?.name === seriesName)
+        .filter((post) => post.series?.id === seriesId)
         .sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0))
     : [...posts].sort(byPublishedAt);
   const index = orderedPosts.findIndex((post) => post.slug === slug);

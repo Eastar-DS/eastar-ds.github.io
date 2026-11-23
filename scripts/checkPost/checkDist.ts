@@ -319,10 +319,14 @@ const checkDist = ({ slug, meta, dist }: CheckDistParams) => {
       findings: breadcrumb
         ? [
             ...expect({ name: "첫 항목", actual: crumbs[0]?.item, expected: new URL("/", SITE.url).href }),
+            ...(meta.series?.id ? [
+              ...expect({ name: "시리즈 항목", actual: crumbs[1]?.item, expected: new URL(`/series/${meta.series.id}/`, SITE.url).href }),
+              ...(crumbs.length === 3 ? [] : [{ message: `시리즈 글은 3단계여야 합니다 (지금 ${crumbs.length}단계)` }]),
+            ] : []),
             ...expect({ name: "끝 항목", actual: crumbs.at(-1)?.item, expected: url }),
           ]
         : [{ message: "BreadcrumbList JSON-LD가 없습니다" }],
-      passSummary: `${crumbs.length}단계 (사이트 → 글)`,
+      passSummary: `${crumbs.length}단계 (${meta.series ? "사이트 → 시리즈 → 글" : "사이트 → 글"})`,
       basis: `${DIST.basis}, .claude/rules/seo-guide.md`,
       fix: "`createBreadcrumbListJsonLd`와 글 페이지를 봅니다.",
     }),

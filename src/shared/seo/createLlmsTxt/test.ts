@@ -78,3 +78,10 @@ describe("createLlmsTxt", () => {
     expect(llms.match(/^# /gm)).toHaveLength(1);
   });
 });
+
+it("시리즈는 고유 페이지의 절대 주소와 소개를 적는다", () => {
+  const llms = createLlmsTxt({ posts: [], isResumeShown: false, isPortfolioShown: true, seriesList: [
+    { id: "virtual-list", name: "목록 가상화", description: "목록을 가상화합니다.", count: 5, firstPostSlug: "first-part" },
+  ] });
+  expect(llms).toContain("## 시리즈\n\n- [목록 가상화](https://eastar-ds.github.io/series/virtual-list/): 목록을 가상화합니다.");
+});

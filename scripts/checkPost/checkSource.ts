@@ -776,10 +776,12 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
   const series = meta.series;
 
   if (series) {
-    const group = posts.filter((other) => other.meta.series?.name === series.name);
+    const group = posts.filter((other) => other.meta.series?.id === series.id);
     const orders = group.map((other) => other.meta.series?.order ?? 0).sort((a, b) => a - b);
     const published = group.filter((other) => !other.meta.draft).map((other) => other.meta.series?.order ?? 0).sort((a, b) => a - b);
     const findings: Finding[] = [];
+    if (!series.id || !/^[a-z]+(?:-[a-z]+)*$/.test(series.id)) findings.push({ line: frontmatterLines.series, message: "시리즈 id는 영문 소문자 낱말을 하이픈으로 이어 씁니다" });
+    if (group.some((other) => other.meta.series?.name !== series.name) || posts.some((other) => other.meta.series?.name === series.name && other.meta.series?.id !== series.id)) findings.push({ line: frontmatterLines.series, message: "같은 시리즈의 id와 이름이 다릅니다" });
     const duplicates = orders.filter((order, index) => orders.indexOf(order) !== index);
 
     if (duplicates.length > 0) findings.push({ line: frontmatterLines.series, message: `번호 ${[...new Set(duplicates)].join(", ")}이 겹칩니다` });

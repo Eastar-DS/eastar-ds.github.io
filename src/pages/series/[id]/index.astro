@@ -1,0 +1,43 @@
+---
+import SeriesOverview from "@/modules/widgets/series/SeriesOverview/index.astro";
+import SiteFooter from "@/modules/widgets/site/SiteFooter/index.astro";
+import SiteHeader from "@/modules/widgets/site/SiteHeader/index.astro";
+import Container from "@/shared/components/primitives/layout/Container/index.astro";
+import Document from "@/shared/components/primitives/layout/Document/index.astro";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import getSeriesList from "@/shared/content/getSeriesList";
+
+import { getSeriesPath, MAIN_CONTENT_ID, PATHS } from "@/shared/routes/paths";
+import createPageMeta from "@/shared/seo/createPageMeta";
+import createBreadcrumbListJsonLd from "@/shared/seo/createBreadcrumbListJsonLd";
+import { SITE } from "@/shared/constants/site";
+
+/** 시리즈 한 묶음을 본문 폭으로 배치합니다. */
+export const getStaticPaths = (async () => (await getSeriesList()).map((series) => ({ params: { id: series.id }, props: { series } }))) satisfies GetStaticPaths;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { series } = Astro.props as Props;
+const meta = createPageMeta({ title: series.name, description: series.description, path: getSeriesPath(series.id) });
+const jsonLds = [createBreadcrumbListJsonLd([{ name: SITE.title, path: PATHS.home }, { name: series.name, path: getSeriesPath(series.id) }])];
+---
+
+<Document meta={meta} jsonLds={jsonLds}>
+  <SiteHeader />
+  <main id={MAIN_CONTENT_ID} tabindex="-1" class="main">
+    <Container size="content">
+      <SeriesOverview id={series.id} />
+    </Container>
+  </main>
+  <SiteFooter />
+</Document>
+
+<style>
+  .main {
+    padding-block: var(--space-10) var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .main {
+      padding-block: var(--space-18) var(--space-24);
+    }
+  }
+</style>

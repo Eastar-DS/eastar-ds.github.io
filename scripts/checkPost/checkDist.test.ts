@@ -184,3 +184,12 @@ it("한국 날짜 0시 대신 같은 날 UTC 0시나 한국 9시를 쓴 BlogPost
     expect(result?.findings.some((finding) => finding.message.includes("datePublished"))).toBe(true);
   }
 });
+
+it("시리즈 글은 사이트, 시리즈, 글 세 단계의 Breadcrumb을 검사한다", () => {
+  const meta = { ...META, series: { id: "virtual-list", name: "목록 가상화", order: 2 } };
+  const files = goodFiles();
+  const inspect = () => checkDist({ slug: SLUG, meta, dist: createDist(files) }).find((r) => r.id === "dist-breadcrumb");
+  expect(inspect()?.status).toBe("fail");
+  files[`posts/${SLUG}/index.html`] = PAGE.replace('{"item":"https://eastar-ds.github.io/"},', '{"item":"https://eastar-ds.github.io/"},{"item":"https://eastar-ds.github.io/series/virtual-list/"},');
+  expect(inspect()?.status).toBe("pass");
+});

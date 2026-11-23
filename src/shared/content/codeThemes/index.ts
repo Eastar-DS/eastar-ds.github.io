@@ -9,8 +9,8 @@ type ShikiTheme = typeof lightPlus;
  * 모든 낱말 색은 두 바탕 위에서 4.5:1 이상이어야 합니다 (codeThemes/test.ts가 확인).
  */
 export const CODE_BACKGROUNDS = {
-  light: { base: "#F6F8FA", lineHighlight: "#F1F5FE" },
-  dark: { base: "#1E1E1E", lineHighlight: "#232830" },
+  light: { base: "#F6F8FA", lineHighlight: "#F1F5FE", diffAdd: "#F0F5F2", diffRemove: "#FAF1F1" },
+  dark: { base: "#1E1E1E", lineHighlight: "#232830", diffAdd: "#212721", diffRemove: "#2A2224" },
 } as const;
 
 interface RecolorParams {

@@ -186,7 +186,7 @@ export const toPostMeta = (data: Frontmatter["data"]) => {
     category: asString(data.category),
     series:
       series && typeof series === "object" && !Array.isArray(series) && typeof series.name === "string" && typeof series.order === "number"
-        ? { name: series.name, order: series.order }
+        ? { ...(typeof series.id === "string" ? { id: series.id } : {}), name: series.name, order: series.order }
         : undefined,
     projects: Array.isArray(projects) ? projects.map(String) : undefined,
     draft: data.draft === true,

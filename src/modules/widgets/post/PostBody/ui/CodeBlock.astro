@@ -23,6 +23,7 @@ interface Props {
  * - 줄 번호: 20줄 넘는 코드만. CSS counter로 그려 복사에 섞이지 않습니다
  * - 긴 줄은 줄바꿈하지 않고 칸 안에서 가로로 밉니다(tabindex="0"으로 키보드로도 밂)
  *
+ * @design docs/design-system.md 7.34 (바뀐 줄: Pencil 시안 없음)
  * @design design/blog.pen 「코드 칸」 CX4xi (복사 전 w3LWD3 · 복사됨 oddTf)
  */
 const {
@@ -34,12 +35,14 @@ const {
   "data-language": language,
   "data-line-numbers": lineNumbers,
 } = Astro.props;
+const hasDiff = (shikiClass ?? className ?? "").split(/\s+/).includes("has-diff");
 const label = title ?? (language && language !== "plaintext" ? language : "");
 ---
 
 <figure class="container" data-copy-scope>
   <figcaption class="head">
     <span class="label">{label}</span>
+    {hasDiff && <span class="diffLegend">+ 추가, − 삭제</span>}
     <CopyCodeButton />
   </figcaption>
   <pre
@@ -121,6 +124,41 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
     background: var(--color-code-line-highlight);
   }
 
+  .diffLegend {
+    margin-left: auto;
+    color: var(--color-code-meta);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
+
+  /* 바뀐 줄 기호 열은 --space-6이며 줄 번호와 함께 보입니다(정본 7.34). */
+  .code.has-diff :global(.line) {
+    position: relative;
+    padding-left: calc(var(--space-5) + var(--space-6));
+  }
+  .code :global(.line.diff.add) {
+    background: var(--color-code-diff-add-bg);
+  }
+  .code :global(.line.diff.remove) {
+    background: var(--color-code-diff-remove-bg);
+  }
+  .code :global(.line.diff)::after {
+    position: absolute;
+    left: var(--space-2);
+    width: var(--space-3);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    user-select: none;
+  }
+  .code :global(.line.diff.add)::after {
+    content: "+";
+    color: var(--color-code-diff-add);
+  }
+  .code :global(.line.diff.remove)::after {
+    content: "−";
+    color: var(--color-code-diff-remove);
+  }
+
   /* 줄 번호 열 22px, 코드와 사이 16px. 가상 요소라 복사에 섞이지 않습니다 */
   .code[data-line-numbers] :global(code) {
     counter-reset: code-line;
@@ -135,6 +173,10 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
     color: var(--color-code-line-number);
     text-align: right;
     user-select: none;
+  }
+
+  .code[data-line-numbers] :global(.line.diff)::before {
+    color: var(--color-code-text);
   }
 
   /* 강조 줄의 줄 번호는 본문 글자색 */
@@ -157,6 +199,15 @@ const label = title ?? (language && language !== "plaintext" ? language : "");
 
     .code :global(.line.highlighted) {
       padding-left: calc(var(--space-4) - var(--border-width-callout));
+    }
+    .code.has-diff :global(.line) {
+      padding-left: calc(var(--space-4) + var(--space-6));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .code :global(.line.diff)::after {
+      color: CanvasText;
     }
   }
 </style>

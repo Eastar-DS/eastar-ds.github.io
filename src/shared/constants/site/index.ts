@@ -27,7 +27,7 @@ export const SITE = {
      * 소개 페이지의 내용이나 글쓴이 정보를 사람이 마지막으로 고친 날(한국 날짜). 소개의 ProfilePage 구조화 데이터 `dateModified`가 됩니다.
      * 소개 페이지(`widgets/site/AboutProfile`)나 위 이름 · 소개 말을 고치면 이 날짜도 함께 바꿉니다.
      */
-    profileUpdatedAt: "2026-11-21",
+    profileUpdatedAt: "2026-11-23",
     githubUrl: "https://github.com/eastar-DS",
     /**
      * 연락받을 이메일. 소개와 이력서에 mailto 링크로 보입니다. 비우면 두 페이지가 이메일을 그리지 않습니다.

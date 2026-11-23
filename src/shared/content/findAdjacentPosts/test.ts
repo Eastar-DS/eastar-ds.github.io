@@ -7,7 +7,7 @@ import findAdjacentPosts from ".";
 const createPost = (
   slug: string,
   publishedAt: string,
-  series?: { name: string; order: number },
+  series?: { id: string; name: string; order: number },
 ): Post => ({
   slug,
   title: slug,
@@ -20,9 +20,9 @@ const createPost = (
 });
 
 const posts = [
-  createPost("rendering-2", "2026-11-20T00:00:00Z", { name: "렌더링", order: 2 }),
+  createPost("rendering-2", "2026-11-20T00:00:00Z", { id: "rendering", name: "렌더링", order: 2 }),
   createPost("single-new", "2026-11-10T00:00:00Z"),
-  createPost("rendering-1", "2026-10-01T00:00:00Z", { name: "렌더링", order: 1 }),
+  createPost("rendering-1", "2026-10-01T00:00:00Z", { id: "rendering", name: "렌더링", order: 1 }),
   createPost("single-mid", "2026-09-01T00:00:00Z"),
   createPost("single-old", "2026-08-01T00:00:00Z"),
 ];

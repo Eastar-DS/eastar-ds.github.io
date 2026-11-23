@@ -4,6 +4,7 @@ description: "행 높이를 그리기 전에 계산하고, 넓힌 화면 구간�
 publishedAt: 2026-11-14
 category: React
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 2
 projects: [knot]
@@ -12,7 +13,7 @@ draft: true
 
 import FirstRowDividerDiagram from "@/modules/features/demo/FirstRowDividerDiagram/index.astro";
 
-목록 가상화는 행마다 위치를 그리기 전에 계산하고, 화면 구간을 위아래로 넓혀 걸친 행만 그린 뒤, 그리지 않은 행의 높이를 카드 높이와 위쪽 여백으로 채우면 동작합니다. 「라이브러리 없이 목록 가상화」 시리즈 2편에서는 Knot 문서 탭 「주제별」 목록에 넣은 계산을 함수마다 숫자 예로 따라가고, 첫 렌더링과 크기 변화, 구분선처럼 직접 구현하며 걸린 곳을 다룹니다. 목록이 왜 느렸고 얼마나 빨라졌는지는 [1편](/posts/virtualized-document-list/)에 있습니다.
+목록 가상화는 행마다 위치를 그리기 전에 계산하고, 화면 구간을 위아래로 넓혀 걸친 행만 그린 뒤, 그리지 않은 행의 높이를 카드 높이와 위쪽 여백으로 채우면 동작합니다.
 
 「주제별」 목록은 문서를 주제별 폴더 카드(`ul`)로 묶고, 스크롤은 창이 아니라 화면 레이아웃의 `main`이 맡습니다. 폴더 틀은 모두 그리고 카드마다 화면 근처의 행(`li`)만 그리므로, 아래 계산은 모두 폴더 카드 하나를 기준으로 합니다.
 

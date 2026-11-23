@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import getContrastRatio from "@/shared/utils/getContrastRatio";
 
+import tokens from "@/shared/styles/tokens.css?raw";
+
 import { blogDarkPlus, blogLightPlus, CODE_BACKGROUNDS } from ".";
 
 // 글자 대비 기준 (WCAG 2.2 AA)
@@ -92,7 +94,7 @@ describe.each(themes)("$mode 코드 테마", ({ mode, theme }) => {
 
   it("테마가 쓰는 모든 글자색이 바탕과 강조 줄 위에서 4.5:1을 넘는다", () => {
     const failures = collectForegrounds(theme).flatMap((color) =>
-      [backgrounds.base, backgrounds.lineHighlight]
+      Object.values(backgrounds)
         .map((background) => ({
           color,
           background,
@@ -103,4 +105,17 @@ describe.each(themes)("$mode 코드 테마", ({ mode, theme }) => {
 
     expect(failures).toEqual([]);
   });
+});
+
+// 바뀐 줄의 CSS 토큰과 테마 대비 검사가 같은 바탕을 쓰는지 확인합니다.
+it.each(["light", "dark"] as const)("%s 바뀐 줄의 토큰과 기호 대비를 확인한다", (mode) => {
+  const color = (name: string) => {
+    const values = new RegExp(name + ": light-dark\\((#[0-9a-f]+), (#[0-9a-f]+)\\)", "i").exec(tokens);
+    return values?.[mode === "light" ? 1 : 2] ?? "";
+  };
+  for (const [suffix, key] of [["add", "diffAdd"], ["remove", "diffRemove"]] as const) {
+    const background = color("--color-code-diff-" + suffix + "-bg");
+    expect(background.toUpperCase()).toBe(CODE_BACKGROUNDS[mode][key]);
+    expect(getContrastRatio({ foreground: color("--color-code-diff-" + suffix), background })).toBeGreaterThanOrEqual(4.5);
+  }
 });

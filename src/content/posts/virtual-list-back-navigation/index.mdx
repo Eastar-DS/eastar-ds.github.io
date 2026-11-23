@@ -4,6 +4,7 @@ description: "뒤로 가기로 스크롤을 한 번에 되돌릴 때 빈 프레�
 publishedAt: 2026-11-16
 category: React
 series:
+  id: virtual-list
   name: 라이브러리 없이 목록 가상화
   order: 4
 projects: [knot]
@@ -12,7 +13,7 @@ draft: true
 
 import BackNavigationFrameDiagram from "@/modules/features/demo/BackNavigationFrameDiagram/index.astro";
 
-깊이 스크롤한 목록에서 문서를 열었다가 뒤로 돌아오면 스크롤 위치는 돌아왔지만, 화면 대부분이 행 없이 보이는 프레임이 한 장 있었습니다. 스크롤 위치를 한 번에 되돌린 뒤 scroll 이벤트에서 구한 새 범위를 React가 페인트 다음 작업으로 미뤄서였고, 그린 행이 화면을 덮지 못할 때만 `flushSync`로 이벤트 안에서 렌더링하게 해서 휠 스크롤의 프레임 간격을 지키며 막았습니다. 「라이브러리 없이 목록 가상화」 시리즈 4편이고, 휠 스크롤 중의 빈 칸과 빈 칸 프레임을 센 방법은 [3편](/posts/virtual-list-blank-frames/)에 있습니다.
+깊이 스크롤한 목록에서 문서를 열었다가 뒤로 돌아오면 스크롤 위치는 돌아왔지만, 화면 대부분이 행 없이 보이는 프레임이 한 장 있었습니다. 스크롤 위치를 한 번에 되돌린 뒤 scroll 이벤트에서 구한 새 범위를 React가 페인트 다음 작업으로 미뤄서였고, 그린 행이 화면을 덮지 못할 때만 `flushSync`로 이벤트 안에서 렌더링하게 해서 휠 스크롤의 프레임 간격을 지키며 막았습니다.
 
 ## 뒤로 가기에서는 왜 한 프레임이 비었을까
 

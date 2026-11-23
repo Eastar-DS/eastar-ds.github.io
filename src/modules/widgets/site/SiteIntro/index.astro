@@ -2,14 +2,17 @@
 /**
  * 글 목록 맨 위의 사이트 소개입니다. 이 페이지의 h1을 가집니다.
  * 제목은 페이지 제목 단계(title, 28px · 휴대폰 24px)입니다.
- * @design design/blog.pen 화면 「A · 글 목록 · 넓은 화면」 Yknaw
+ * @design design/blog.pen 화면 「A · 글 목록 · 넓은 화면」 Yknaw (포트폴리오 링크: docs/design-system.md 7.33, Pencil 시안 없음)
  */
+import { IS_PORTFOLIO_SHOWN } from "@/shared/constants/features";
+import { PATHS } from "@/shared/routes/paths";
 import { SITE } from "@/shared/constants/site";
 ---
 
 <section class="container">
   <h1 class="title">공부하며 만든 것과 배운 것을 적습니다</h1>
   <p class="description">{SITE.author.tagline} {SITE.author.displayName}입니다.</p>
+  {IS_PORTFOLIO_SHOWN && <p class="portfolio"><a href={PATHS.portfolio}>포트폴리오 보기</a></p>}
 </section>
 
 <style>
@@ -25,6 +28,18 @@ import { SITE } from "@/shared/constants/site";
     line-height: var(--line-height-title);
     letter-spacing: var(--letter-spacing-title);
     text-wrap: balance;
+  }
+
+  .portfolio {
+    font-size: var(--font-size-body-sm);
+  }
+  .portfolio a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .portfolio a:hover {
+    color: var(--color-accent-hover);
   }
 
   .description {

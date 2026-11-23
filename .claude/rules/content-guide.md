@@ -24,6 +24,8 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 - `projects`(선택, 2026-11-21): 이 글과 이어진 프로젝트 id 목록(`projects: [knot]`). `shared/constants/career`의 `CAREER_PROJECT_IDS`(`knot`, `sellerhome`, `bid`)만 받아서 없는 id면 빌드가 멈춥니다. 적으면 글 끝에 「이 글과 이어진 프로젝트」 링크(`features/post/PostProjectLinks`)가 붙습니다. 정본 `docs/content-guide.md` 1장 표의 `projects` 줄과 같습니다.
 - 이력서 줄과 포트폴리오 사례는 `relatedPostSlugs`에 글 이름(slug)을 적어 「관련 글」로 잇습니다. 글 이름(폴더 이름)을 바꾸면 그 값도 함께 고칩니다. 없는 글 이름이면 그 페이지의 빌드가 멈춥니다.
 
+- 시리즈 앞머리는 `id`, `name`, `order`를 쓰며 정본 8.2를 따릅니다. `id`는 영문 소문자 낱말을 하이픈으로 잇고, 안내는 본문 첫 문단 대신 `SeriesGuide`가 그립니다.
+
 ## 글에서 쓰는 부품
 
 `PostBody`가 MDX `components`로 넘겨 주므로 import 없이 씁니다.
@@ -50,7 +52,8 @@ description: 글(MDX)과 콘텐츠 코드의 규칙 요약. 글쓰기 · 게시 
 | `getPosts` | 모든 글을 최신순으로. 화면용 `Post` 모양으로 바꿈 |
 | `getPost(slug)` | 글 하나. 없으면 빌드를 멈춤 |
 | `renderPost(slug)` | 본문 컴포넌트(`Content`)와 제목 목록(`headings`) |
-| `getSeriesList` | 시리즈별 글 수와 첫 편 |
+| `getSeriesList` | 공개한 편이 있는 시리즈의 id, 이름, 소개와 전체 편 수 |
+| `getSeries(id)` | 시리즈 소개와 순서대로 정렬한 전체 편 목록. 배포에서 초안 편은 주소를 주지 않음 |
 | `getAdjacentPosts(slug)` | 이전 글 · 다음 글 (같은 시리즈면 시리즈 순서, 아니면 발행일 순서) |
 | `getPostsBySlugs(slugs)` | 글 이름 목록에 맞는 글을 적은 순서대로. 없는 글 이름이 있으면 빌드를 멈춤 (이력서 · 포트폴리오의 「관련 글」) |
 | `calculateReadingMinutes` · `groupPostsByYear` · `toSeriesList` · `findAdjacentPosts` · `findPostsBySlugs` | 위 함수들이 쓰는 순수 계산. 단위 테스트함 |

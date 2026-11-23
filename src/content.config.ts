@@ -39,6 +39,7 @@ const posts = defineCollection({
     category: z.enum(POST_CATEGORIES),
     series: z
       .object({
+        id: z.string().regex(/^[a-z]+(?:-[a-z]+)*$/),
         name: z.string(),
         order: z.number().int().positive(),
       })
@@ -49,8 +50,9 @@ const posts = defineCollection({
      */
     projects: z.array(z.enum(CAREER_PROJECT_IDS)).optional(),
     /**
-     * 초안이면 `true`. 배포 빌드에서는 글 목록, 글 페이지, RSS, 사이트맵, llms.txt, 공유 그림 어디에도 나오지 않고,
-     * 개발 서버에서만 보입니다. 이스타가 글을 확인한 뒤 지우거나 `false`로 바꿔 게시합니다.
+     * 초안이면 `true`. 배포 빌드에서는 글 목록, 글 페이지, RSS, 사이트맵, llms.txt, 공유 그림에서 빠지고,
+     * 공개한 편이 있는 시리즈의 편 목록에 제목과 「준비 중」을 보입니다. 개발 서버에서는 본문도 보입니다.
+     * 이스타가 글을 확인한 뒤 지우거나 `false`로 바꿔 게시합니다.
      */
     draft: z.boolean().default(false),
   }),
