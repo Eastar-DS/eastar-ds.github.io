@@ -8,14 +8,14 @@ import type { Measurement } from "@/modules/features/demo/VirtualizationResultCh
  */
 export const MEASUREMENTS: Measurement[] = [
   {
-    label: "「주제별」을 누른 뒤 목록이 보일 때까지",
+    label: "문서 목록 탭을 누른 뒤 목록이 보일 때까지",
     condition: "세션 녹화 없음",
     before: 966,
     after: 46,
     unit: "ms",
   },
   {
-    label: "「주제별」을 누른 뒤 목록이 보일 때까지",
+    label: "문서 목록 탭을 누른 뒤 목록이 보일 때까지",
     condition: "세션 녹화 켬",
     before: 1729,
     after: 67,
@@ -28,7 +28,7 @@ export const MEASUREMENTS: Measurement[] = [
     unit: "개",
   },
   {
-    label: "탭에 들어갈 때 렌더링한 컴포넌트 수",
+    label: "탭에 들어갈 때 마운트한 컴포넌트 수",
     condition: "React Profiler",
     before: 37168,
     after: 558,
