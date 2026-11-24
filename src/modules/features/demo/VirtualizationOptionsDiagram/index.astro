@@ -1,0 +1,429 @@
+---
+import Icon from "@/shared/components/primitives/ui/Icon/index.astro";
+
+const TANSTACK_CARDS = [
+  { distance: "isNear", scrollMargin: "40", note: "" },
+  { distance: "isFar", scrollMargin: "150", note: "위 폴더가 바뀌면 다시 맞춤" },
+];
+
+/** 한 리스트의 칸들. 폴더 이름도 칸 하나이고, 각 폴더의 첫 행 · 마지막 행은 카드 모서리를 따로 그립니다 */
+const FLAT_ITEMS = [
+  { kind: "name", hint: "폴더 이름도 한 칸" },
+  { kind: "first", hint: "위 모서리 둥글게" },
+  { kind: "middle", hint: "행마다 흰 바탕" },
+  { kind: "last", hint: "아래 모서리 둥글게" },
+  { kind: "name", hint: "" },
+  { kind: "first", hint: "" },
+  { kind: "last", hint: "" },
+];
+
+/**
+ * 리스트 가상화를 적용하는 네 방법이 문서 목록(폴더 이름 · 카드 · 행)에 어떤 모양을 만드는지 칸 네 개로 견주는 그림입니다(design-system 7.37).
+ * 칸 순서와 이름은 글의 표 2와 같습니다(TanStack Virtual, react-window, 한 리스트, 직접 구현).
+ * 칸마다 페이지를 줄인 작은 도식과 한 줄 설명을 두고, 숫자가 아니라 모양으로 차이를 보입니다. 고른 방법은 강조색 틀과 체크 아이콘, 「고름」 글로 알립니다.
+ * 도식은 꾸밈이라 화면 낭독기에서 숨기고, 같은 뜻을 한 줄 설명이 글로 말합니다. 내용은 글의 표 2와 같아야 합니다.
+ * JavaScript 없이 서버에서 그리고, 색은 토큰만 써서 어두운 화면에서도 그대로 보입니다. 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
+ */
+---
+
+<div class="root">
+  <ol class="options">
+    <li class="option">
+      <p class="name">TanStack Virtual</p>
+      <div class="sketch" aria-hidden="true">
+        <div class="page hasGutter">
+          {
+            TANSTACK_CARDS.map((card) => (
+              <div class="folder">
+                <span class="folderName">폴더 이름</span>
+                <div class="card isMeasured">
+                  <span class={`reach ${card.distance}`} />
+                  <span class="settings">
+                    <span class="setting">가상화 설정</span>
+                    <span class="setting">
+                      <code>scrollMargin</code> {card.scrollMargin}
+                    </span>
+                  </span>
+                  <span class="row" />
+                </div>
+                {card.note && <span class="hint isAlone">{card.note}</span>}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <p class="description">
+        카드마다 가상화 설정을 붙이고, 카드가 페이지 맨 위에서 몇 px 떨어져 있는지(<code>scrollMargin</code>)를 숫자로 알려
+        줘야 합니다. 위쪽 폴더 높이가 바뀌면 그 숫자도 다시 맞춥니다.
+      </p>
+    </li>
+    <li class="option">
+      <p class="name">react-window의 <code>List</code></p>
+      <div class="sketch" aria-hidden="true">
+        <div class="page hasScrollbar">
+          {
+            [0, 1].map(() => (
+              <div class="folder">
+                <span class="folderName">폴더 이름</span>
+                <div class="card isScrollBox">
+                  <span class="row" />
+                  <span class="row" />
+                  <span class="row" />
+                  <span class="scrollbar isInner" />
+                </div>
+              </div>
+            ))
+          }
+          <span class="scrollbar" />
+        </div>
+      </div>
+      <p class="description">카드 자리에 스크롤되는 상자가 생겨, 페이지 전체 스크롤 안에 카드마다 스크롤이 또 생깁니다.</p>
+    </li>
+    <li class="option">
+      <p class="name">폴더 이름도 한 칸으로 만들어 한 리스트로 세우기</p>
+      <div class="sketch" aria-hidden="true">
+        <ol class="page flatList">
+          {
+            FLAT_ITEMS.map((item) => (
+              <li class="flatItem">
+                <span class:list={["cell", `is-${item.kind}`]}>
+                  {item.kind === "name" ? "폴더 이름" : <span class="row" />}
+                </span>
+                {item.hint && <span class="hint">← {item.hint}</span>}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <p class="description">
+        카드라는 상자가 없어지고 폴더 이름도 행과 같은 리스트의 한 칸이 되어, 모든 칸이 한 줄로 섞입니다. 카드처럼 보이려면 첫
+        행은 위 모서리, 마지막 행은 아래 모서리를 둥글게 하고 행마다 흰 바탕을 따로 칠해야 합니다.
+      </p>
+    </li>
+    <li class="option isChosen">
+      <p class="name">
+        직접 구현
+        <span class="chosen"><Icon name="check" size="sm" />고름</span>
+      </p>
+      <div class="sketch" aria-hidden="true">
+        <div class="page">
+          <span class="setting isAsk">스크롤마다 <code>getBoundingClientRect</code></span>
+          <div class="folder">
+            <span class="folderName">폴더 이름</span>
+            <div class="card">
+              <span class="empty">그리지 않은 행의 자리</span>
+              <span class="row isDrawn">그리는 행</span>
+              <span class="row isDrawn">그리는 행</span>
+              <span class="empty">그리지 않은 행의 자리</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="description">
+        폴더 이름과 카드는 그대로 두고, 카드 안에서는 그리는 행(보이는 행과 overscan 안의 행)만 그립니다. 나머지는 그리지 않은
+        행의 자리로 두고, 카드 위치는 스크롤할 때마다 브라우저에게 묻습니다.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<style>
+  .root {
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    container: options-diagram / inline-size;
+  }
+
+  .options {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .option.isChosen {
+    border: var(--border-width-strong) solid var(--color-accent);
+  }
+
+  .name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-caption);
+  }
+
+  /* 코드 이름만 고정폭 글꼴로 씁니다. 한글 설명은 본문 글꼴 그대로입니다 */
+  .root code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-label);
+  }
+
+  .chosen {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+  }
+
+  .description {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    text-wrap: pretty;
+  }
+
+  /* 네 칸의 도식 높이를 같게 둬서 모양만 견주게 합니다 */
+  .sketch {
+    height: calc(var(--space-24) * 2);
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+  }
+
+  .page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0;
+    padding: var(--space-2);
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    list-style: none;
+  }
+
+  .page.hasScrollbar {
+    padding-inline-end: var(--space-4);
+  }
+
+  .page.hasGutter {
+    padding-inline-start: var(--space-8);
+  }
+
+  .folder {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .folderName,
+  .empty,
+  .setting,
+  .hint,
+  .cell.is-name {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+  }
+
+  .folderName,
+  .cell.is-name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .hint {
+    white-space: nowrap;
+  }
+
+  .hint.isAlone {
+    padding-inline-start: var(--space-1);
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .row {
+    display: block;
+    height: var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-hover);
+  }
+
+  /* 그리는 행은 이름표 글을 담으므로 막대 높이 대신 글 높이를 씁니다 */
+  .row.isDrawn {
+    height: auto;
+    border: var(--border-width) solid var(--color-accent);
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-label);
+    text-align: center;
+  }
+
+  /* react-window: 카드가 높이가 정해진 스크롤 상자가 되어 행 일부만 보이고 자기 스크롤 막대를 가집니다 */
+  .card.isScrollBox {
+    height: var(--space-10);
+    padding-inline-end: var(--space-4);
+    overflow: hidden;
+  }
+
+  .scrollbar {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-1);
+    bottom: var(--space-2);
+    width: var(--space-1);
+    border-radius: var(--radius-full);
+    background: var(--color-border);
+  }
+
+  .scrollbar::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 50%;
+    border-radius: var(--radius-full);
+    background: var(--color-border-strong);
+  }
+
+  .scrollbar.isInner {
+    top: var(--space-1);
+    bottom: var(--space-1);
+  }
+
+  /* TanStack Virtual: 카드 위 모서리에서 페이지 맨 위까지 잇는 선(scrollMargin)을 카드마다 긋습니다.
+     선은 위로 길게 그리고 페이지 칸이 넘친 부분을 잘라 페이지 맨 위에서 끝나게 합니다 */
+  /* 칩 안의 코드 이름은 본문 인라인 코드의 선과 바탕(7.14) 없이 글꼴만 바꿉니다 */
+  .sketch .setting code {
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  .settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .setting {
+    align-self: flex-start;
+    padding: 0 var(--space-1);
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .reach {
+    position: absolute;
+    bottom: 100%;
+    height: calc(var(--space-24) * 2);
+    border-inline-start: var(--border-width-strong) solid var(--color-text-muted);
+  }
+
+  .reach::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: calc(-1 * var(--space-1));
+    width: var(--space-2);
+    border-top: var(--border-width-strong) solid var(--color-text-muted);
+  }
+
+  .reach.isNear {
+    left: calc(-1 * var(--space-3));
+  }
+
+  .reach.isFar {
+    left: calc(-1 * var(--space-6));
+  }
+
+  /* 한 리스트: 카드 상자 없이 폴더 이름 칸과 행 칸이 떨어진 같은 폭 상자로 한 줄로 섭니다.
+     카드 모양(흰 바탕, 첫 행 위 · 마지막 행 아래 둥근 모서리)은 칸마다 따로 칠합니다 */
+  .page.flatList {
+    gap: var(--space-1);
+  }
+
+  .flatItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .cell {
+    flex: 0 0 50%;
+    box-sizing: border-box;
+    padding: var(--space-1);
+    border: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .cell.is-name {
+    padding-block: 0;
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: none;
+  }
+
+  .cell.is-first {
+    border-start-start-radius: var(--radius-lg);
+    border-start-end-radius: var(--radius-lg);
+  }
+
+  .cell.is-last {
+    border-end-start-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
+  }
+
+  .empty {
+    display: block;
+    padding: var(--space-1);
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+
+  @container options-diagram (min-width: 520px) {
+    .options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .option.isChosen,
+    .row.isDrawn {
+      border-color: Highlight;
+    }
+
+    .chosen {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+</style>

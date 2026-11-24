@@ -31,7 +31,7 @@ const KNOT: ResumeExperience = {
       title: "까다로운 요구사항을 단순한 구조로 구현",
       items: [
         {
-          title: "문서 탭 「주제별」 목록 가상화(우테코 렌더링 성능 과제)",
+          title: "문서 탭 「주제별」 리스트 가상화(우테코 렌더링 성능 과제)",
           text: "문서 1,939개인 팀 워크스페이스에서 탭을 누른 뒤 목록이 보일 때까지 966ms(CPU 4배 느림)가 걸리던 것을 46ms로 줄임. 운영 배포 뒤 같은 조건에서도 1,530ms → 68ms",
           relatedPostSlugs: [
             "virtualized-document-list",

@@ -51,7 +51,7 @@ const KEPT_ATTRIBUTES = new Set([
   "cite",
 ]);
 
-/** 링크에만 남기는 속성. 각주 링크의 「1번 각주로 돌아가기」 같은 이름을 살립니다. 다른 요소의 이름(aria-label)은 role을 버리면 뜻이 없어집니다 */
+/** 링크에만 남기는 속성. 각주 돌아가기 링크의 「읽던 곳으로, 1번 각주를 단 문장」 같은 이름을 살립니다. 다른 요소의 이름(aria-label)은 role을 버리면 뜻이 없어집니다 */
 const LINK_ATTRIBUTES = new Set(["aria-label", "aria-describedby"]);
 
 /** 안을 다듬고 나서 비면 버리는 요소. 단추와 아이콘을 뺀 뒤 남는 빈 껍데기입니다 */

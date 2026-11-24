@@ -16,7 +16,7 @@ interface WheelControlsProps {
 }
 
 /**
- * 데모의 조작 줄입니다. 미리 그릴 거리 슬라이더와 휠 한 번의 거리 슬라이더를 한 줄에 하나씩 쌓고, 값을 옆에 글로 보입니다.
+ * 데모의 조작 줄입니다. overscan 슬라이더와 휠 한 번의 거리 슬라이더를 한 줄에 하나씩 쌓고, 값을 옆에 글로 보입니다.
  * @design design/blog.pen 「데모 틀」 M3NVPX 조작 줄, 「슬라이더」 taHDx
  */
 export default function WheelControls({
@@ -30,7 +30,7 @@ export default function WheelControls({
     <div className={styles.container}>
       <div className={styles.group}>
         <span className={styles.label} aria-hidden="true">
-          미리 그릴 거리
+          overscan
         </span>
         <DemoSlider
           value={overscanPx}
@@ -38,7 +38,7 @@ export default function WheelControls({
           max={OVERSCAN_PX.max}
           step={OVERSCAN_PX.step}
           onValueChange={onOverscanChange}
-          label="미리 그릴 거리"
+          label="overscan"
           valueText={`${overscanPx}px`}
         />
         <span className={styles.value} aria-hidden="true">

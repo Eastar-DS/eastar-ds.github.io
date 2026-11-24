@@ -56,6 +56,8 @@ export const NOTATION = {
    * 정본에 없는 기준으로 「네 자리 이상 숫자 + 아래 세는 말」만 봅니다. 기계 판단이라 경고
    */
   counterWords: ["개", "자", "명", "번", "건", "줄", "편", "행", "회", "원"],
+  /** 정말 강조할 곳에만 쓰는 느낌표의 글 하나당 상한. 넘으면 경고 */
+  maxExclamations: 3,
   basis: `${CONTENT_GUIDE} 4장`,
 } as const;
 

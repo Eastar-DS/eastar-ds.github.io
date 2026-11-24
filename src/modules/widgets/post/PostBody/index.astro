@@ -168,7 +168,7 @@ const { Content } = await renderPost(slug);
 
   /*
    * 각주 (docs/design-system.md 7.28). 본문의 각주 번호는 본문 링크 모양에 위 첨자이고, 줄 간격이 벌어지지 않게 줄 높이를 0으로 둡니다.
-   * 각주 목록은 body-sm · 보조색이고, 목록 안 링크(「↩」 돌아가기 포함)는 본문 링크와 같은 모양입니다.
+   * 각주 목록은 body-sm · 보조색이고, 목록 안 링크(「↑ 읽던 곳으로」 돌아가기 포함)는 본문 링크와 같은 모양입니다.
    */
   .container > :global(:is(p, ul, ol, blockquote) sup) {
     line-height: 0;
@@ -212,6 +212,16 @@ const { Content } = await renderPost(slug);
     text-decoration-thickness: var(--border-width-strong);
   }
 
+  /*
+   * 돌아가기 링크(「↑ 읽던 곳으로」)는 출처 링크와 붙어 보이지 않게 각주 글 아래 자기 줄에 둡니다.
+   * 줄을 혼자 차지해 글 속 링크 예외를 받지 못하므로, 위아래 안쪽 여백으로 누르는 높이를 24px 넘게 둡니다(WCAG 2.5.8)
+   */
+  .container > :global([data-footnotes] > ol a[data-footnote-backref]) {
+    display: block;
+    width: fit-content;
+    padding-block: var(--space-1);
+  }
+
   .container > :global(hr) {
     margin-block: var(--space-10);
     border: 0;
@@ -222,11 +232,77 @@ const { Content } = await renderPost(slug);
    * 인쇄 (docs/design-system.md 7.29). 종이에서는 링크를 누를 수 없어서 밑줄과 강조색을 빼고,
    * 다른 사이트로 가는 링크(`ContentLink`가 `data-print-url`을 붙임)는 링크 글 뒤에 주소를 괄호로 붙입니다.
    */
+  /* 본문을 끊는 보충 자료(측정 조건 등)는 접는 칸에 둡니다. JavaScript 없이 열리고 닫힙니다 (design-system 7.39) */
+  .container > :global(details) {
+    padding: var(--space-2) var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .container > :global(details > summary) {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    width: fit-content;
+    padding-block: var(--space-2);
+    font-weight: 600;
+    list-style: none;
+    cursor: pointer;
+  }
+  .container > :global(details > summary::-webkit-details-marker) {
+    display: none;
+  }
+  /* 글꼴에 없는 기호 대신 테두리로 삼각형을 그립니다. 펼치면 아래를 향하게 돌립니다 */
+  .container > :global(details > summary::before) {
+    content: "";
+    border-block: 5px solid transparent;
+    border-left: 6px solid var(--color-text-muted);
+    transition: transform 0.15s ease;
+  }
+  .container > :global(details[open] > summary::before) {
+    transform: rotate(90deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .container > :global(details > summary::before) {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .container > :global(details > summary::before) {
+      border-left-color: CanvasText;
+    }
+  }
+  .container > :global(details[open]) {
+    padding-bottom: var(--space-4);
+  }
+  .container > :global(details > * + *:not(summary)) {
+    margin-top: var(--space-3);
+  }
+  .container > :global(details[open] > summary + *) {
+    margin-top: var(--space-2);
+  }
+  .container > :global(details :is(th, td):first-child) {
+    white-space: nowrap;
+  }
+  .container > :global(details :is(ul, ol)) {
+    padding-left: 1.4em;
+  }
+  .container > :global(details :is(ul, ol) li + li) {
+    margin-top: var(--space-3);
+  }
+  .container > :global(details :is(ul, ol) li::marker) {
+    color: var(--color-text-muted);
+  }
+
   @media print {
     .container > :global(:is(p, ul, ol, blockquote, figure, [role="note"]) a:is(:link, :visited)),
     .container > :global([data-footnotes] > ol a:is(:link, :visited)) {
       color: inherit;
       text-decoration: none;
+    }
+
+    /* 종이에서는 읽던 곳으로 옮겨 갈 수 없으므로 돌아가기 링크 줄을 그리지 않습니다 */
+    .container > :global([data-footnotes] > ol a[data-footnote-backref]) {
+      display: none;
     }
 
     .container :global(a[data-print-url])::after {

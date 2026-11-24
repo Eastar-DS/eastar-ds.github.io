@@ -206,14 +206,23 @@ describe("코드 칸", () => {
 });
 
 describe("한글 표기", () => {
-  it("<br>, 이모지, 느낌표, 큰따옴표, 기울임꼴은 실패한다", () => {
+  it("<br>, 이모지, 큰따옴표, 기울임꼴은 실패한다", () => {
     const source = SERIES_FIRST_SOURCE.replace(
       "화면에 보이지 않는 행까지 한꺼번에 만들었기 때문에 느렸습니다.",
       '화면에 보이지 않는 행까지<br />한꺼번에 만들었습니다! 그래서 "느렸습니다" 🚀 *정말*로요.',
     );
     const results = check({ source });
 
-    expect(["br", "emoji", "exclamation", "double-quote", "italic"].map((id) => find(results, id).status)).toEqual(["fail", "fail", "fail", "fail", "fail"]);
+    expect(["br", "emoji", "double-quote", "italic"].map((id) => find(results, id).status)).toEqual(["fail", "fail", "fail", "fail"]);
+  });
+
+  it("느낌표는 글 하나에 세 곳까지 통과하고, 넘으면 경고한다", () => {
+    const sentence = "화면에 보이지 않는 행까지 한꺼번에 만들었기 때문에 느렸습니다.";
+    const withMarks = (count: number) =>
+      check({ source: SERIES_FIRST_SOURCE.replace(sentence, `${"정말 느렸습니다! ".repeat(count)}${sentence}`) });
+
+    expect(find(withMarks(3), "exclamation").status).toBe("pass");
+    expect(find(withMarks(4), "exclamation").status).toBe("warn");
   });
 
   it("코드 칸과 인라인 코드, 그림 문법 속의 느낌표와 큰따옴표는 보지 않는다", () => {

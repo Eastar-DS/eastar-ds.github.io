@@ -1,49 +1,68 @@
 ---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+import { FOLDER_SHOT_MARKS } from "./constants/folderShotMarks";
+
+interface Props {
+  /** 글 폴더의 폴더 하나 화면 그림(`knot-topic-folder.png`). 이름표 자리는 `constants/folderShotMarks.ts`가 이 그림에 맞춰 둡니다 */
+  image: ImageMetadata;
+  /** 그림의 대체 글. 그림이 보여 주는 것을 한 문장으로 씁니다 */
+  alt: string;
+}
+
 /**
- * Knot 문서 탭 「주제별」 목록의 DOM 구조를 바깥 칸이 안쪽 칸을 감싸는 모양으로 보여 주는 그림입니다.
- * 스크롤은 창이 아니라 `main`이 맡고, 폴더 틀(`section`, 폴더 머리, 카드 `ul`)은 모두 그리며, 카드 안의 행(`li`)만 화면 근처의 것을 그린다는 점을 보입니다.
- * JavaScript 없이 서버에서 그리고, 색은 토큰만 써서 어두운 화면에서도 그대로 보입니다. 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
- * 늘 그리는 틀은 실선 테두리, 행은 강조색 바탕(●)으로 나누고, 이름표로도 알립니다.
+ * Knot 문서 탭 「주제별」의 실제 화면 한 폴더와 그 DOM 구조를 나란히 놓는 그림입니다(design-system 7.36).
+ * 폴더 이름은 `section` 안 첫 `div`(`h3`, `span`), 카드는 `ul`, 행은 `li`이고, 두 칸에 같은 이름표와 강조색 틀을 붙여 잇습니다.
+ * 넓으면 가로로, 좁으면(틀 안쪽 600px 미만) 위아래로 쌓습니다. 스크롤은 `main`이 맡고, 카드 안에서 그리지 않은 행의 자리는 점선 칸으로 보입니다.
+ * JavaScript 없이 서버에서 그리고, 이름표는 그림에 굽지 않고 HTML로 얹어 어두운 화면에서도 토큰 색을 따릅니다. 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
  */
-const rows = ["0번 행", "1번 행", "2번 행"];
+const { image, alt } = Astro.props;
 ---
 
 <div class="container">
-  <div class="box">
-    <p class="name"><code>main</code> 스크롤 영역</p>
-    <div class="box isDashed">
-      <p class="name">문서 탭 머리 (제목과 탭)</p>
-    </div>
-    <div class="box">
-      <p class="name">폴더 목록 <span class="note">폴더 사이 28px</span></p>
-      <div class="box">
-        <p class="name"><code>section</code> 폴더 <span class="note">28개</span></p>
-        <div class="box isDashed">
-          <p class="name">폴더 머리 <span class="note">폴더 이름과 문서 수, 높이 24px</span></p>
-        </div>
-        <p class="gap">간격 12px</p>
-        <div class="box">
-          <p class="name"><code>ul</code> 카드</p>
-          <ul class="rows">
-            {
-              rows.map((row) => (
-                <li class="row">
-                  <span class="marker" aria-hidden="true">●</span> <code>li</code> {row}
-                </li>
-              ))
-            }
-            <li class="row isMore">폴더 28개를 합쳐 행 1,939개</li>
-          </ul>
-        </div>
+  <div class="panels">
+    <div class="panel">
+      <p class="panelTitle">실제 화면 (폴더 하나)</p>
+      <div class="shot">
+        <Image class="shotImage" src={image} alt={alt} width={440} densities={[1, 2]} />
+        {
+          FOLDER_SHOT_MARKS.map((mark) => (
+            <span
+              class:list={["mark", `is-${mark.kind}`]}
+              style={`--left: ${mark.left}%; --top: ${mark.top}%; --width: ${mark.width}%; --height: ${mark.height}%`}
+            >
+              <span class="tag">{mark.label}</span>
+            </span>
+          ))
+        }
       </div>
-      <div class="box isDashed">
-        <p class="name">다음 <code>section</code> 27개</p>
+    </div>
+    <div class="panel">
+      <p class="panelTitle">DOM 구조</p>
+      <div class="node">
+        <p class="name"><code>main</code> 스크롤 영역</p>
+        <div class="node">
+          <p class="name"><code>section</code> 폴더 <span class="note">28개</span></p>
+          <div class="node isMarked">
+            <p class="name"><code>div</code> <span class="tag">폴더 이름</span></p>
+            <p class="detail"><code>h3</code> 고객 문의 · <code>span</code> 5</p>
+          </div>
+          <div class="node isMarked">
+            <p class="name"><code>ul</code> <span class="tag">카드</span></p>
+            <p class="empty"><span>그리지 않은 행의 자리</span> <code>padding-top</code></p>
+            <p class="node isMarked isRow"><code>li</code> 그리는 행 <span class="tag">행</span></p>
+            <p class="node isRow"><code>li</code> 그리는 행</p>
+            <p class="empty">그리지 않은 행의 자리</p>
+          </div>
+        </div>
+        <p class="node isDashed"><span class="name">다음 <code>section</code> 27개</span></p>
       </div>
     </div>
   </div>
   <ul class="legend">
-    <li class="legendItem"><span class="swatch isFrame"></span>늘 그리는 틀</li>
-    <li class="legendItem"><span class="swatch isRow"></span>화면 근처의 것만 그리는 행</li>
+    <li class="legendItem"><span class="swatch isMarked"></span>같은 이름표: 두 칸에서 같은 부분</li>
+    <li class="legendItem"><span class="swatch isEmpty"></span>점선: 그리지 않은 행의 자리(<code>li</code> 없음)</li>
   </ul>
 </div>
 
@@ -52,14 +71,98 @@ const rows = ["0번 행", "1번 행", "2번 행"];
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    padding: var(--space-5);
+    padding: var(--space-4);
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-lg);
     background: var(--color-surface);
-    container: dom-diagram / inline-size;
+    container: folder-dom / inline-size;
   }
 
-  .box {
+  .panels {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .panelTitle {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-caption);
+  }
+
+  .shot {
+    position: relative;
+  }
+
+  /* Figure가 그림에 거는 선과 모서리를 그대로 받습니다. 폭은 칸에 맞춥니다 */
+  .shot :global(.shotImage) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .mark {
+    --outset: var(--space-1);
+
+    position: absolute;
+    top: calc(var(--top) - var(--outset));
+    left: calc(var(--left) - var(--outset));
+    width: calc(var(--width) + 2 * var(--outset));
+    height: calc(var(--height) + 2 * var(--outset));
+    border: var(--border-width-strong) solid var(--color-accent);
+    border-radius: var(--radius-md);
+
+    /* 그림은 두 화면 모두 흰 바탕이라, 어두운 화면의 옅은 강조색 틀은 흰색과 3:1이 안 됩니다. 바깥에 on-accent 선을 덧대 경계를 지킵니다 */
+    outline: var(--border-width) solid var(--color-on-accent);
+  }
+
+  /* 행 틀은 카드 틀과 겹치지 않게 안쪽으로 들입니다 */
+  .mark.is-row {
+    --outset: calc(-1 * var(--space-1));
+
+    border-radius: var(--radius-sm);
+  }
+
+  .mark .tag {
+    position: absolute;
+  }
+
+  .mark.is-header .tag {
+    top: 50%;
+    left: calc(100% + var(--space-2));
+    transform: translateY(-50%);
+  }
+
+  .mark.is-card .tag {
+    right: 0;
+    bottom: calc(100% + var(--space-1));
+  }
+
+  .mark.is-row .tag {
+    top: 50%;
+    right: var(--space-2);
+    transform: translateY(-50%);
+  }
+
+  .tag {
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label);
+    white-space: nowrap;
+  }
+
+  .node {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -69,64 +172,77 @@ const rows = ["0번 행", "1번 행", "2번 행"];
     background: var(--color-bg);
   }
 
-  /* 점선 칸은 늘 그리지만 이 글에서 다루지 않는 부분입니다 */
-  .box.isDashed {
+  .node.isMarked {
+    border: var(--border-width-strong) solid var(--color-accent);
+  }
+
+  .node.isDashed {
     border-style: dashed;
   }
 
-  .name {
+  .node.isRow {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1) var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .name,
+  .node.isRow,
+  .node.isDashed {
     color: var(--color-text);
     font-size: var(--font-size-caption);
-    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-caption);
   }
 
-  .name code,
-  .row code {
-    font-family: var(--font-mono);
-    font-size: var(--font-size-label);
+  .name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .name .tag,
+  .node.isRow .tag {
+    margin-inline-start: var(--space-1);
+  }
+
+  .node.isRow .tag {
+    margin-inline-start: auto;
   }
 
   .note,
-  .gap {
+  .detail,
+  .empty {
     color: var(--color-text-muted);
     font-weight: var(--font-weight-regular);
   }
 
-  .gap {
+  .detail,
+  .empty {
     font-size: var(--font-size-label);
     line-height: var(--line-height-label);
   }
 
-  .rows {
+  /* 이름과 코드 이름을 두 줄로 나눠, 좁은 칸에서 코드 이름이 가운데서 끊기지 않게 합니다 */
+  .empty {
     display: flex;
     flex-direction: column;
-    margin: 0;
-    padding: 0;
-    border: var(--border-width) solid var(--color-accent);
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2);
+    border: var(--border-width) dashed var(--color-border-strong);
     border-radius: var(--radius-sm);
-    list-style: none;
-  }
-
-  .row {
-    padding: var(--space-1) var(--space-2);
-    background: var(--color-accent-soft);
-    color: var(--color-text);
-    font-size: var(--font-size-caption);
-    line-height: var(--line-height-caption);
-  }
-
-  .row + .row {
-    border-top: var(--border-width) solid var(--color-bg);
-  }
-
-  .row.isMore {
-    color: var(--color-text-muted);
     text-align: center;
   }
 
-  .marker {
-    color: var(--color-accent);
+  .container code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-label);
+  }
+
+  .container .empty code {
+    overflow-wrap: normal;
+    white-space: nowrap;
   }
 
   .legend {
@@ -154,26 +270,33 @@ const rows = ["0번 행", "1번 행", "2번 행"];
     border-radius: var(--radius-sm);
   }
 
-  .swatch.isFrame {
-    border: var(--border-width-strong) solid var(--color-border-strong);
-    background: var(--color-bg);
+  .swatch.isMarked {
+    border: var(--border-width-strong) solid var(--color-accent);
   }
 
-  .swatch.isRow {
-    border: var(--border-width) solid var(--color-accent);
-    background: var(--color-accent-soft);
+  .swatch.isEmpty {
+    border: var(--border-width) dashed var(--color-border-strong);
   }
 
-  @container dom-diagram (min-width: 520px) {
-    .box {
-      padding: var(--space-3);
+  /* 두 칸에 각각 300px 안팎이 남는 폭부터 나란히 둡니다. 그림 쪽 글자가 덜 작아지게 그림 칸을 조금 넓게 줍니다 */
+  @container folder-dom (min-width: 600px) {
+    .panels {
+      grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+      align-items: start;
     }
   }
 
   @media (forced-colors: active) {
-    .rows,
-    .swatch.isRow {
-      border-color: CanvasText;
+    .mark,
+    .node.isMarked,
+    .swatch.isMarked {
+      border-color: Highlight;
+    }
+
+    .tag {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
     }
   }
 </style>

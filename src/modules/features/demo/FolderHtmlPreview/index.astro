@@ -1,0 +1,442 @@
+---
+import {
+  FOLDER_NAME,
+  OVERSCAN_PX,
+  ROW_HEIGHT_PX,
+  ROW_TITLES,
+  TICK_STEP_PX,
+  VIEW_HEIGHT_PX,
+  VIEW_TOP_PX,
+} from "./constants/folderHtmlPreview";
+import getDrawnRowRange from "./utils/getDrawnRowRange";
+
+interface Props {
+  /** 참이면 가상화 후(카드 안에서 그리는 행만), 거짓이면 가상화 전(행 모두)을 그립니다 */
+  isVirtualized?: boolean;
+}
+
+/**
+ * 글의 HTML 예시(폴더 「프런트엔드」, 행 4개)를 코드 칸 옆에 화면 모양으로 그린 미리보기입니다(design-system 7.38).
+ * 기본 슬롯에 코드 칸을 받고, 틀 안쪽이 본문 폭(680px) 이상이면 코드와 미리보기를 가로로, 좁으면 위아래로 둡니다.
+ * 가상화 후에는 카드 안에 그리는 행과 그리지 않은 행의 자리만 두고, 화면 · overscan · 그리는 범위는 카드 오른쪽 괄호로 따로 표시합니다.
+ * 카드 400px를 360px로 줄여 그리고 위치는 모두 카드 높이에 대한 비율이라 글의 숫자와 그대로 맞습니다.
+ * JavaScript 없이 서버에서 그립니다. 미리보기는 `role="img"`로 한 덩어리로 읽히게 하고, 글에서는 `<Figure>`로 감싸 설명을 붙입니다.
+ */
+const { isVirtualized = false } = Astro.props;
+
+const cardHeightPx = ROW_TITLES.length * ROW_HEIGHT_PX;
+const toPercent = (px: number) => `${(px / cardHeightPx) * 100}%`;
+const toBox = ({ topPx, heightPx }: { topPx: number; heightPx: number }) =>
+  `--top: ${toPercent(topPx)}; --height: ${toPercent(heightPx)}`;
+
+const ticks = Array.from({ length: cardHeightPx / TICK_STEP_PX + 1 }, (_, index) => index * TICK_STEP_PX);
+const rangeStartPx = VIEW_TOP_PX - OVERSCAN_PX;
+const viewBottomPx = VIEW_TOP_PX + VIEW_HEIGHT_PX;
+const rangeEndPx = viewBottomPx + OVERSCAN_PX;
+const drawn = isVirtualized
+  ? getDrawnRowRange({ rowCount: ROW_TITLES.length, rowHeightPx: ROW_HEIGHT_PX, rangeStartPx, rangeEndPx })
+  : { start: 0, end: ROW_TITLES.length };
+const rows = ROW_TITLES.map((title, index) => ({ title, index })).slice(drawn.start, drawn.end);
+const topGapPx = drawn.start * ROW_HEIGHT_PX;
+const bottomGapPx = cardHeightPx - drawn.end * ROW_HEIGHT_PX;
+const guides = [rangeStartPx, VIEW_TOP_PX, viewBottomPx, rangeEndPx];
+const spans = [
+  { kind: "overscan", name: "overscan", value: `${OVERSCAN_PX}px`, topPx: rangeStartPx, heightPx: OVERSCAN_PX },
+  { kind: "view", name: "화면", value: `${VIEW_TOP_PX}–${viewBottomPx}px`, topPx: VIEW_TOP_PX, heightPx: VIEW_HEIGHT_PX },
+  { kind: "overscan", name: "overscan", value: `${OVERSCAN_PX}px`, topPx: viewBottomPx, heightPx: OVERSCAN_PX },
+];
+const range = { topPx: rangeStartPx, heightPx: rangeEndPx - rangeStartPx };
+
+const label = isVirtualized
+  ? `폴더 「${FOLDER_NAME}」의 카드 ${cardHeightPx}px 안에서 위쪽 ${topGapPx}px와 아래쪽 ${bottomGapPx}px는 그리지 않은 행의 자리이고, ${drawn.start + 1}번째와 ${drawn.end}번째 행만 그립니다. 화면은 ${VIEW_TOP_PX}–${viewBottomPx}px이고 위아래 overscan ${OVERSCAN_PX}px를 더한 ${rangeStartPx}–${rangeEndPx}px가 그리는 범위이며, 범위에 조금이라도 걸친 행은 통째로 그립니다.`
+  : `폴더 「${FOLDER_NAME}」 이름 아래 카드 ${cardHeightPx}px 안에 행 ${ROW_TITLES.length}개가 ${ROW_HEIGHT_PX}px씩 쌓여 있습니다.`;
+---
+
+<div class="container">
+  <div class="panels">
+    <div class="code">
+      <slot />
+    </div>
+    <div class="preview" role="img" aria-label={label}>
+      <p class="previewTitle">화면에서 보이는 모양</p>
+      <p class="folderName">{FOLDER_NAME} <span class="count">{ROW_TITLES.length}</span></p>
+      <div class:list={["stage", { isVirtualized }]}>
+        <ol class="ticks">
+          {
+            ticks.map((px) => (
+              <li class="tick" style={`--top: ${toPercent(px)}`}>
+                {px}
+              </li>
+            ))
+          }
+        </ol>
+        <div class="card">
+          {
+            topGapPx > 0 && (
+              <div class="gap" style={toBox({ topPx: 0, heightPx: topGapPx })}>
+                <span>그리지 않은 행의 자리</span>
+              </div>
+            )
+          }
+          {
+            rows.map((row) => (
+              <div
+                class:list={["row", { isDrawn: isVirtualized }]}
+                style={toBox({ topPx: row.index * ROW_HEIGHT_PX, heightPx: ROW_HEIGHT_PX })}
+              >
+                <span class="rowTitle">{row.title}</span>
+              </div>
+            ))
+          }
+          {
+            bottomGapPx > 0 && (
+              <div class="gap" style={toBox({ topPx: cardHeightPx - bottomGapPx, heightPx: bottomGapPx })}>
+                <span>그리지 않은 행의 자리</span>
+              </div>
+            )
+          }
+          {isVirtualized && guides.map((px) => <span class="guide" style={`--top: ${toPercent(px)}`} />)}
+        </div>
+        {
+          isVirtualized && (
+            <div class="spans">
+              <span class="bracket is-range" style={toBox(range)} />
+              <span class="spanLabel is-range" style={`--top: ${toPercent(spans[0].topPx + spans[0].heightPx / 2)}`}>
+                <span>그리는 범위</span>
+                <span>
+                  {rangeStartPx}–{rangeEndPx}px
+                </span>
+              </span>
+              {spans.map((span) => (
+                <>
+                  <span class:list={["bracket", "is-part", `is-${span.kind}`]} style={toBox(span)} />
+                  <span
+                    class:list={["spanLabel", "is-part", `is-${span.kind}`]}
+                    style={`--top: ${toPercent(span.topPx + span.heightPx / 2)}`}
+                  >
+                    <span>{span.name}</span>
+                    <span>{span.value}</span>
+                  </span>
+                </>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      {
+        isVirtualized && (
+          <div class="notes">
+            <p class="legend">
+              <span class="swatch" />
+              그리는 행
+            </p>
+            <p class="note">범위에 조금이라도 걸친 행은 통째로 그립니다.</p>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    container: folder-html / inline-size;
+  }
+
+  .panels {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  /* 긴 코드 줄은 코드 칸 안에서 가로로 밀리게 칸이 내용 폭으로 늘어나지 않게 합니다 */
+  .code {
+    min-width: 0;
+  }
+
+  .preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .previewTitle,
+  .folderName {
+    color: var(--color-text);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-caption);
+  }
+
+  .previewTitle {
+    color: var(--color-text-muted);
+  }
+
+  .count {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .legend,
+  .note {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-text);
+  }
+
+  /* 카드 안 그리는 행과 같은 모양의 견본입니다 */
+  .swatch {
+    width: var(--space-3);
+    height: var(--space-3);
+    box-sizing: border-box;
+    border: var(--border-width) solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+  }
+
+  /*
+   * 눈금 · 카드 · 괄호 세 칸. 카드 400px를 360px로 줄여, 2번째 행 제목 두 줄이 첫 안내선(150px)보다 위에서 끝나게 합니다.
+   * 위아래 안쪽 여백은 맨 위 · 맨 아래 눈금 숫자와 괄호 이름표가 칸 밖으로 나가지 않게 둡니다
+   */
+  .stage {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-1);
+    height: calc(var(--space-18) * 5);
+    box-sizing: content-box;
+    padding-block: var(--space-2);
+  }
+
+  .stage.isVirtualized {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .ticks,
+  .spans {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+    list-style: none;
+  }
+
+  .tick {
+    position: absolute;
+    top: var(--top);
+    right: 0;
+    padding-inline-end: var(--space-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transform: translateY(-50%);
+  }
+
+  /* 눈금 줄: 숫자와 카드 경계를 잇습니다 */
+  .tick::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: var(--space-1);
+    border-top: var(--border-width) solid var(--color-border-strong);
+  }
+
+  /* 숫자 폭(「400」)만큼 눈금 칸을 비워 둡니다. 숫자는 위치가 절대값이라 칸 폭을 만들지 않습니다 */
+  .ticks {
+    width: var(--space-8);
+  }
+
+  .card {
+    position: relative;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .row,
+  .gap {
+    position: absolute;
+    top: var(--top);
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    height: var(--height);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-bottom: var(--border-width) solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+  }
+
+  .row:last-of-type:not(.isDrawn) {
+    border-bottom: none;
+  }
+
+  .row.isDrawn {
+    border: var(--border-width) solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+  }
+
+
+  .gap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-1);
+    border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+    text-align: center;
+  }
+
+  /* 화면 · 그리는 범위의 경계 높이. 카드를 가로질러 괄호 칸 앞까지 이어, 괄호와 카드의 높이를 잇습니다 */
+  .guide {
+    position: absolute;
+    top: var(--top);
+    right: calc(var(--space-1) * -1);
+    left: 0;
+    border-top: var(--border-width) dotted var(--color-border-strong);
+  }
+
+  /*
+   * 괄호 칸: 카드 쪽에 그리는 범위(강조색), 그 바깥에 overscan · 화면 · overscan을 두고 이름표는 맨 바깥에 둡니다.
+   * 그리는 범위의 이름표는 괄호 위쪽, 첫 overscan 이름표 위에 둡니다
+   */
+  /* 이름표 자리(24px)와 가장 긴 이름표 「170–270px」 폭만큼 둡니다 */
+  .spans {
+    width: calc(var(--space-6) + var(--space-18) - var(--space-2));
+  }
+
+  .bracket {
+    position: absolute;
+    top: var(--top);
+    box-sizing: border-box;
+    width: var(--space-2);
+    height: var(--height);
+    border: var(--border-width-strong) solid currentColor;
+    border-left: none;
+  }
+
+  .bracket.is-range {
+    left: 0;
+  }
+
+  /* 이웃한 괄호의 끝 선이 붙어 한 줄로 보이지 않게 위아래를 1px씩 띄웁니다 */
+  .bracket.is-part {
+    left: var(--space-3);
+    margin-top: var(--border-width);
+    height: calc(var(--height) - var(--border-width) * 2);
+  }
+
+  .spanLabel {
+    position: absolute;
+    top: var(--top);
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+  }
+
+  .spanLabel.is-part {
+    left: var(--space-6);
+    transform: translateY(-50%);
+  }
+
+  /* overscan 띠는 얇아서 첫 줄(「overscan」)을 띠 높이에 맞추고 값은 그 아래에 둡니다. 두 줄 이름표라 -25%가 첫 줄 가운데입니다 */
+  .spanLabel.is-part.is-overscan {
+    transform: translateY(-25%);
+  }
+
+  /* 그리는 범위 이름표는 첫 overscan 이름표 바로 위, 곧 괄호 위끝 바로 위에 둡니다 */
+  .spanLabel.is-range {
+    left: 0;
+    margin-top: calc(var(--line-height-label) * -0.5em - var(--space-1));
+    transform: translateY(-100%);
+  }
+
+  .is-range {
+    color: var(--color-accent);
+  }
+
+  .is-view {
+    color: var(--color-text);
+  }
+
+  .is-overscan {
+    color: var(--color-data-1);
+  }
+
+  .spanLabel.is-range,
+  .spanLabel.is-view {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /*
+   * 본문 폭(680px)에서 나란히 둡니다. 코드 칸은 코드 글자를 한 단계 작게(code-sm) 하고 줄 좌우 여백을 휴대폰 값(16px)으로 줄여
+   * 가장 긴 줄(주석 줄 · ul style 줄)이 잘리지 않는 폭을 받고, 미리보기는 눈금 · 카드 · 괄호가 들어가는 폭만 받습니다.
+   * 이보다 좁은 틀에서는 코드 줄이 잘리므로 코드 아래에 미리보기를 쌓습니다
+   */
+  @container folder-html (min-width: 680px) {
+    .panels {
+      grid-template-columns: minmax(0, 1fr) calc(var(--space-24) * 2 + var(--space-8));
+      gap: var(--space-3);
+      align-items: start;
+    }
+
+    .code :global(pre) {
+      font-size: var(--font-size-code-sm);
+    }
+
+    .code :global(pre .line) {
+      padding-inline: var(--space-4);
+    }
+
+    .code :global(pre .line.highlighted) {
+      padding-left: calc(var(--space-4) - var(--border-width-callout));
+    }
+
+    .preview {
+      padding-inline: var(--space-2);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .row.isDrawn,
+    .swatch,
+    .bracket.is-range,
+    .bracket.is-view {
+      border-color: Highlight;
+    }
+
+    .bracket.is-overscan,
+    .guide {
+      border-color: CanvasText;
+    }
+
+    .spanLabel {
+      color: CanvasText;
+    }
+  }
+</style>

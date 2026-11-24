@@ -94,10 +94,10 @@ describe("toFeedHtml", () => {
   });
 
   it("aria-label은 링크에만 남긴다", () => {
-    const html = '<p><a href="#fnref-1" aria-label="1번 각주를 단 곳으로 돌아가기">↩</a></p><div aria-label="표"><table></table></div>';
+    const html = '<p><a href="#fnref-1" aria-label="읽던 곳으로, 1번 각주를 단 문장">↑ 읽던 곳으로</a></p><div aria-label="표"><table></table></div>';
 
     expect(toFeed(html)).toBe(
-      '<p><a href="https://eastar-ds.github.io/posts/sample-post/#fnref-1" aria-label="1번 각주를 단 곳으로 돌아가기">↩</a></p><div><table></table></div>',
+      '<p><a href="https://eastar-ds.github.io/posts/sample-post/#fnref-1" aria-label="읽던 곳으로, 1번 각주를 단 문장">↑ 읽던 곳으로</a></p><div><table></table></div>',
     );
   });
 });

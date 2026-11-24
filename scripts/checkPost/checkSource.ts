@@ -489,6 +489,9 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
     }),
   );
 
+  const exclamationLines = findInProse({ post, pattern: /[!！]/ });
+  // A line can hold several marks, so count the marks themselves against the per-post limit.
+  const exclamationCount = collectProse(post).reduce((sum, { text }) => sum + (text.match(/[!！]/g)?.length ?? 0), 0);
   const emojiPattern = /\p{Emoji_Presentation}|\p{Extended_Pictographic}️/u;
 
   results.push(
@@ -509,10 +512,10 @@ const checkSource = ({ post, posts, allowedEmails = [] }: CheckSourceParams) => 
       id: "exclamation",
       label: "느낌표",
       basis: `${NOTATION.basis} 4.2`,
-      statusIfFound: "fail",
-      findings: findInProse({ post, pattern: /[!！]/ }),
-      passSummary: "없습니다",
-      fix: "느낌표를 마침표로 바꿉니다. 코드라면 백틱으로 감쌉니다.",
+      statusIfFound: "warn",
+      findings: exclamationCount > NOTATION.maxExclamations ? exclamationLines : [],
+      passSummary: exclamationCount === 0 ? "없습니다" : `${exclamationCount}곳 (${NOTATION.maxExclamations}곳 이하)`,
+      fix: `느낌표는 정말 강조할 곳에만 글 하나에 ${NOTATION.maxExclamations}곳 이하로 둡니다. 나머지는 마침표로 바꿉니다.`,
     }),
     byFindings({
       id: "double-quote",

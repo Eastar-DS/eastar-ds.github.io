@@ -30,14 +30,14 @@ export default function OverscanWheelDemo() {
 
   return (
     <DemoFrame
-      caption="휠 한 번이 화면 아래로 그려 둔 거리보다 길면, 메인 스레드가 행을 더 그리기 전에 합성기가 내보낸 프레임에 그 차이만큼 빈 칸이 보입니다. 미리 그릴 거리 160px는 휠 300px에서 86px가 비고, 325px는 비지 않습니다."
+      caption="휠 한 번이 화면 아래로 그려 둔 거리보다 길면, 메인 스레드가 행을 더 그리기 전에 합성기가 내보낸 프레임에 그 차이만큼 빈 칸이 보입니다. overscan 160px는 휠 300px에서 86px가 비고, 325px는 비지 않습니다."
       controls={
         <WheelControls
           overscanPx={overscanPx}
           onOverscanChange={changeOverscan}
           wheelPx={wheelPx}
           onWheelChange={changeWheel}
-          status={`미리 그릴 거리 ${overscanPx}px, 휠 ${wheelPx}px, ${blankText}`}
+          status={`overscan ${overscanPx}px, 휠 ${wheelPx}px, ${blankText}`}
         />
       }
     >

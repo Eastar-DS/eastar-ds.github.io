@@ -13,6 +13,7 @@ import codeLineNumbersTransformer from "./src/shared/content/codeLineNumbersTran
 import { CODE_THEMES } from "./src/shared/content/codeThemes";
 import codeTitleTransformer from "./src/shared/content/codeTitleTransformer";
 import readPostLastmods from "./src/shared/content/readPostLastmods";
+import toFootnoteBackref from "./src/shared/content/toFootnoteBackref";
 import addPostLastmod from "./src/shared/seo/addPostLastmod";
 import isCommentsReady from "./src/shared/utils/isCommentsReady";
 import shouldLoadAnalytics from "./src/shared/utils/shouldLoadAnalytics";
@@ -64,13 +65,10 @@ export default defineConfig({
         gfm: {
           footnotes: {
             label: "각주",
-            backContent: "↩",
-            // 같은 각주를 여러 곳에서 달면 두 번째부터 링크 글이 「↩²」처럼 자리 번호를 보이므로, 그 숫자를 따로 된 낱말로 이름 끝에 둡니다.
-            // 보이는 글(2)이 이름에 그대로 들어 있어야 음성으로 고르는 사람이 부를 수 있습니다(WCAG 2.5.3). 괄호 안 글은 이름 비교에서 빠지므로 괄호로 감싸지 않습니다
-            backLabel: (referenceNumber, rerunIndex) =>
-              rerunIndex > 1
-                ? `${referenceNumber}번 각주를 단 곳으로 돌아가기, ${rerunIndex}`
-                : `${referenceNumber}번 각주를 단 곳으로 돌아가기`,
+            // 돌아가기 링크는 「↑ 읽던 곳으로」(두 번째부터 「↑ 읽던 곳으로 2」)이고, 이름은 보이는 글로 시작합니다(WCAG 2.5.3).
+            // 콜백을 넘기면 Sätteri가 자리 번호 위 첨자를 붙이지 않으므로 자리 번호도 이 함수가 붙입니다
+            backContent: (referenceNumber, rerunIndex) => toFootnoteBackref({ referenceNumber, rerunIndex }).content,
+            backLabel: (referenceNumber, rerunIndex) => toFootnoteBackref({ referenceNumber, rerunIndex }).label,
           },
         },
       },
