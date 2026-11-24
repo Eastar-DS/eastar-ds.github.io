@@ -15,6 +15,7 @@ argument-hint: "[주제 또는 작업 이름]"
 - 이스타의 답은 받은 글자 그대로 `answers/`에 `.txt`로 저장한 뒤 단계 스킬에 경로를 넘깁니다. 줄이거나 다듬어서 넘기지 않습니다.
 - 커밋, 푸시, 배포, 외부 게시는 하지 않습니다. 이스타가 게시를 시키면 publish-post를 부릅니다.
 - 하위 에이전트는 Paseo 에이전트로 띄우고, `agents/` 폴더의 지시문 틀을 씁니다.
+- 초안과 글 고치기에는 [blog-voice](../blog-voice/SKILL.md)와 writing-style을 함께 적용합니다. 새 독자 검토는 작성 대화를 받지 않은 새 세션에 [review-post](../review-post/SKILL.md)로 맡깁니다. 검토자는 파일을 고치지 않고, 오케스트레이터가 검토 답변을 `review.md`로 저장합니다.
 
 ## 구현 범위
 
@@ -31,13 +32,15 @@ argument-hint: "[주제 또는 작업 이름]"
 | 5 | 인터뷰 질문 | interview-for-post | `interview.md` | 검사 출력 없음, 상태 `답 기다림` |
 | 6 | 이스타 확인 ② | (오케스트레이터) | `answers/interview-answer-n.txt` | 개요의 판단, 제목, 주소와 인터뷰 답을 받음 |
 | 7 | 답 저장과 개요 고침 | interview-for-post, plan-post | `interview.md`, `outline.md` | 둘 다 검사 출력 없음, 개요 상태 `확정` |
-| 8 | 초안 | draft-post | `src/content/posts/{slug}/index.mdx` | `draft: true`, `check.sh` 출력 없음 |
-| 9 | 데모와 그림 | artifact-to-demo | `src/modules/features/demo/…` | 정본 7.8의 확인을 통과 |
+| 8 | 초안 | draft-post (아직 없음), blog-voice | `src/content/posts/{slug}/index.mdx` | 새 글은 `draft: true`, 문체 기준 적용, `check.sh` 출력 없음 |
+| 9 | 데모와 그림 | artifact-to-demo (아직 없음) | `src/modules/features/demo/…` | 정본 7.8의 확인을 통과 |
 | 10 | 사실 대조 | fact-check-post | `fact-check.md` | 「다름」과 「출처 없음」이 0이거나 이스타가 확인함 |
-| 11 | 검토 | review-post | `review.md` | 고칠 것을 반영함 |
+| 11 | 새 독자 검토와 고치기 | review-post (새 세션), blog-voice (글 고치기) | `review.md`, 고친 글 | 줄 번호가 있는 검토 목록을 받고, 글쓴이가 blog-voice로 반영한 뒤 문체 검사 통과 |
 | 12 | 게시 전 점검 | prepublish-check | 점검 표 | 실패 항목 없음 |
 | 13 | 이스타 확인 ③ | (오케스트레이터) | | 이스타가 개발 서버에서 읽고 확인함 |
-| 14 | 게시 | publish-post | | 이스타가 시킬 때만 |
+| 14 | 게시 | publish-post (아직 없음) | | 이스타가 시킬 때만 |
+
+「아직 없음」은 설치되지 않은 스킬입니다. 그 스킬이 필요한 단계에서는 `막힘`으로 적고 알립니다. blog-voice는 문체 기준이며 draft-post의 초안 단계 전체를 대체하지 않습니다. 공개한 글을 고칠 때는 `slug`, `publishedAt`, 시리즈 순서와 공개 상태를 지키며 `draft: true`를 더하지 않습니다.
 
 10단계와 11단계에서 글을 고쳤으면 고친 글로 10단계를 한 번 더 돌립니다. 문장을 다듬다가 숫자와 뜻이 바뀌는 일이 있기 때문입니다.
 
