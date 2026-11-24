@@ -9,13 +9,13 @@
 const bands = [
   {
     kind: "gap",
-    title: "위쪽 빈 높이",
+    title: "위쪽 그리지 않은 행의 자리",
     detail: "0–455번 행은 li가 없습니다. 카드의 위쪽 여백(paddingTop 29,639px)이 그 높이를 채웁니다.",
     rowCount: 0,
   },
   {
     kind: "overscan",
-    title: "▲ 미리 그린 행 5개 (456–460번)",
+    title: "▲ overscan 안의 행 5개 (456–460번)",
     detail: "화면 위로 넓힌 325px 안에 걸친 행이라 미리 그립니다.",
     rowCount: 5,
   },
@@ -27,13 +27,13 @@ const bands = [
   },
   {
     kind: "overscan",
-    title: "▲ 미리 그린 행 5개 (471–475번)",
+    title: "▲ overscan 안의 행 5개 (471–475번)",
     detail: "화면 아래로 넓힌 325px 안에 걸친 행입니다.",
     rowCount: 5,
   },
   {
     kind: "gap",
-    title: "아래쪽 빈 높이",
+    title: "아래쪽 그리지 않은 행의 자리",
     detail: "476–999번 행도 li가 없습니다. 카드 높이(64,999px)를 행을 모두 그린 높이로 두어서 스크롤바 길이가 바뀌지 않습니다.",
     rowCount: 0,
   },
@@ -136,7 +136,7 @@ const bands = [
     outline-offset: calc(var(--border-width-strong) * -1);
   }
 
-  /* 빈 높이: 행이 없다는 것을 옅은 바탕으로만 보입니다 */
+  /* 그리지 않은 행의 자리: 행이 없다는 것을 옅은 바탕으로만 보입니다 */
   .gap .bar {
     min-height: var(--space-14);
     background: var(--color-border);
