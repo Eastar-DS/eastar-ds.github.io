@@ -7,7 +7,12 @@
 #   훅이 Edit로 새로 넣은 문장만 검사할 때 쓴다.
 
 # 훅 환경에 로캘이 없어도 [가-힣] 같은 한글 범위가 글자 단위로 맞게 한다.
-export LC_ALL=en_US.UTF-8
+# 맥에는 en_US.UTF-8이, CI(우분투)에는 C.UTF-8이 늘 있어서 있는 쪽을 고른다.
+if locale -a 2>/dev/null | grep -qiE '^en_US\.utf-?8$'; then
+  export LC_ALL=en_US.UTF-8
+else
+  export LC_ALL=C.UTF-8
+fi
 
 FILE="$1"
 LINES="$2"
@@ -34,7 +39,7 @@ awk -v lines="$LINES" '
     line = $0
     gsub(/`[^`]*`/, "", line)
     gsub(/<!--|-->/, "", line)
-    gsub(/https?:\/\/[^ \t)>\]"\x27]+/, "", line)
+    gsub(/https?:\/\/[^] \t)>"\047]+/, "", line)
     if (line ~ /^[ \t]*[-|: \t]+$/) next
     print NR ": " line
   }
