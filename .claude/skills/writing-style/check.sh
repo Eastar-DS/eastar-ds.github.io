@@ -7,19 +7,19 @@
 #   훅이 Edit로 새로 넣은 문장만 검사할 때 쓴다.
 
 # 훅 환경에 로캘이 없어도 [가-힣] 같은 한글 범위가 글자 단위로 맞게 한다.
-# 맥에는 en_US.UTF-8이, CI(우분투)에는 C.UTF-8이 늘 있어서 있는 쪽을 고른다.
+# 맥의 BSD grep은 en_US.UTF-8에서 grep -E로 한글 범위를 읽는다.
+# GNU grep(리눅스, CI)은 어느 UTF-8 로캘에서도 [가-힣]을 받지 않아서(Invalid collation character),
+# 범위를 코드 포인트로 바꾸고 grep -P 한 패턴으로 검사한다.
 PATTERNS="$(cd "$(dirname "$0")" && pwd)/banned-patterns.txt"
 
-# C.UTF-8의 GNU grep은 [가-힣] 같은 한글 범위를 받지 않아서(Invalid collation character),
-# 그때는 범위를 코드 포인트로 바꿔 PCRE(grep -P)로 검사한다.
-if locale -a 2>/dev/null | grep -qiE '^en_US\.utf-?8$'; then
-  export LC_ALL=en_US.UTF-8
-  match() { grep -E -f "$PATTERNS"; }
-else
+if grep --version 2>/dev/null | grep -q '^grep (GNU grep)'; then
   export LC_ALL=C.UTF-8
   # grep -P는 패턴을 하나만 받아서 줄마다 (?:…)로 싸서 | 로 잇는다
   PCRE_PATTERN="$(grep -v '^$' "$PATTERNS" | sed 's/가-힣/\\x{AC00}-\\x{D7A3}/g' | awk '{ printf "%s(?:%s)", (NR > 1 ? "|" : ""), $0 }')"
   match() { grep -P -e "$PCRE_PATTERN"; }
+else
+  export LC_ALL=en_US.UTF-8
+  match() { grep -E -f "$PATTERNS"; }
 fi
 
 FILE="$1"
