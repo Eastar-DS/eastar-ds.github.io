@@ -6,7 +6,7 @@ argument-hint: "[slug 또는 글 파일 경로]"
 
 # 이스타의 블로그 글 문체
 
-Knot를 모르는 프런트엔드 개발자에게 제가 어떤 문제를 만나 어떻게 풀었는지 들려주듯 씁니다. 기준 글은 이스타와 함께 완성한 `src/content/posts/virtualized-document-list/index.mdx`(리스트 가상화 1편)입니다. 아래 규칙은 이스타의 `voice-notes.md`, `voice-pairs.md`와 1편 수정 전후에서 뽑았습니다.
+Knot를 모르는 프론트엔드 개발자에게 제가 어떤 문제를 만나 어떻게 풀었는지 들려주듯 씁니다. 기준 글은 이스타와 함께 완성한 `src/content/posts/virtualized-document-list/index.mdx`(리스트 가상화 1편)입니다. 아래 규칙은 이스타의 `voice-notes.md`, `voice-pairs.md`와 1편 수정 전후에서 뽑았습니다.
 
 ## 함께 읽을 것과 규칙의 순서
 
